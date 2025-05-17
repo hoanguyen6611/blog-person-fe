@@ -1,40 +1,66 @@
+"use client";
 import ImageShow from "@/app/components/Image";
 import PostMenuActions from "@/app/components/PostMenuActions";
 import { FacebookIcon, InstagramIcon } from "lucide-react";
 import Link from "next/link";
 import SearchInput from "@/app/components/Search";
 import Comments from "@/app/components/Comments";
+import useSWR from "swr";
+import { useAuth } from "@clerk/nextjs";
+import { useParams } from "next/navigation";
+import { format } from "timeago.js";
+import DOMPurify from "dompurify";
+const fetcherWithToken = (url: string, token: string) =>
+  fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((res) => {
+    if (!res.ok) throw new Error("Failed to fetch");
+    return res.json();
+  });
 const ItemPostPage = () => {
+  const params = useParams();
+  const { getToken, isSignedIn } = useAuth();
+
+  const { data, error, isLoading } = useSWR(
+    isSignedIn ? "fetch-user" : null,
+    async () => {
+      const token = await getToken();
+      return fetcherWithToken(
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/${params.slug}`,
+        token!
+      );
+    }
+  );
+
+  if (!isSignedIn) return <p>Bạn chưa đăng nhập</p>;
+  if (isLoading) return <p>Đang tải...</p>;
+  if (error) return <p>Lỗi: {error.message}</p>;
   return (
     <div className="flex flex-col gap-8">
       {/* details */}
       <div className="flex gap-8">
         <div className="lg:w-3/5 flex flex-col gap-8">
           <h1 className="text-xl md:text-3xl xl:text-4xl 2xl:text-5xl font-semibold">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            {data?.title}
           </h1>
           <div className="flex items-center gap-2 text-gray-400 text-sm">
             <span>Written by</span>
             <Link href="" className="text-blue-800">
-              John Doe
+              {data?.user.username}
             </Link>
             <span>on</span>
             <Link href="" className="text-blue-800">
               Web Design
             </Link>
-            <span>2 days ago</span>
+            <span>{format(data?.createdAt)}</span>
           </div>
-          <p className="text-gray-500 font-medium">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-            quos. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Quisquam, quos.
-          </p>
+          <p className="text-gray-500 font-medium">{data?.desc}</p>
         </div>
         <div className="hidden lg:block w-2/5">
           <ImageShow
-            src="featured1.jpg"
+            src={data?.img}
             className="rounded-2xl"
             width={600}
             height={400}
@@ -45,85 +71,26 @@ const ItemPostPage = () => {
       {/* content */}
       <div className="flex flex-col md:flex-row gap-12">
         {/* text */}
-        <div className="lg:text-lg flex flex-col gap-6 text-justify">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-        </div>
+        <div
+          className="lg:text-lg flex flex-col gap-6 text-justify w-[95%]"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(data?.content),
+          }}
+        ></div>
         {/* menu */}
         <div className="px-4 h-max sticky top-8">
           <h1 className="mb-4 text-sm font-bold">Author</h1>
           <div className=" flex flex-col gap-4">
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-4">
               <ImageShow
-                src="userImg.jpg"
+                src={data?.user.img}
                 className="w-12 h-12 rounded-full object-full"
                 width={48}
                 height={48}
                 alt="userImg"
               />
               <Link href="" className="text-blue-800">
-                John Doe
+                {data?.user.username}
               </Link>
             </div>
             <p className="text-sm text-gray-500">
@@ -152,14 +119,26 @@ const ItemPostPage = () => {
               Web Development
             </Link>
             <Link href="" className="underline">
-              Web Design
+              Database
+            </Link>
+            <Link href="" className="underline">
+              AI
+            </Link>
+            <Link href="" className="underline">
+              Security
+            </Link>
+            <Link href="" className="underline">
+              Marketing
+            </Link>
+            <Link href="" className="underline">
+              Business
             </Link>
           </div>
           <h1 className="mt-8 mb-4 text-sm font-bold">Search</h1>
           <SearchInput />
         </div>
       </div>
-      <Comments />
+      <Comments postId={data?._id} />
     </div>
   );
 };

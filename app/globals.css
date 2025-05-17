@@ -28,3 +28,12 @@ body {
 .animateButton {
   animation-duration: 10000ms;
 }
+.ql-container {
+  border: none !important;
+}
+.ql-toolbar {
+  border: none !important;
+}
+.ql-editor {
+  border: none !important;
+}

@@ -2,7 +2,7 @@
 import { Image } from "@imagekit/next";
 
 type ImageShowProps = {
-  src: string;
+  src: string | "";
   width?: number;
   height?: number;
   alt: string;
