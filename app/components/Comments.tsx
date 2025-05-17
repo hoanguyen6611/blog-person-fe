@@ -9,7 +9,6 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Comments = ({ postId }: { postId: string }) => {
   const { getToken } = useAuth();
-  const [pageIndex, setPageIndex] = useState(1);
   const [desc, setDesc] = useState("");
   const { data, error, isLoading, mutate } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/comments/${postId}`,
@@ -18,7 +17,6 @@ const Comments = ({ postId }: { postId: string }) => {
   console.log(data);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
     const dataForm = {
       desc: desc,
       post: postId,

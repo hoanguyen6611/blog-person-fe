@@ -9,12 +9,6 @@ import {
 } from "@imagekit/next";
 import { useRef, useState } from "react";
 
-type ImageShowProps = {
-  type: string;
-  setProgress: (progress: number) => void;
-  // setData: (data: any) => void;
-};
-
 // UploadExample component demonstrates file uploading using ImageKit's Next.js SDK.
 const Upload = () => {
   const [progress, setProgress] = useState(0);
