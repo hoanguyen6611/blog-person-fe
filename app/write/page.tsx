@@ -13,9 +13,11 @@ import {
   ImageKitUploadNetworkError,
   upload,
 } from "@imagekit/next";
+import dynamic from "next/dynamic";
 
 const WritePage = () => {
   const { isLoaded, isSignedIn } = useUser();
+  const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
   const router = useRouter();
   const [value, setValue] = useState("");
   const { getToken } = useAuth();
