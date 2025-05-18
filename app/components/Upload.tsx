@@ -17,7 +17,9 @@ const Upload = () => {
 
   const authenticator = async () => {
     try {
-      const response = await fetch("http://localhost:3000/posts/upload-auth");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/upload-auth`
+      );
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(

@@ -1,6 +1,5 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
-import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
@@ -14,6 +13,7 @@ import {
   upload,
 } from "@imagekit/next";
 import dynamic from "next/dynamic";
+import { toast, ToastContainer } from "react-toastify";
 
 const WritePage = () => {
   const { isLoaded, isSignedIn } = useUser();
@@ -34,7 +34,9 @@ const WritePage = () => {
 
   const authenticator = async () => {
     try {
-      const response = await fetch("http://localhost:3000/posts/upload-auth");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/upload-auth`
+      );
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(
@@ -106,7 +108,7 @@ const WritePage = () => {
     };
     const token = await getToken();
     const res = await axios.post(
-      "http://localhost:3000/posts",
+      `${process.env.NEXT_PUBLIC_API_URL}/posts`,
       {
         ...dataForm,
       },
@@ -118,6 +120,7 @@ const WritePage = () => {
     );
     if (res.status === 200) {
       router.push(`/posts/${res.data.slug}`);
+      toast.success("Post created successfully");
     }
   };
   return (
@@ -185,6 +188,7 @@ const WritePage = () => {
           Send
         </button>
       </form>
+      <ToastContainer position="top-right" />
     </div>
   );
 };

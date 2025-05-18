@@ -4,6 +4,7 @@ export interface Post {
   title: string;
   slug: string;
   content: string;
+  desc: string;
   isFeature: boolean;
   visit: number;
   createdAt: string;

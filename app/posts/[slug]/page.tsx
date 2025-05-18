@@ -35,7 +35,7 @@ const ItemPostPage = () => {
   );
 
   if (!isSignedIn) return <p>Bạn chưa đăng nhập</p>;
-  if (isLoading) return <p>Đang tải...</p>;
+  if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Lỗi: {error.message}</p>;
   return (
     <div className="flex flex-col gap-8">

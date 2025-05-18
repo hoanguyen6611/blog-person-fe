@@ -24,7 +24,7 @@ const PostListItem = ({ post }: { post: Post }) => {
         <div className="flex items-center gap-2 text-gray-400 text-sm">
           <span>Written by</span>
           <Link href="" className="text-blue-800">
-            {/* {post.user.username} */}
+            {post.user.username}
           </Link>
           <span>on</span>
           <Link href="" className="text-blue-800">
@@ -32,10 +32,7 @@ const PostListItem = ({ post }: { post: Post }) => {
           </Link>
           <span>{format(post.createdAt)}</span>
         </div>
-        <p className="">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          quos.
-        </p>
+        <p className="">{post.desc}</p>
         <Link href={`/posts/${post.slug}`} className="underline text-blue-800">
           Read More
         </Link>
