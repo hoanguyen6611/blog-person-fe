@@ -15,11 +15,11 @@ export default function Home() {
         {/* title */}
         <div className="">
           <h1 className="text-gray-800 text-2xl md:text-5xl lg:text-6xl font-bold">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            Technology synthesizes knowledge, creates progress and changes our
+            lives.
           </h1>
           <p className="mt-8 text-md md:text-xl">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-            quos.
+            Technology is an endless source of inspiration for creativity.
           </p>
         </div>
         {/* animated button */}
