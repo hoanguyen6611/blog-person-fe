@@ -2,8 +2,16 @@ import Link from "next/link";
 import ImageShow from "./Image";
 import { Post } from "@/interface/Post";
 import { format } from "timeago.js";
+import useSWR from "swr";
+import { fetcherUseSWR } from "../api/useswr";
+import { Category } from "@/interface/Category";
 
 const PostListItem = ({ post }: { post: Post }) => {
+  const {
+    data: categories,
+    error,
+    isLoading,
+  } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/category`, fetcherUseSWR);
   return (
     <div className="flex flex-col xl:flex-row gap-8">
       {/* image */}
@@ -23,12 +31,17 @@ const PostListItem = ({ post }: { post: Post }) => {
         </Link>
         <div className="flex items-center gap-2 text-gray-400 text-sm">
           <span>Written by</span>
-          <Link href="" className="text-blue-800">
+          <Link
+            href={`/posts?author=${post.user.username}`}
+            className="text-blue-800"
+          >
             {post.user.username}
           </Link>
           <span>on</span>
           <Link href="" className="text-blue-800">
-            Web Design
+            {categories?.categories.find(
+              (category: Category) => category._id === post.category
+            )?.title || "General"}
           </Link>
           <span>{format(post.createdAt)}</span>
         </div>

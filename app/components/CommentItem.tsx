@@ -1,8 +1,18 @@
 import ImageShow from "@/app/components/Image";
 import { Comment } from "@/interface/Comment";
+import { useUser } from "@clerk/nextjs";
+import { Trash } from "lucide-react";
 import { format } from "timeago.js";
 
-const CommentItem = ({ comment }: { comment: Comment }) => {
+type Props = {
+  comment: Comment;
+  onDelete: (id: string) => void;
+};
+
+const CommentItem = ({ comment, onDelete }: Props) => {
+  const { user } = useUser();
+  const isAdmin = user?.publicMetadata?.role === "admin" || false;
+
   return (
     <div className="p-4 bg-slate-50 rounded-xl mb-8">
       <div className="flex items-center gap-4">
@@ -17,6 +27,14 @@ const CommentItem = ({ comment }: { comment: Comment }) => {
         <span className="text-sm text-gray-500">
           {format(comment.createdAt)}
         </span>
+        {(comment.user.username === user?.username || isAdmin) && (
+          <button
+            className="text-sm text-gray-500"
+            onClick={() => onDelete(comment._id)}
+          >
+            <Trash className="hover:text-red-500 cursor-pointer" />
+          </button>
+        )}
       </div>
       <div className="mt-4">
         <p>{comment.desc}</p>

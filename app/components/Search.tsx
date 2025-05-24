@@ -1,4 +1,16 @@
+import { useRouter, useSearchParams } from "next/navigation";
+
 const SearchInput = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      const query = e.currentTarget.value;
+      console.log(searchParams);
+      console.log(query);
+      router.push(`/posts?search=${query}`);
+    }
+  };
   return (
     <div className="bg-gray-100 p-2 rounded-full flex items-center gap-2">
       <svg
@@ -16,6 +28,7 @@ const SearchInput = () => {
         type="text"
         placeholder="search a post ..."
         className="bg-transparent"
+        onKeyDown={handleKeyPress}
       />
     </div>
   );

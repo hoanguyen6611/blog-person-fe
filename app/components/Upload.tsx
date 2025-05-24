@@ -1,5 +1,4 @@
-"use client"; // This component must be a client component
-
+"use client";
 import {
   ImageKitAbortError,
   ImageKitInvalidRequestError,
@@ -9,8 +8,13 @@ import {
 } from "@imagekit/next";
 import { useRef, useState } from "react";
 
-// UploadExample component demonstrates file uploading using ImageKit's Next.js SDK.
-const Upload = () => {
+const Upload = ({
+  type,
+  children,
+}: {
+  type: string;
+  children?: React.ReactNode;
+}) => {
   const [progress, setProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const abortController = new AbortController();
@@ -81,10 +85,15 @@ const Upload = () => {
 
   return (
     <>
-      <input type="file" ref={fileInputRef} />
-      <button type="button" onClick={handleUpload}>
-        Upload file
+      <input accept={`${type}/*`} type="file" ref={fileInputRef} />
+      <button
+        className="w-max p-4 shadow-md rounded-xl text-sm text-gray-500 bg-white"
+        type="button"
+        onClick={handleUpload}
+      >
+        Add a cover image
       </button>
+      {children}
       <br />
       Upload progress: <progress value={progress} max={100}></progress>
     </>

@@ -4,17 +4,32 @@ import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { Comment } from "@/interface/Comment";
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcherUseSWR } from "../api/useswr";
+import { toast } from "react-toastify";
 
 const Comments = ({ postId }: { postId: string }) => {
   const { getToken } = useAuth();
   const [desc, setDesc] = useState("");
   const { data, error, isLoading, mutate } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/comments/${postId}`,
-    fetcher
+    fetcherUseSWR
   );
-  console.log(data);
+
+  const handleDeleteComment = async (id: string) => {
+    const token = await getToken();
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_API_URL}/comments/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res.status === 200) {
+      toast.success("Delete comment successfully");
+      await mutate();
+    }
+  };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const dataForm = {
@@ -33,9 +48,10 @@ const Comments = ({ postId }: { postId: string }) => {
         },
       }
     );
-    await mutate();
-    setDesc("");
-    console.log(res);
+    if (res.status === 200) {
+      await mutate();
+      setDesc("");
+    }
   };
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Failed to load</p>;
@@ -59,7 +75,11 @@ const Comments = ({ postId }: { postId: string }) => {
         </button>
       </form>
       {(data || []).map((comment: Comment) => (
-        <CommentItem key={comment._id} comment={comment} />
+        <CommentItem
+          key={comment._id}
+          comment={comment}
+          onDelete={handleDeleteComment}
+        />
       ))}
     </div>
   );

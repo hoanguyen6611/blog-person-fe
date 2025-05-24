@@ -4,27 +4,55 @@ import "react-quill-new/dist/quill.snow.css";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
-import {
-  ImageKitAbortError,
-  ImageKitInvalidRequestError,
-  ImageKitServerError,
-  ImageKitUploadNetworkError,
-  upload,
-} from "@imagekit/next";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { toast, ToastContainer } from "react-toastify";
+import UploadV1 from "../components/UploadV1";
+import useSWR from "swr";
+import { fetcherUseSWR } from "../api/useswr";
+import { Category } from "@/interface/Category";
+import { Button, Modal } from "antd";
+import { Plus } from "lucide-react";
 
 const WritePage = () => {
   const { isLoaded, isSignedIn } = useUser();
+  const [isDisabledBtnSend, setIsDisabledBtnSend] = useState(false);
   const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+  const [content, setContent] = useState("");
   const router = useRouter();
   const [value, setValue] = useState("");
   const { getToken } = useAuth();
-  const [progress, setProgress] = useState(0);
   const [cover, setCover] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const abortController = new AbortController();
+  const [coverVideo, setCoverVideo] = useState("");
+  const [coverImage, setCoverImage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [nameCategory, setNameCategory] = useState("");
+  const {
+    data: dataCategories,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/category`, fetcherUseSWR);
+  useEffect(() => {
+    if (coverImage) {
+      setValue(
+        (prev) =>
+          prev +
+          `<p><image src="${process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY}${coverImage}"/>
+      </p>`
+      );
+    }
+  }, [coverImage]);
+  useEffect(() => {
+    if (coverVideo) {
+      setValue(
+        (prev) =>
+          prev +
+          `<p><iframe class="ql-video" src="${process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY}${coverVideo}"/></p>`
+      );
+    }
+  }, [coverVideo]);
+
   if (!isLoaded) {
     return <div>Loading</div>;
   }
@@ -32,72 +60,43 @@ const WritePage = () => {
     return <div>You should login</div>;
   }
 
-  const authenticator = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/posts/upload-auth`
-      );
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(
-          `Request failed with status ${response.status}: ${errorText}`
-        );
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = async () => {
+    // setIsModalOpen(false);
+    const dataForm = {
+      title: nameCategory,
+    };
+    const token = await getToken();
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/category`,
+      {
+        ...dataForm,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-      const data = await response.json();
-      const { signature, expire, token, publicKey } = data;
-      return { signature, expire, token, publicKey };
-    } catch (error) {
-      console.error("Authentication error:", error);
-      throw new Error("Authentication request failed");
+    );
+    if (res.status === 200) {
+      toast.success("Category created successfully");
+      setIsModalOpen(false);
+      mutate();
+    } else {
+      toast.error("Category created failed");
     }
   };
 
-  const handleUpload = async () => {
-    const fileInput = fileInputRef.current;
-    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-      alert("Please select a file to upload");
-      return;
-    }
-    const file = fileInput.files[0];
-    let authParams;
-    try {
-      authParams = await authenticator();
-    } catch (authError) {
-      console.error("Failed to authenticate for upload:", authError);
-      return;
-    }
-    const { signature, expire, token, publicKey } = authParams;
-    try {
-      const uploadResponse = await upload({
-        expire,
-        token,
-        signature,
-        publicKey,
-        file,
-        fileName: file.name,
-        onProgress: (event) => {
-          setProgress((event.loaded / event.total) * 100);
-        },
-        abortSignal: abortController.signal,
-      });
-      setCover(uploadResponse.filePath || "");
-    } catch (error) {
-      if (error instanceof ImageKitAbortError) {
-        console.error("Upload aborted:", error.reason);
-      } else if (error instanceof ImageKitInvalidRequestError) {
-        console.error("Invalid request:", error.message);
-      } else if (error instanceof ImageKitUploadNetworkError) {
-        console.error("Network error:", error.message);
-      } else if (error instanceof ImageKitServerError) {
-        console.error("Server error:", error.message);
-      } else {
-        console.error("Upload error:", error);
-      }
-    }
+  const handleCancel = () => {
+    setIsModalOpen(false);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsDisabledBtnSend(true);
     const formData = new FormData(e.target as HTMLFormElement);
     const dataForm = {
       title: formData.get("title"),
@@ -119,10 +118,13 @@ const WritePage = () => {
       }
     );
     if (res.status === 200) {
-      router.push(`/posts/${res.data.slug}`);
       toast.success("Post created successfully");
+      setTimeout(() => {
+        router.push(`/posts/${res.data.slug}`);
+      }, 3000);
     }
   };
+
   return (
     <div className="h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] flex flex-col gap-6">
       <h1 className="text-xl font-light">Create a New Post</h1>
@@ -131,39 +133,54 @@ const WritePage = () => {
         className="flex flex-col gap-6 flex-1 mb-6"
         onSubmit={handleSubmit}
       >
-        {/* <button className="w-max p-4 shadow-md rounded-xl text-sm text-gray-500 bg-white">
-          Add a cover image
-        </button> */}
-        <>
-          <input type="file" ref={fileInputRef} />
-          <button type="button" onClick={handleUpload}>
-            Upload file
-          </button>
-          <br />
-          Upload progress: <progress value={progress} max={100}></progress>
-        </>
+        <UploadV1
+          type="image"
+          buttonText="Tải ảnh lên"
+          onSuccess={(res) => setCover(res.filePath || "")}
+        />
         <input
           className="text-4xl font-semibold bg-transparent outline-none"
           type="text"
           placeholder="My Awesome Story"
           name="title"
         />
-        <div className="flex items-center gap-2">
-          <label htmlFor="" className="text-sm">
-            Choose a category:
-          </label>
-          <select
-            name="category"
-            id="category"
-            className="p-2 rounded-xl bg-white shadow-md"
-          >
-            <option value="general">General</option>
-            <option value="web-design">Web Design</option>
-            <option value="development">Development</option>
-            <option value="database">Database</option>
-            <option value="seo">Search Engines</option>
-            <option value="marketing">Marketing</option>
-          </select>
+        <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <label htmlFor="" className="text-sm">
+              Choose a category:
+            </label>
+            <select
+              name="category"
+              id="category"
+              className="p-2 rounded-xl bg-white shadow-md"
+            >
+              {(dataCategories?.categories || []).map((category: Category) => (
+                <option value={category._id} key={category._id}>
+                  {category.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <Button type="primary" onClick={showModal}>
+              <Plus />
+              New Category
+            </Button>
+            <Modal
+              title="Create New Category"
+              open={isModalOpen}
+              onOk={handleOk}
+              onCancel={handleCancel}
+            >
+              <input
+                className="text-4xl font-semibold bg-transparent outline-none"
+                type="text"
+                placeholder="My Awesome Category"
+                name="nameCategory"
+                onChange={(e) => setNameCategory(e.target.value)}
+              />
+            </Modal>
+          </div>
         </div>
         <textarea
           name="desc"
@@ -172,19 +189,35 @@ const WritePage = () => {
           className="p-4 rounded-xl bg-white shadow-md"
         />
         {/* quill editor */}
+        <div className="flex flex-col gap-2 mr-2 w-[30%]">
+          <UploadV1
+            type="image"
+            buttonText="Tải ảnh lên"
+            onSuccess={(res) => setCoverImage(res.filePath || "")}
+          >
+            🌠
+          </UploadV1>
+          <UploadV1
+            type="video"
+            buttonText="Upload video mới"
+            onSuccess={(res) => setCoverVideo(res.filePath || "")}
+            onProgress={(p) => console.log("Đang upload:", p.toFixed(0), "%")}
+          >
+            🎥
+          </UploadV1>
+        </div>
         <div className="flex">
-          <div className="flex flex-col gap-2 mr-2">
-            <div className="cursor-pointer">🌠</div>
-            <div className="cursor-pointer">🎥</div>
-          </div>
           <ReactQuill
             theme="snow"
-            className="flex-1 rounded-xl bg-white shadow-md"
+            className="flex-1 rounded-xl bg-white shadow-md w-[70%]"
             value={value}
             onChange={setValue}
           />
         </div>
-        <button className="bg-blue-800 text-white font-medium rounded-xl mt-4 p-2 w-36">
+        <button
+          disabled={isDisabledBtnSend}
+          className="bg-blue-800 text-white font-medium rounded-xl mt-4 p-2 w-36 disabled:bg-blue-200"
+        >
           Send
         </button>
       </form>

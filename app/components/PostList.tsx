@@ -3,14 +3,15 @@ import PostListItem from "./PostListItem";
 import useSWR from "swr";
 import { Post } from "@/interface/Post";
 import { useState } from "react";
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcherUseSWR } from "../api/useswr";
+import { useSearchParams } from "next/navigation";
 
 const PostList = () => {
   const [pageIndex, setPageIndex] = useState(1);
+  const searchParams = useSearchParams();
   const { data, error, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/posts?page=${pageIndex}`,
-    fetcher
+    `${process.env.NEXT_PUBLIC_API_URL}/posts?page=${pageIndex}&${searchParams}`,
+    fetcherUseSWR
   );
 
   if (isLoading) return <p>Loading...</p>;
@@ -21,8 +22,19 @@ const PostList = () => {
         <PostListItem key={post._id} post={post} />
       ))}
       <div className="flex justify-center gap-4">
-        <button onClick={() => setPageIndex(pageIndex - 1)}>Previous</button>
-        <button onClick={() => setPageIndex(pageIndex + 1)}>Next</button>
+        <button
+          onClick={() => setPageIndex((p) => Math.max(1, p - 1))}
+          disabled={pageIndex === 1}
+        >
+          Prev
+        </button>
+        <span>Page {pageIndex}</span>
+        <button
+          onClick={() => setPageIndex((p) => (data.hasMore ? p + 1 : p))}
+          disabled={!data.hasMore}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

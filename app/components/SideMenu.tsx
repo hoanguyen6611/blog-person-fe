@@ -1,6 +1,11 @@
 import SearchInput from "@/app/components/Search";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 const SideMenu = () => {
+  const router = useRouter();
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    router.push(`/posts?sort=${e.target.value}`);
+  };
   return (
     <div>
       <h1 className="mb-4 text-sm font-bold">Search</h1>
@@ -11,6 +16,7 @@ const SideMenu = () => {
           <input
             type="radio"
             name="sort"
+            onChange={handleFilterChange}
             value="newest"
             className="appearance-none w-4 h-4 border-[1.5px] border-blue-800 cursor-pointer rounded-sm bg-white checked:bg-blue-800"
           />
@@ -20,6 +26,7 @@ const SideMenu = () => {
           <input
             type="radio"
             name="sort"
+            onChange={handleFilterChange}
             value="most-popular"
             className="appearance-none w-4 h-4 border-[1.5px] border-blue-800 cursor-pointer rounded-sm bg-white checked:bg-blue-800"
           />
@@ -29,6 +36,7 @@ const SideMenu = () => {
           <input
             type="radio"
             name="sort"
+            onChange={handleFilterChange}
             value="trending"
             className="appearance-none w-4 h-4 border-[1.5px] border-blue-800 cursor-pointer rounded-sm bg-white checked:bg-blue-800"
           />
@@ -38,6 +46,7 @@ const SideMenu = () => {
           <input
             type="radio"
             name="sort"
+            onChange={handleFilterChange}
             value="oldest"
             className="appearance-none w-4 h-4 border-[1.5px] border-blue-800 cursor-pointer rounded-sm bg-white checked:bg-blue-800"
           />
@@ -52,8 +61,8 @@ const SideMenu = () => {
         <Link href="/posts?cat=web-design" className="underline">
           Web Design
         </Link>
-        <Link href="/posts?cat=web-development" className="underline">
-          Web Development
+        <Link href="/posts?cat=development" className="underline">
+          Development
         </Link>
         <Link href="/posts?cat=database" className="underline">
           Database

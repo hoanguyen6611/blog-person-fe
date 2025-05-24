@@ -2,6 +2,7 @@ import Link from "next/link";
 import MainCategories from "./components/MainCategories";
 import FeaturedPost from "./components/FeaturedPost";
 import PostList from "./components/PostList";
+
 export default function Home() {
   return (
     <div className="mt-4 flex flex-col gap-4">

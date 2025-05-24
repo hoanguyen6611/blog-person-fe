@@ -6,6 +6,7 @@ export interface Post {
   content: string;
   desc: string;
   isFeature: boolean;
+  category: string;
   visit: number;
   createdAt: string;
   updatedAt: string;

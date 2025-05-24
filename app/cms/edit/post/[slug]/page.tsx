@@ -1,20 +1,19 @@
 "use client";
 import ImageShow from "@/app/components/Image";
-import PostMenuActions from "@/app/components/PostMenuActions";
-import { FacebookIcon, InstagramIcon } from "lucide-react";
-import Link from "next/link";
-import SearchInput from "@/app/components/Search";
-import Comments from "@/app/components/Comments";
 import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
-import { useParams } from "next/navigation";
-import { format } from "timeago.js";
-import DOMPurify from "dompurify";
+import { useParams, useRouter } from "next/navigation";
 import { fetcherWithTokenUseSWR } from "@/app/api/useswr";
-const ItemPostPage = () => {
+import dynamic from "next/dynamic";
+import { useState } from "react";
+import UploadV1 from "@/app/components/UploadV1";
+import axios from "axios";
+import { toast } from "react-toastify";
+const EditPage = () => {
   const params = useParams();
+  const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
-
+  const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
   const { data, error, isLoading } = useSWR(
     isSignedIn ? "fetch-user" : null,
     async () => {
@@ -25,20 +24,65 @@ const ItemPostPage = () => {
       );
     }
   );
+  const [content, setContent] = useState(data?.content || "");
+  const [cover, setCover] = useState(data?.img || "");
+  const changeContent = (value: string) => {
+    setContent(value);
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const dataForm = {
+      title: formData.get("title"),
+      category: data?.category,
+      desc: formData.get("desc"),
+      content: content,
+      img: cover,
+    };
+    const token = await getToken();
+    const res = await axios.put(
+      `${process.env.NEXT_PUBLIC_API_URL}/posts/${data?._id}`,
+      {
+        ...dataForm,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res.status === 200) {
+      toast.success("Post updated successfully");
+      setTimeout(() => {
+        router.push(`/cms`);
+      }, 5000);
+    }
+  };
 
   if (!isSignedIn) return <p>Bạn chưa đăng nhập</p>;
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Lỗi: {error.message}</p>;
   if (!data) return <p>Không tìm thấy bài viết</p>;
+
   return (
-    <div className="flex flex-col gap-8">
+    <form action="" className="flex flex-col gap-8" onSubmit={handleSubmit}>
       {/* details */}
       <div className="flex gap-8">
         <div className="lg:w-3/5 flex flex-col gap-8">
           <h1 className="text-xl md:text-3xl xl:text-4xl 2xl:text-5xl font-semibold">
-            {data?.title}
+            <input
+              className="text-4xl font-semibold bg-transparent outline-none w-full h-full"
+              type="text"
+              defaultValue={data?.title}
+              name="title"
+            />
           </h1>
-          <div className="flex items-center gap-2 text-gray-400 text-sm">
+          <UploadV1
+            type="image"
+            buttonText="Change cover"
+            onSuccess={(res) => setCover(res.filePath || "")}
+          />
+          {/* <div className="flex items-center gap-2 text-gray-400 text-sm">
             <span>Written by</span>
             <Link href="" className="text-blue-800">
               {data?.user.username}
@@ -48,12 +92,18 @@ const ItemPostPage = () => {
               {data?.category}
             </Link>
             <span>{format(data?.createdAt)}</span>
-          </div>
-          <p className="text-gray-500 font-medium">{data?.desc}</p>
+          </div> */}
+          <textarea
+            name="desc"
+            defaultValue={data?.desc}
+            id="content"
+            placeholder="A Short Description"
+            className="p-4 rounded-xl bg-white shadow-md"
+          />
         </div>
         <div className="hidden lg:block w-2/5">
           <ImageShow
-            src={data?.img}
+            src={cover}
             className="rounded-2xl"
             width={600}
             height={400}
@@ -63,15 +113,14 @@ const ItemPostPage = () => {
       </div>
       {/* content */}
       <div className="flex flex-col md:flex-row gap-12">
-        {/* text */}
-        <div
-          className="lg:text-lg flex flex-col gap-6 text-justify w-[95%]"
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(data?.content),
-          }}
-        ></div>
+        <ReactQuill
+          theme="snow"
+          className="flex-1 rounded-xl bg-white shadow-md w-[70%]"
+          value={content}
+          onChange={changeContent}
+        />
         {/* menu */}
-        <div className="px-4 h-max sticky top-8">
+        {/* <div className="px-4 h-max sticky top-8">
           <h1 className="mb-4 text-sm font-bold">Author</h1>
           <div className=" flex flex-col gap-4">
             <div className="flex items-center gap-4">
@@ -129,11 +178,14 @@ const ItemPostPage = () => {
           </div>
           <h1 className="mt-8 mb-4 text-sm font-bold">Search</h1>
           <SearchInput />
-        </div>
+        </div> */}
       </div>
-      <Comments postId={data?._id} />
-    </div>
+      {/* <Comments postId={data?._id} /> */}
+      <button className="bg-blue-800 text-white font-medium rounded-xl mt-4 p-2 w-36 disabled:bg-blue-200">
+        Update
+      </button>
+    </form>
   );
 };
 
-export default ItemPostPage;
+export default EditPage;
