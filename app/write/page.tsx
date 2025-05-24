@@ -162,10 +162,14 @@ const WritePage = () => {
             </select>
           </div>
           <div>
-            <Button type="primary" onClick={showModal}>
+            <button
+              onClick={showModal}
+              className="flex items-center gap-2 w-max p-3 px-5 rounded-lg bg-blue-500 text-white hover:bg-blue-600 text-sm"
+              type="button"
+            >
               <Plus />
               New Category
-            </Button>
+            </button>
             <Modal
               title="Create New Category"
               open={isModalOpen}

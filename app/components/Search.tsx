@@ -1,4 +1,5 @@
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 const SearchInput = () => {
   const router = useRouter();
@@ -34,4 +35,12 @@ const SearchInput = () => {
   );
 };
 
-export default SearchInput;
+const Search = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchInput />
+    </Suspense>
+  );
+};
+
+export default Search;

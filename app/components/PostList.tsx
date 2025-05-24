@@ -2,11 +2,11 @@
 import PostListItem from "./PostListItem";
 import useSWR from "swr";
 import { Post } from "@/interface/Post";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { fetcherUseSWR } from "../api/useswr";
 import { useSearchParams } from "next/navigation";
 
-const PostList = () => {
+const PostListContent = () => {
   const [pageIndex, setPageIndex] = useState(1);
   const searchParams = useSearchParams();
   const { data, error, isLoading } = useSWR(
@@ -37,6 +37,14 @@ const PostList = () => {
         </button>
       </div>
     </div>
+  );
+};
+
+const PostList = () => {
+  return (
+    <Suspense fallback={<div>Loading posts...</div>}>
+      <PostListContent />
+    </Suspense>
   );
 };
 
