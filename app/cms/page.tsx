@@ -9,7 +9,7 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { Button, Space, Table } from "antd";
+import { Button, Flex, Space, Table } from "antd";
 import type { TableProps } from "antd";
 import { Category } from "@/interface/Category";
 
@@ -25,7 +25,7 @@ const CMSPage = () => {
 
   const { user } = useUser();
   const router = useRouter();
-  const { getToken } = useAuth();
+  const { getToken, isSignedIn } = useAuth();
   const isAdmin = user?.publicMetadata?.role === "admin" || false;
   const urlAdmin = `${process.env.NEXT_PUBLIC_API_URL}/posts`;
   const urlUser = `${process.env.NEXT_PUBLIC_API_URL}/posts?author=${user?.username}`;
@@ -128,15 +128,18 @@ const CMSPage = () => {
       // thêm các field cần hiển thị
     })) || [];
 
+  if (!isSignedIn) return <p>Bạn chưa đăng nhập</p>;
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Failed to load</p>;
   return (
     <div className="h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] flex flex-col gap-6">
       <>
-        <Button type="primary" onClick={() => router.push("/write")}>
-          <Plus />
-          New Post
-        </Button>
+        <Flex gap="small" wrap>
+          <Button type="primary" onClick={() => router.push("/write")}>
+            <Plus />
+            New Post
+          </Button>
+        </Flex>
       </>
       <Table<DataType> columns={columns} dataSource={dataSource} />
     </div>
