@@ -22,7 +22,7 @@ const MainCategories = () => {
         </Link>
         {(data?.categories || []).map((category: Category) => (
           <Link
-            href="/posts?cat=web-design"
+            href={`/posts?cat=${category._id}`}
             className="hover:bg-blue-50 rounded-full px-4 py-2"
             key={category._id}
           >

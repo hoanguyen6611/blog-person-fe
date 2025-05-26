@@ -4,21 +4,29 @@ import "react-quill-new/dist/quill.snow.css";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, forwardRef } from "react";
 import dynamic from "next/dynamic";
 import { toast, ToastContainer } from "react-toastify";
 import UploadV1 from "../components/UploadV1";
 import useSWR from "swr";
 import { fetcherUseSWR } from "../api/useswr";
 import { Category } from "@/interface/Category";
-import { Button, Modal } from "antd";
+import { Modal, Select } from "antd";
 import { Plus } from "lucide-react";
+import { set } from "date-fns";
+import SelectOption from "../components/SelectOption";
+
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+const QuillWrapper = forwardRef((props: any, ref: any) => {
+  return <ReactQuill {...props} forwardedRef={ref} />;
+});
+QuillWrapper.displayName = "QuillWrapper";
 
 const WritePage = () => {
   const { isLoaded, isSignedIn } = useUser();
   const [isDisabledBtnSend, setIsDisabledBtnSend] = useState(false);
-  const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
   const [content, setContent] = useState("");
+  const quillRef = useRef<any>(null);
   const router = useRouter();
   const [value, setValue] = useState("");
   const { getToken } = useAuth();
@@ -27,6 +35,7 @@ const WritePage = () => {
   const [coverImage, setCoverImage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nameCategory, setNameCategory] = useState("");
+  const [idCategory, setIdCategory] = useState("");
   const {
     data: dataCategories,
     error,
@@ -93,18 +102,7 @@ const WritePage = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsDisabledBtnSend(true);
-    const formData = new FormData(e.target as HTMLFormElement);
-    const dataForm = {
-      title: formData.get("title"),
-      category: formData.get("category"),
-      desc: formData.get("desc"),
-      content: value,
-      img: cover,
-    };
+  const createCategory = async (dataForm: any) => {
     const token = await getToken();
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/posts`,
@@ -120,10 +118,51 @@ const WritePage = () => {
     if (res.status === 200) {
       toast.success("Post created successfully");
       setTimeout(() => {
-        router.push(`/posts/${res.data.slug}`);
+        router.push(`/posts/${res.data._id}`);
       }, 3000);
+    } else {
+      toast.error("Post updated failed");
     }
   };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const dataForm = {
+      title: formData.get("title"),
+      category: nameCategory,
+      desc: formData.get("desc"),
+      content: value,
+      img: cover,
+    };
+    if (!dataForm.title) {
+      toast.error("The title field is required");
+      return;
+    }
+    if (!dataForm.category) {
+      toast.error("The category field is required");
+    }
+    if (!dataForm.content) {
+      toast.error("The content field is required");
+    } else {
+      setIsDisabledBtnSend(true);
+      createCategory(dataForm);
+    }
+  };
+  const onChange = (value: string) => {
+    console.log(`selected ${value}`);
+    setIdCategory(value);
+  };
+
+  const onSearch = (value: string) => {
+    console.log("search:", value);
+  };
+  const categoryOptions = dataCategories?.categories.map(
+    (category: Category) => ({
+      value: category._id,
+      label: category.title,
+    })
+  );
 
   return (
     <div className="h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] flex flex-col gap-6">
@@ -144,22 +183,21 @@ const WritePage = () => {
           placeholder="My Awesome Story"
           name="title"
         />
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           <div className="flex items-center gap-2">
             <label htmlFor="" className="text-sm">
               Choose a category:
             </label>
-            <select
-              name="category"
-              id="category"
-              className="p-2 rounded-xl bg-white shadow-md"
-            >
-              {(dataCategories?.categories || []).map((category: Category) => (
-                <option value={category._id} key={category._id}>
-                  {category.title}
-                </option>
-              ))}
-            </select>
+            <Select
+              showSearch
+              defaultValue={categoryOptions[0].value}
+              placeholder="Select a category"
+              optionFilterProp="label"
+              onChange={onChange}
+              onSearch={onSearch}
+              options={categoryOptions}
+              style={{ width: "100%" }}
+            />
           </div>
           <div>
             <button
@@ -185,7 +223,12 @@ const WritePage = () => {
               />
             </Modal>
           </div>
-        </div>
+        </div> */}
+        <SelectOption
+          categories={categoryOptions}
+          modal={true}
+          onChangeCategory={(value) => setNameCategory(value)}
+        />
         <textarea
           name="desc"
           id="content"
@@ -193,30 +236,33 @@ const WritePage = () => {
           className="p-4 rounded-xl bg-white shadow-md"
         />
         {/* quill editor */}
-        <div className="flex flex-col gap-2 mr-2 w-[30%]">
-          <UploadV1
-            type="image"
-            buttonText="Tải ảnh lên"
-            onSuccess={(res) => setCoverImage(res.filePath || "")}
-          >
-            🌠
-          </UploadV1>
-          <UploadV1
-            type="video"
-            buttonText="Upload video mới"
-            onSuccess={(res) => setCoverVideo(res.filePath || "")}
-            onProgress={(p) => console.log("Đang upload:", p.toFixed(0), "%")}
-          >
-            🎥
-          </UploadV1>
-        </div>
         <div className="flex">
-          <ReactQuill
-            theme="snow"
-            className="flex-1 rounded-xl bg-white shadow-md w-[70%]"
-            value={value}
-            onChange={setValue}
-          />
+          <div className="flex flex-col gap-2 mr-2 w-[20%]">
+            <UploadV1
+              type="image"
+              buttonText="Tải ảnh lên"
+              onSuccess={(res) => setCoverImage(res.filePath || "")}
+            >
+              🌠
+            </UploadV1>
+            <UploadV1
+              type="video"
+              buttonText="Upload video mới"
+              onSuccess={(res) => setCoverVideo(res.filePath || "")}
+              onProgress={(p) => console.log("Đang upload:", p.toFixed(0), "%")}
+            >
+              🎥
+            </UploadV1>
+          </div>
+          <div className="flex w-[80%]">
+            <QuillWrapper
+              ref={quillRef}
+              theme="snow"
+              className="flex-1 rounded-xl bg-white shadow-md w-[70%]"
+              value={value}
+              onChange={setValue}
+            />
+          </div>
         </div>
         <button
           disabled={isDisabledBtnSend}

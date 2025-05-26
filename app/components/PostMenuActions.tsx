@@ -124,7 +124,7 @@ const PostMenuActions = ({ post }: { post: any }) => {
           <span>Featured this Post</span>
         </div>
       )}
-      {(post.user.username === user?.username || isAdmin) && (
+      {(post?.user?.username === user?.username || isAdmin) && (
         <div
           className="flex items-center gap-2 py-2 text-sm cursor-pointer text-red-500"
           onClick={handleDeletePost}

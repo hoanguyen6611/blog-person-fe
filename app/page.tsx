@@ -7,9 +7,9 @@ export default function Home() {
   return (
     <div className="mt-4 flex flex-col gap-4">
       <div className="flex gap-4">
-        <Link href="/">Home</Link>
+        {/* <Link href="/">Home</Link>
         <span>.</span>
-        <span className="text-blue-800">Blogs and Articles</span>
+        <span className="text-blue-800">Blogs and Articles</span> */}
       </div>
       <div className="flex items-center justify-between">
         {/* title */}

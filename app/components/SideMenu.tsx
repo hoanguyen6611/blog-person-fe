@@ -27,7 +27,7 @@ const SideMenu = () => {
             type="radio"
             name="sort"
             onChange={handleFilterChange}
-            value="most-popular"
+            value="popular"
             className="appearance-none w-4 h-4 border-[1.5px] border-blue-800 cursor-pointer rounded-sm bg-white checked:bg-blue-800"
           />
           Most Popular

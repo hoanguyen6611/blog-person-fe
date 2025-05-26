@@ -6,8 +6,8 @@ const NavBarItem = () => {
   return (
     <>
       <Link href="/">Home</Link>
-      <Link href="#">Trending</Link>
-      <Link href="#">Most Popular</Link>
+      <Link href="posts?sort=trending">Trending</Link>
+      <Link href="posts?sort=popular">Most Popular</Link>
       <Link href="#">About</Link>
       <Link href="/cms">CMS</Link>
       <SignedOut>

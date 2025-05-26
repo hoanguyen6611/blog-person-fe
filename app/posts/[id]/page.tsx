@@ -11,6 +11,8 @@ import { useParams } from "next/navigation";
 import { format } from "timeago.js";
 import DOMPurify from "dompurify";
 import { fetcherWithTokenUseSWR } from "@/app/api/useswr";
+import { fetcherUseSWR } from "../../api/useswr/index";
+import { Category } from "@/interface/Category";
 const ItemPostPage = () => {
   const params = useParams();
   const { getToken, isSignedIn } = useAuth();
@@ -25,11 +27,16 @@ const ItemPostPage = () => {
       );
     }
   );
+  const {
+    data: categories,
+    error: errorCategories,
+    isLoading: isLoadingCategories,
+  } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/category`, fetcherUseSWR);
 
-  if (!isSignedIn) return <p>Bạn chưa đăng nhập</p>;
+  if (!isSignedIn) return <p>You are not logged in</p>;
   if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Lỗi: {error.message}</p>;
-  if (!data) return <p>Không tìm thấy bài viết</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  if (!data) return <p>Post not found</p>;
   return (
     <div className="flex flex-col gap-8">
       {/* details */}
@@ -41,11 +48,22 @@ const ItemPostPage = () => {
           <div className="flex items-center gap-2 text-gray-400 text-sm">
             <span>Written by</span>
             <Link href="" className="text-blue-800">
-              {data?.user.username}
+              {data?.user?.username}
             </Link>
             <span>on</span>
-            <Link href="" className="text-blue-800">
-              {data?.category}
+            <Link
+              href={`/posts?cat=${
+                categories?.categories.find(
+                  (category: Category) => category._id === data.category
+                )?._id
+              }`}
+              className="text-blue-800"
+            >
+              {
+                categories?.categories.find(
+                  (category: Category) => category._id === data?.category
+                )?.title
+              }
             </Link>
             <span>{format(data?.createdAt)}</span>
           </div>
@@ -76,14 +94,14 @@ const ItemPostPage = () => {
           <div className=" flex flex-col gap-4">
             <div className="flex items-center gap-4">
               <ImageShow
-                src={data?.user.img}
+                src={data?.user?.img}
                 className="w-12 h-12 rounded-full object-full"
                 width={48}
                 height={48}
                 alt="userImg"
               />
               <Link href="" className="text-blue-800">
-                {data?.user.username}
+                {data?.user?.username}
               </Link>
             </div>
             <p className="text-sm text-gray-500">

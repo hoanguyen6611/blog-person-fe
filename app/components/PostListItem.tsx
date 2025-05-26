@@ -26,7 +26,7 @@ const PostListItem = ({ post }: { post: Post }) => {
       </div>
       {/* details */}
       <div className="flex flex-col gap-4 xl:w-2/3">
-        <Link href={`/posts/${post.slug}`} className="text-4xl font-semibold">
+        <Link href={`/posts/${post._id}`} className="text-4xl font-semibold">
           {post.title}
         </Link>
         <div className="flex items-center gap-2 text-gray-400 text-sm">
@@ -38,10 +38,19 @@ const PostListItem = ({ post }: { post: Post }) => {
             {post.user.username}
           </Link>
           <span>on</span>
-          <Link href="" className="text-blue-800">
-            {categories?.categories.find(
-              (category: Category) => category._id === post.category
-            )?.title || "General"}
+          <Link
+            href={`/posts?cat=${
+              categories?.categories.find(
+                (category: Category) => category._id === post.category
+              )?._id
+            }`}
+            className="text-blue-800"
+          >
+            {
+              categories?.categories.find(
+                (category: Category) => category._id === post.category
+              )?.title
+            }
           </Link>
           <span>{format(post.createdAt)}</span>
         </div>

@@ -53,6 +53,7 @@ const Comments = ({ postId }: { postId: string }) => {
       setDesc("");
     }
   };
+  const comments = Array.isArray(data) ? data : data?.comments || [];
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Failed to load</p>;
   return (
@@ -74,7 +75,7 @@ const Comments = ({ postId }: { postId: string }) => {
           Send
         </button>
       </form>
-      {(data || []).map((comment: Comment) => (
+      {comments.map((comment: Comment) => (
         <CommentItem
           key={comment._id}
           comment={comment}

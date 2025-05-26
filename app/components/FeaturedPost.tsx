@@ -37,21 +37,33 @@ const FeaturedPost = () => {
         )}
         {/* details */}
         <div className="flex items-center gap-4">
-          <h1 className="font-semibold lg:text-lg">01.</h1>
-          <Link href="" className="text-blue-800">
-            {categories?.categories.find(
-              (category: Category) => category._id === posts[0].category
-            )?.title || "General"}
+          <h1 className="text-xl lg:text-3xl font-semibold lg:font-bold">
+            01.
+          </h1>
+          <Link
+            href={`/posts/${posts[0]._id}`}
+            className="text-xl lg:text-3xl font-semibold lg:font-bold"
+          >
+            {posts[0].title}
+          </Link>
+        </div>
+        <div className="flex items-center gap-4">
+          <Link
+            href={`/posts?cat=${
+              categories?.categories.find(
+                (category: Category) => category._id === posts[0].category
+              )?._id
+            }`}
+            className="text-blue-800"
+          >
+            {
+              categories?.categories.find(
+                (category: Category) => category._id === posts[0].category
+              )?.title
+            }
           </Link>
           <span className="text-gray-500">{format(posts[0].createdAt)}</span>
         </div>
-        {/* title */}
-        <Link
-          href=""
-          className="text-xl lg:text-3xl font-semibold lg:font-bold"
-        >
-          {posts[0].title}
-        </Link>
       </div>
       {/* Other */}
       <div className="w-full lg:w-1/2 flex flex-col gap-4">
@@ -67,22 +79,35 @@ const FeaturedPost = () => {
             />
             <div className="w-2/3">
               <div className="flex items-center gap-4 text-sm lg:text-base mb-4">
-                <h1 className="font-semibold">02.</h1>
-                <Link href="" className="text-blue-800">
-                  {categories?.categories.find(
-                    (category: Category) => category._id === posts[1].category
-                  )?.title || "General"}
+                <h1 className="text-xl lg:text-3xl font-semibold lg:font-bold">
+                  02.
+                </h1>
+                <Link
+                  href={`/posts/${posts[1]._id}`}
+                  className="text-base sm:text-lg md:text-2xl lg:text-xl xl:text-2xl font-medium"
+                >
+                  {posts[1].title}
                 </Link>
-                <span className="text-gray-500 text-sm">
+              </div>
+              <div className="flex items-center gap-4">
+                <Link
+                  href={`/posts?cat=${
+                    categories?.categories.find(
+                      (category: Category) => category._id === posts[1].category
+                    )?._id
+                  }`}
+                  className="text-blue-800"
+                >
+                  {
+                    categories?.categories.find(
+                      (category: Category) => category._id === posts[1].category
+                    )?.title
+                  }
+                </Link>
+                <span className="text-gray-500">
                   {format(posts[1].createdAt)}
                 </span>
               </div>
-              <Link
-                href=""
-                className="text-base sm:text-lg md:text-2xl lg:text-xl xl:text-2xl font-medium"
-              >
-                {posts[1].title}
-              </Link>
             </div>
           </div>
         )}
@@ -98,22 +123,35 @@ const FeaturedPost = () => {
             />
             <div className="w-2/3">
               <div className="flex items-center gap-4 text-sm lg:text-base mb-4">
-                <h1 className="font-semibold">03.</h1>
-                <Link href="" className="text-blue-800">
-                  {categories?.categories.find(
-                    (category: Category) => category._id === posts[2].category
-                  )?.title || "General"}
+                <h1 className="text-xl lg:text-3xl font-semibold lg:font-bold">
+                  03.
+                </h1>
+                <Link
+                  href={`/posts/${posts[2]._id}`}
+                  className="text-base sm:text-lg md:text-2xl lg:text-xl xl:text-2xl font-medium"
+                >
+                  {posts[2].title}
                 </Link>
-                <span className="text-gray-500 text-sm">
+              </div>
+              <div className="flex items-center gap-4">
+                <Link
+                  href={`/posts?cat=${
+                    categories?.categories.find(
+                      (category: Category) => category._id === posts[2].category
+                    )?._id
+                  }`}
+                  className="text-blue-800"
+                >
+                  {
+                    categories?.categories.find(
+                      (category: Category) => category._id === posts[2].category
+                    )?.title
+                  }
+                </Link>
+                <span className="text-gray-500">
                   {format(posts[2].createdAt)}
                 </span>
               </div>
-              <Link
-                href=""
-                className="text-base sm:text-lg md:text-2xl lg:text-xl xl:text-2xl font-medium"
-              >
-                {posts[2].title}
-              </Link>
             </div>
           </div>
         )}
@@ -129,22 +167,35 @@ const FeaturedPost = () => {
             />
             <div className="w-2/3">
               <div className="flex items-center gap-4 text-sm lg:text-base mb-4">
-                <h1 className="font-semibold">04.</h1>
-                <Link href="" className="text-blue-800">
-                  {categories?.categories.find(
-                    (category: Category) => category._id === posts[3].category
-                  )?.title || "General"}
+                <h1 className="text-xl lg:text-3xl font-semibold lg:font-bold">
+                  04.
+                </h1>
+                <Link
+                  href={`/posts/${posts[3]._id}`}
+                  className="text-base sm:text-lg md:text-2xl lg:text-xl xl:text-2xl font-medium"
+                >
+                  {posts[3].title}
                 </Link>
-                <span className="text-gray-500 text-sm">
+              </div>
+              <div className="flex items-center gap-4">
+                <Link
+                  href={`/posts?cat=${
+                    categories?.categories.find(
+                      (category: Category) => category._id === posts[3].category
+                    )?._id
+                  }`}
+                  className="text-blue-800"
+                >
+                  {
+                    categories?.categories.find(
+                      (category: Category) => category._id === posts[3].category
+                    )?.title
+                  }
+                </Link>
+                <span className="text-gray-500">
                   {format(posts[3].createdAt)}
                 </span>
               </div>
-              <Link
-                href=""
-                className="text-base sm:text-lg md:text-2xl lg:text-xl xl:text-2xl font-medium"
-              >
-                {posts[3].title}
-              </Link>
             </div>
           </div>
         )}
