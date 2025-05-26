@@ -23,11 +23,11 @@ const EditPage = () => {
   const { getToken, isSignedIn } = useAuth();
   const quillRef = useRef<any>(null);
   const { data, error, isLoading } = useSWR(
-    isSignedIn && params?.slug ? [`post`, params.slug] : null,
-    async ([, slug]) => {
+    isSignedIn && params?.id ? [`post`, params.id] : null,
+    async ([, id]) => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(
-        `${process.env.NEXT_PUBLIC_API_URL}/posts/${slug}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`,
         token!
       );
     }
