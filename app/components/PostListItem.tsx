@@ -12,6 +12,7 @@ const PostListItem = ({ post }: { post: Post }) => {
     error,
     isLoading,
   } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/category`, fetcherUseSWR);
+  console.log(post);
   return (
     <div className="flex flex-col xl:flex-row gap-8">
       {/* image */}
@@ -55,7 +56,7 @@ const PostListItem = ({ post }: { post: Post }) => {
           <span>{format(post.createdAt)}</span>
         </div>
         <p className="">{post.desc}</p>
-        <Link href={`/posts/${post.slug}`} className="underline text-blue-800">
+        <Link href={`/posts/${post._id}`} className="underline text-blue-800">
           Read More
         </Link>
       </div>

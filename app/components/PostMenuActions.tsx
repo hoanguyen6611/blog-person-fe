@@ -3,7 +3,7 @@ import axios from "axios";
 import { Save, Star, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "../api/useswr";
 
@@ -53,9 +53,7 @@ const PostMenuActions = ({ post }: { post: any }) => {
     );
     if (res.status === 200) {
       toast.success("Delete post successfully");
-      setTimeout(() => {
-        router.push(`/`);
-      }, 3000);
+      router.push(`/`);
     }
   };
 
@@ -133,7 +131,6 @@ const PostMenuActions = ({ post }: { post: any }) => {
           <span>Delete this Post</span>
         </div>
       )}
-      <ToastContainer position="top-right" />
     </div>
   );
 };

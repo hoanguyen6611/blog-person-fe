@@ -16,13 +16,13 @@ import { Category } from "@/interface/Category";
 const ItemPostPage = () => {
   const params = useParams();
   const { getToken, isSignedIn } = useAuth();
-
+  console.log(params);
   const { data, error, isLoading } = useSWR(
-    isSignedIn ? "fetch-user" : null,
-    async () => {
+    isSignedIn && params?.id ? [`post`, params.id] : null,
+    async ([, id]) => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(
-        `${process.env.NEXT_PUBLIC_API_URL}/posts/${params.slug}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`,
         token!
       );
     }

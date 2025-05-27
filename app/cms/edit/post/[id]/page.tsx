@@ -56,21 +56,18 @@ const EditPage = () => {
     }
   }, [data]);
   useEffect(() => {
-    if (coverImage) {
-      setContent(
-        (prev) =>
-          prev +
-          `<p><image src="${process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY}${coverImage}"/>
-      </p>`
+    if (coverImage && quillRef.current) {
+      const editor = quillRef.current.getEditor();
+      editor.clipboard.dangerouslyPasteHTML(
+        `<p><img src="${process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY}${coverImage}" /></p>`
       );
     }
   }, [coverImage]);
   useEffect(() => {
-    if (coverVideo) {
-      setContent(
-        (prev) =>
-          prev +
-          `<p><iframe class="ql-video" src="${process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY}${coverVideo}"/></p>`
+    if (coverVideo && quillRef.current) {
+      const editor = quillRef.current.getEditor();
+      editor.clipboard.dangerouslyPasteHTML(
+        `<p><iframe class="ql-video" src="${process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY}${coverVideo}"/></p>`
       );
     }
   }, [coverVideo]);
@@ -87,7 +84,6 @@ const EditPage = () => {
       content: content,
       img: cover,
     };
-    console.log(dataForm);
     const token = await getToken();
     const res = await axios.put(
       `${process.env.NEXT_PUBLIC_API_URL}/posts/${data?._id}`,
@@ -101,10 +97,8 @@ const EditPage = () => {
       }
     );
     if (res.status === 200) {
-      router.push(`/cms`);
-      // setTimeout(() => {
-      // }, 5000);
       toast.success("Post updated successfully");
+      router.push(`/cms`);
     } else {
       toast.error("Post updated failed");
     }

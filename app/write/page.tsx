@@ -6,7 +6,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, forwardRef } from "react";
 import dynamic from "next/dynamic";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import UploadV1 from "../components/UploadV1";
 import useSWR from "swr";
 import { fetcherUseSWR } from "../api/useswr";
@@ -117,9 +117,7 @@ const WritePage = () => {
     );
     if (res.status === 200) {
       toast.success("Post created successfully");
-      setTimeout(() => {
-        router.push(`/posts/${res.data._id}`);
-      }, 3000);
+      router.push(`/posts/${res.data._id}`);
     } else {
       toast.error("Post updated failed");
     }
@@ -148,14 +146,6 @@ const WritePage = () => {
       setIsDisabledBtnSend(true);
       createCategory(dataForm);
     }
-  };
-  const onChange = (value: string) => {
-    console.log(`selected ${value}`);
-    setIdCategory(value);
-  };
-
-  const onSearch = (value: string) => {
-    console.log("search:", value);
   };
   const categoryOptions = dataCategories?.categories.map(
     (category: Category) => ({
@@ -271,7 +261,6 @@ const WritePage = () => {
           Send
         </button>
       </form>
-      <ToastContainer position="top-right" />
     </div>
   );
 };

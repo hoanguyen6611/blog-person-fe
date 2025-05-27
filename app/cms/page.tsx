@@ -82,9 +82,7 @@ const CMSPage = () => {
       setIsShowFormDelete(false);
       toast.success("Delete post successfully");
       await mutate();
-      setTimeout(() => {
-        router.push(`/cms`);
-      }, 3000);
+      router.push(`/cms`);
     }
   };
   const columns: TableColumnsType<DataType> = [
