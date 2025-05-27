@@ -14,7 +14,7 @@ import { Category } from "@/interface/Category";
 import { Modal, Select } from "antd";
 import { Plus } from "lucide-react";
 import { set } from "date-fns";
-import SelectOption from "../components/SelectOption";
+import SelectOption from "../components/SelectOptionAndModalCreate";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 const QuillWrapper = forwardRef((props: any, ref: any) => {
@@ -239,7 +239,7 @@ const WritePage = () => {
               type="video"
               buttonText="Upload video mới"
               onSuccess={(res) => setCoverVideo(res.filePath || "")}
-              onProgress={(p) => console.log("Đang upload:", p.toFixed(0), "%")}
+              // onProgress={(p) => console.log("Đang upload:", p.toFixed(0), "%")}
             >
               🎥
             </UploadV1>

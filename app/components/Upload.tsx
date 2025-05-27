@@ -67,7 +67,6 @@ const Upload = ({
         },
         abortSignal: abortController.signal,
       });
-      console.log("Upload response:", uploadResponse);
     } catch (error) {
       if (error instanceof ImageKitAbortError) {
         console.error("Upload aborted:", error.reason);

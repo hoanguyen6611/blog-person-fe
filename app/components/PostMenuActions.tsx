@@ -77,7 +77,7 @@ const PostMenuActions = ({ post }: { post: any }) => {
     );
     if (res.status === 200) {
       await mutate();
-      toast.success("Save post successfully");
+      toast.success(res.data);
     }
   };
   const featurePost = async () => {
@@ -100,7 +100,11 @@ const PostMenuActions = ({ post }: { post: any }) => {
     );
     if (res.status === 200) {
       await mutate();
-      toast.success("Featured post successfully");
+      toast.success(
+        res.data.isFeature
+          ? "Featured post successfully"
+          : "Unfeatured post successfully"
+      );
     }
   };
   return (

@@ -16,7 +16,6 @@ import { Category } from "@/interface/Category";
 const ItemPostPage = () => {
   const params = useParams();
   const { getToken, isSignedIn } = useAuth();
-  console.log(params);
   const { data, error, isLoading } = useSWR(
     isSignedIn && params?.id ? [`post`, params.id] : null,
     async ([, id]) => {

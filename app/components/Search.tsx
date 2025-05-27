@@ -7,8 +7,6 @@ const SearchInput = () => {
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       const query = e.currentTarget.value;
-      console.log(searchParams);
-      console.log(query);
       router.push(`/posts?search=${query}`);
     }
   };

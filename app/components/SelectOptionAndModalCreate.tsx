@@ -11,33 +11,30 @@ type SelectOptionProps = {
   categories: SelectOption[];
   modal: boolean;
   value?: any;
+  isModalOpen?: boolean;
   handleOk?: () => void;
   handleCancel?: () => void;
   onChangeCategory?: (value: string) => void;
+  showModal?: () => void;
 };
 
 const SelectOption: React.FC<SelectOptionProps> = ({
   categories,
   modal,
+  isModalOpen,
   value,
   handleOk,
   handleCancel,
   onChangeCategory,
+  showModal,
 }) => {
   const [idCategory, setIdCategory] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onChange = (value: string) => {
-    console.log(`selected ${value}`);
     setIdCategory(value);
   };
 
-  const onSearch = (value: string) => {
-    console.log("search:", value);
-  };
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  const onSearch = (value: string) => {};
 
   return (
     <div className="flex gap-2">

@@ -7,7 +7,7 @@ import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/app/api/useswr";
 import dynamic from "next/dynamic";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import UploadV1 from "@/app/components/UploadV1";
-import SelectOption from "@/app/components/SelectOption";
+import SelectOption from "@/app/components/SelectOptionAndModalCreate";
 import { Category } from "@/interface/Category";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -171,7 +171,7 @@ const EditPage = () => {
             type="video"
             buttonText="Upload video mới"
             onSuccess={(res) => setCoverVideo(res.filePath || "")}
-            onProgress={(p) => console.log("Đang upload:", p.toFixed(0), "%")}
+            // onProgress={(p) => console.log("Đang upload:", p.toFixed(0), "%")}
           >
             🎥
           </UploadV1>
