@@ -3,9 +3,11 @@ import { useState } from "react";
 import ImageShow from "./Image";
 import NavBarItem from "./NavBarItem";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 const NavBar = () => {
   const [open, setOpen] = useState(false);
-
+  const param = useParams();
+  console.log(param);
   return (
     <div className="w-full h-16 md:h-20 flex items-center justify-between">
       {/* LOGO */}

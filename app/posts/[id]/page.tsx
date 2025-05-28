@@ -99,7 +99,7 @@ const ItemPostPage = () => {
                 height={48}
                 alt="userImg"
               />
-              <Link href="" className="text-blue-800">
+              <Link href="#" className="text-blue-800">
                 {data?.user?.username}
               </Link>
             </div>

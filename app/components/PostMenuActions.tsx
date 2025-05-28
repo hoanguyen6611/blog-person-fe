@@ -77,7 +77,7 @@ const PostMenuActions = ({ post }: { post: any }) => {
     );
     if (res.status === 200) {
       await mutate();
-      toast.success(res.data);
+      toast.success(res.data.message || "Saved successfully");
     }
   };
   const featurePost = async () => {

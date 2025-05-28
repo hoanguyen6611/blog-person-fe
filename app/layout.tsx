@@ -23,10 +23,8 @@ export default function RootLayout({
           <div className="px-4 md:px-8 lg:px-16 lx:px-32 2xl:px-64">
             <NavBar />
             <main>
-              <Providers>
-                {children}
-                <ToastContainer position="top-right" />
-              </Providers>
+              <Providers>{children}</Providers>
+              <ToastContainer position="top-right" />
             </main>
           </div>
         </body>
