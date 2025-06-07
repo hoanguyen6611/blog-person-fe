@@ -10,10 +10,10 @@ import { toast } from "react-toastify";
 import useSWR from "swr";
 import { Category } from "@/interface/Category";
 import { Modal } from "antd";
-import { Plus } from "lucide-react";
 import { fetcherUseSWR } from "@/app/api/useswr";
 import UploadV1 from "@/app/components/UploadV1";
 import SelectOption from "../../SelectOption";
+import { PlusOutlined } from "@ant-design/icons";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 const QuillWrapper = forwardRef((props: any, ref: any) => {
@@ -177,7 +177,10 @@ const PostCreate = () => {
               className="flex items-center gap-2 w-max p-3 px-5 rounded-lg bg-blue-500 text-white hover:bg-blue-600 text-sm"
               type="button"
             >
-              <Plus />
+              <PlusOutlined
+                className="cursor-pointer"
+                style={{ fontSize: "16px" }}
+              />
               New Category
             </button>
             <Modal

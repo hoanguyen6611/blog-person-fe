@@ -1,7 +1,7 @@
 import ImageShow from "@/app/components/Image";
 import { Comment } from "@/interface/Comment";
+import { DeleteOutlined } from "@ant-design/icons";
 import { useUser } from "@clerk/nextjs";
-import { Trash } from "lucide-react";
 import { format } from "timeago.js";
 
 type Props = {
@@ -32,7 +32,10 @@ const CommentItem = ({ comment, onDelete }: Props) => {
             className="text-sm text-gray-500"
             onClick={() => onDelete(comment._id)}
           >
-            <Trash className="hover:text-red-500 cursor-pointer" />
+            <DeleteOutlined
+              className="cursor-pointer"
+              style={{ color: "red", fontSize: "16px" }}
+            />
           </button>
         )}
       </div>

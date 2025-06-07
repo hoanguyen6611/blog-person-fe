@@ -4,7 +4,6 @@ import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../../../api/useswr";
 import { Post } from "@/interface/Post";
 import { format } from "date-fns";
 import ImageShow from "../../Image";
-import { Plus, Trash, EditIcon } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -14,6 +13,7 @@ import { Category } from "@/interface/Category";
 import type { TableColumnsType } from "antd";
 import { useEffect, useState } from "react";
 import { TableRowSelection } from "antd/es/table/interface";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 
 interface DataType {
   _id: string;
@@ -131,13 +131,19 @@ const CmsPostPage = () => {
               router.push(`/cms/edit/post/${record._id}`);
             }}
           >
-            <EditIcon />
+            <EditOutlined
+              className="cursor-pointer"
+              style={{ fontSize: "16px" }}
+            />
           </button>
           <button
             className="text-red-500"
             onClick={() => showFormDelete(record._id)}
           >
-            <Trash />
+            <DeleteOutlined
+              className="cursor-pointer"
+              style={{ fontSize: "16px" }}
+            />
           </button>
         </Space>
       ),
@@ -179,7 +185,10 @@ const CmsPostPage = () => {
       <>
         <Flex gap="small" wrap>
           <Button type="primary" onClick={() => router.push("/write")}>
-            <Plus />
+            <PlusOutlined
+              className="cursor-pointer"
+              style={{ fontSize: "16px" }}
+            />
             New Post
           </Button>
         </Flex>

@@ -1,7 +1,7 @@
 "use client";
 import ImageShow from "@/app/components/Image";
 import PostMenuActions from "@/app/components/PostMenuActions";
-import { FacebookIcon, InstagramIcon } from "lucide-react";
+import { InstagramOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import SearchInput from "@/app/components/Search";
 import Comments from "@/app/components/Comments";
@@ -13,6 +13,12 @@ import DOMPurify from "dompurify";
 import { fetcherWithTokenUseSWR } from "@/app/api/useswr";
 import { fetcherUseSWR } from "../../api/useswr/index";
 import { Category } from "@/interface/Category";
+import Categories from "@/app/components/Categories";
+import { createFromIconfontCN } from "@ant-design/icons";
+
+const IconFont = createFromIconfontCN({
+  scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js",
+});
 const ItemPostPage = () => {
   const params = useParams();
   const { getToken, isSignedIn } = useAuth();
@@ -109,41 +115,21 @@ const ItemPostPage = () => {
             </p>
             <div className="flex gap-2">
               <Link href="">
-                <FacebookIcon />
+                <IconFont
+                  type="icon-facebook"
+                  style={{ color: "#1877F2", fontSize: "32px" }}
+                />
               </Link>
               <Link href="">
-                <InstagramIcon />
+                <InstagramOutlined
+                  style={{ color: "#E1306C", fontSize: "32px" }}
+                />
               </Link>
             </div>
           </div>
           <PostMenuActions post={data} />
           <h1 className="mt-8 mb-4 text-sm font-bold">Categories</h1>
-          <div className="flex flex-col gap-2 text-sm">
-            <Link href="/posts" className="underline">
-              All
-            </Link>
-            <Link href="/posts?cat=web-design" className="underline">
-              Web Design
-            </Link>
-            <Link href="/posts?cat=development" className="underline">
-              Development
-            </Link>
-            <Link href="/posts?cat=database" className="underline">
-              Database
-            </Link>
-            <Link href="/posts?cat=ai" className="underline">
-              AI
-            </Link>
-            <Link href="/posts?cat=security" className="underline">
-              Security
-            </Link>
-            <Link href="/posts?cat=marketing" className="underline">
-              Marketing
-            </Link>
-            <Link href="/posts?cat=business" className="underline">
-              Business
-            </Link>
-          </div>
+          <Categories />
           <h1 className="mt-8 mb-4 text-sm font-bold">Search</h1>
           <SearchInput />
         </div>

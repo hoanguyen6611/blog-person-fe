@@ -1,11 +1,11 @@
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
-import { Save, Star, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "../api/useswr";
+import { DeleteOutlined, SaveOutlined, StarOutlined } from "@ant-design/icons";
 
 const PostMenuActions = ({ post }: { post: any }) => {
   const { getToken } = useAuth();
@@ -114,7 +114,9 @@ const PostMenuActions = ({ post }: { post: any }) => {
         className="flex items-center gap-2 py-2 text-sm cursor-pointer"
         onClick={handleSave}
       >
-        <Save className={`${isSavedPost ? "text-black" : "text-gray-500"}`} />
+        <SaveOutlined
+          style={{ color: isSavedPost ? "black" : "gray", fontSize: 32 }}
+        />
         <span>Save this Post</span>
       </div>
       {isAdmin && (
@@ -122,7 +124,9 @@ const PostMenuActions = ({ post }: { post: any }) => {
           className="flex items-center gap-2 py-2 text-sm cursor-pointer"
           onClick={featurePost}
         >
-          <Star className={`${isFeatured ? "text-black" : "text-gray-500"}`} />
+          <StarOutlined
+            style={{ color: isFeatured ? "black" : "gray", fontSize: 32 }}
+          />
           <span>Featured this Post</span>
         </div>
       )}
@@ -131,7 +135,10 @@ const PostMenuActions = ({ post }: { post: any }) => {
           className="flex items-center gap-2 py-2 text-sm cursor-pointer text-red-500"
           onClick={handleDeletePost}
         >
-          <Trash />
+          <DeleteOutlined
+            className="cursor-pointer"
+            style={{ color: "red", fontSize: "32px" }}
+          />
           <span>Delete this Post</span>
         </div>
       )}

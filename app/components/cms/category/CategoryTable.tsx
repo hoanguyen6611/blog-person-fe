@@ -1,17 +1,16 @@
 "use client";
 import { fetcherUseSWR } from "@/app/api/useswr";
 import { TableColumnsType } from "antd";
-import { Trash } from "lucide-react";
 import { format } from "date-fns";
 import useSWR from "swr";
 import { Modal, Space, Table } from "antd";
-import { EditIcon } from "lucide-react";
 import { Category } from "@/interface/Category";
 import { useState } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 interface DataType {
   _id: string;
@@ -58,14 +57,20 @@ const CategoryTable = () => {
             //   router.push(`/cms/edit/post/${record._id}`);
             // }}
           >
-            <EditIcon />
+            <EditOutlined
+              className="cursor-pointer"
+              style={{ fontSize: "16px" }}
+            />
           </button>
           {isAdmin && (
             <button
               className="text-red-500"
               onClick={() => showFormDeleteCategory(record._id)}
             >
-              <Trash />
+              <DeleteOutlined
+                className="cursor-pointer"
+                style={{ fontSize: "16px" }}
+              />
             </button>
           )}
         </Space>
