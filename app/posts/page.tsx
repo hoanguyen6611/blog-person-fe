@@ -1,11 +1,14 @@
 "use client";
+import { useTranslation } from "react-i18next";
 import PostList from "../components/PostList";
 import SideMenu from "../components/SideMenu";
 import { useState } from "react";
 const PostListPage = () => {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
   return (
     <div className="">
+      {t("all-post")}
       <h1 className="mb-8 text-2xl ">Development Blog</h1>
       <button
         onClick={() => setOpen((prev) => !prev)}

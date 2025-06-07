@@ -5,5 +5,5 @@ module.exports = {
     locales: ["vi", "en"],
   },
   localePath: "./public/locales", // hoặc ./src/i18n/locales nếu bạn để ở đó
-  reloadOnPrerender: process.env.NODE_ENV === "development",
+  // reloadOnPrerender: process.env.NODE_ENV === "development",
 };

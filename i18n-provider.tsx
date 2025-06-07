@@ -1,8 +1,7 @@
 "use client";
 
-import { appWithTranslation } from "next-i18next";
 import { I18nextProvider } from "react-i18next";
-import i18n from "./src/i8n/client"; // import custom instance
+import i18n from "./src/i8n/client";
 
 export default function I18nProvider({
   children,

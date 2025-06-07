@@ -6,6 +6,7 @@ import Providers from "./providers";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import I18nProvider from "@/i18n-provider";
+import i18n from "@/src/i8n/client";
 
 export const metadata: Metadata = {
   title: "Blog Personal",
