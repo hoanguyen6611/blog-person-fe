@@ -3,6 +3,7 @@ import { useState } from "react";
 import ImageShow from "./Image";
 import NavBarItem from "./NavBarItem";
 import Link from "next/link";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 const NavBar = () => {
   const [open, setOpen] = useState(false);
   return (
@@ -18,6 +19,7 @@ const NavBar = () => {
         />
         <span>hoadev</span>
       </Link>
+      <LanguageSwitcher />
       {/* MENU MOBILE */}
       <div className="md:hidden">
         {/* MOBILE BUTTON */}

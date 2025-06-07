@@ -5,7 +5,9 @@ import SearchInput from "./Search";
 import { fetcherUseSWR } from "../api/useswr";
 import useSWR from "swr";
 import { Category } from "@/interface/Category";
+import { useTranslation } from "react-i18next";
 const MainCategories = () => {
+  const { t } = useTranslation("common");
   const { data } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/category/getLimit`,
     fetcherUseSWR
@@ -18,7 +20,7 @@ const MainCategories = () => {
           href="/posts"
           className="bg-blue-800 text-white rounded-full px-4 py-2"
         >
-          All Posts
+          {t("all-post")}
         </Link>
         {(data?.categories || []).map((category: Category) => (
           <Link
