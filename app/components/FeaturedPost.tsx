@@ -47,7 +47,7 @@ const FeaturedPost = () => {
             {posts[0].title}
           </Link>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ml-16">
           <Link
             href={`/posts?cat=${
               categories?.categories.find(
@@ -89,7 +89,7 @@ const FeaturedPost = () => {
                   {posts[1].title}
                 </Link>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 ml-16">
                 <Link
                   href={`/posts?cat=${
                     categories?.categories.find(
@@ -133,7 +133,7 @@ const FeaturedPost = () => {
                   {posts[2].title}
                 </Link>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 ml-16">
                 <Link
                   href={`/posts?cat=${
                     categories?.categories.find(
@@ -177,7 +177,7 @@ const FeaturedPost = () => {
                   {posts[3].title}
                 </Link>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 ml-16">
                 <Link
                   href={`/posts?cat=${
                     categories?.categories.find(

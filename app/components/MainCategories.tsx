@@ -6,8 +6,8 @@ import { fetcherUseSWR } from "../api/useswr";
 import useSWR from "swr";
 import { Category } from "@/interface/Category";
 const MainCategories = () => {
-  const { data, error, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+  const { data } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/category/getLimit`,
     fetcherUseSWR
   );
   return (

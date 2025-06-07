@@ -236,9 +236,9 @@ const PostCreate = () => {
         </div>
         <button
           disabled={isDisabledBtnSend}
-          className="bg-blue-800 text-white font-medium rounded-xl mt-4 p-2 w-36 disabled:bg-blue-200"
+          className="bg-blue-800 text-white font-medium rounded-xl mt-4 p-2 w-36 disabled:bg-blue-200 mb-4"
         >
-          Send
+          Create
         </button>
       </form>
     </div>
