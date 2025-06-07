@@ -1,11 +1,18 @@
 import SearchInput from "@/app/components/Search";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import useSWR from "swr";
+import { fetcherUseSWR } from "../api/useswr";
+import { Category } from "@/interface/Category";
 const SideMenu = () => {
   const router = useRouter();
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     router.push(`/posts?sort=${e.target.value}`);
   };
+  const { data, error, isLoading } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    fetcherUseSWR
+  );
   return (
     <div>
       <h1 className="mb-4 text-sm font-bold">Search</h1>
@@ -58,27 +65,15 @@ const SideMenu = () => {
         <Link href="/posts" className="underline">
           All
         </Link>
-        <Link href="/posts?cat=web-design" className="underline">
-          Web Design
-        </Link>
-        <Link href="/posts?cat=development" className="underline">
-          Development
-        </Link>
-        <Link href="/posts?cat=database" className="underline">
-          Database
-        </Link>
-        <Link href="/posts?cat=ai" className="underline">
-          AI
-        </Link>
-        <Link href="/posts?cat=security" className="underline">
-          Security
-        </Link>
-        <Link href="/posts?cat=marketing" className="underline">
-          Marketing
-        </Link>
-        <Link href="/posts?cat=business" className="underline">
-          Business
-        </Link>
+        {(data?.categories || []).map((category: Category) => (
+          <Link
+            href={`/posts?cat=${category._id}`}
+            className="underline"
+            key={category._id}
+          >
+            {category.title}
+          </Link>
+        ))}
       </div>
     </div>
   );

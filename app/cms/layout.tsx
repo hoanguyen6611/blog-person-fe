@@ -1,5 +1,4 @@
 import Siderbar from "../components/Sidebar";
-import { ToastContainer } from "react-toastify";
 import "./cms.css";
 
 export default function CMSLayout({
@@ -13,7 +12,6 @@ export default function CMSLayout({
       <div className="mt-4 flex flex-col gap-4 ml-[100px] w-full">
         {children}
       </div>
-      <ToastContainer position="top-right" />
     </div>
   );
 }
