@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import ImageShow from "./Image";
-import { fetcherUseSWR } from "../api/useswr";
+import { fetcherUseSWR } from "../app/api/useswr";
 import useSWR from "swr";
 import { format } from "timeago.js";
 import { Category } from "@/interface/Category";

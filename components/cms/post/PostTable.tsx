@@ -1,9 +1,8 @@
 "use client";
 import useSWR from "swr";
-import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../../../api/useswr";
 import { Post } from "@/interface/Post";
 import { format } from "date-fns";
-import ImageShow from "../../Image";
+import ImageShow from "@/components/Image";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -14,6 +13,7 @@ import type { TableColumnsType } from "antd";
 import { useEffect, useState } from "react";
 import { TableRowSelection } from "antd/es/table/interface";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/app/api/useswr";
 
 interface DataType {
   _id: string;
@@ -22,6 +22,7 @@ interface DataType {
   category: string;
   createdAt: string;
   slug: string;
+  visit: number;
 }
 const CmsPostPage = () => {
   const router = useRouter();
@@ -101,6 +102,11 @@ const CmsPostPage = () => {
       title: "Description",
       dataIndex: "desc",
       key: "desc",
+    },
+    {
+      title: "Visit",
+      dataIndex: "visit",
+      key: "visit",
     },
     {
       title: "Category",

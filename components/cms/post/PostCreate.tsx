@@ -11,9 +11,9 @@ import useSWR from "swr";
 import { Category } from "@/interface/Category";
 import { Modal } from "antd";
 import { fetcherUseSWR } from "@/app/api/useswr";
-import UploadV1 from "@/app/components/UploadV1";
-import SelectOption from "../../SelectOption";
+import UploadV1 from "@/components/UploadV1";
 import { PlusOutlined } from "@ant-design/icons";
+import SelectOption from "@/components/SelectOption";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 const QuillWrapper = forwardRef((props: any, ref: any) => {

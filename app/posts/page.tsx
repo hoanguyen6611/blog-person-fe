@@ -1,6 +1,6 @@
 "use client";
-import PostList from "../components/PostList";
-import SideMenu from "../components/SideMenu";
+import PostList from "@/components/PostList";
+import SideMenu from "@/components/SideMenu";
 import { useState } from "react";
 const PostListPage = () => {
   const [open, setOpen] = useState(false);

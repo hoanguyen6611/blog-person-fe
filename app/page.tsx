@@ -1,7 +1,7 @@
 import Link from "next/link";
-import MainCategories from "./components/MainCategories";
-import FeaturedPost from "./components/FeaturedPost";
-import PostList from "./components/PostList";
+import MainCategories from "../components/MainCategories";
+import FeaturedPost from "../components/FeaturedPost";
+import PostList from "../components/PostList";
 
 export default function Home() {
   return (

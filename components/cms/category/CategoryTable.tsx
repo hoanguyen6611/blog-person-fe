@@ -110,6 +110,9 @@ const CategoryTable = () => {
   const handleCancelFormDelete = () => {
     setIsShowFormDelete(false);
   };
+  if (!isAdmin) {
+    return <div>You are not admin</div>;
+  }
   return (
     <div>
       <Table<DataType> columns={columns} dataSource={dataSource} />

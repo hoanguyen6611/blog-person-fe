@@ -1,13 +1,13 @@
 "use client";
-import ImageShow from "@/app/components/Image";
+import ImageShow from "@/components/Image";
 import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
 import { useParams, useRouter } from "next/navigation";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/app/api/useswr";
 import dynamic from "next/dynamic";
 import { forwardRef, useEffect, useRef, useState } from "react";
-import UploadV1 from "@/app/components/UploadV1";
-import SelectOption from "@/app/components/SelectOption";
+import UploadV1 from "@/components/UploadV1";
+import SelectOption from "@/components/SelectOption";
 import { Category } from "@/interface/Category";
 import axios from "axios";
 import { toast } from "react-toastify";

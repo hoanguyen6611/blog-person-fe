@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import NavBar from "./components/NavBar";
+import NavBar from "../components/NavBar";
 import { ClerkProvider } from "@clerk/nextjs";
 import Providers from "./providers";
 import { ToastContainer } from "react-toastify";

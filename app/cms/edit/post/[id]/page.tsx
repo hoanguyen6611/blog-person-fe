@@ -1,5 +1,5 @@
 "use client";
-import PostUpdate from "@/app/components/cms/post/PostUpdate";
+import PostUpdate from "@/components/cms/post/PostUpdate";
 const EditPage = () => {
   return <PostUpdate />;
 };

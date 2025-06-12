@@ -1,4 +1,4 @@
-import ImageShow from "@/app/components/Image";
+import ImageShow from "@/components/Image";
 import { Comment } from "@/interface/Comment";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useUser } from "@clerk/nextjs";
