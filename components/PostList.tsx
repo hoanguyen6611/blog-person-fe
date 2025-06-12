@@ -3,7 +3,7 @@ import PostListItem from "./PostListItem";
 import useSWR from "swr";
 import { Post } from "@/interface/Post";
 import { useState, Suspense } from "react";
-import { fetcherUseSWR } from "../api/useswr";
+import { fetcherUseSWR } from "../app/api/useswr";
 import { useSearchParams } from "next/navigation";
 
 const PostListContent = () => {

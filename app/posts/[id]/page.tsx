@@ -1,19 +1,19 @@
 "use client";
-import ImageShow from "@/app/components/Image";
-import PostMenuActions from "@/app/components/PostMenuActions";
+import ImageShow from "@/components/Image";
+import PostMenuActions from "@/components/PostMenuActions";
 import { InstagramOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import SearchInput from "@/app/components/Search";
-import Comments from "@/app/components/Comments";
+import SearchInput from "@/components/Search";
+import Comments from "@/components/Comments";
 import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
 import { format } from "timeago.js";
 import DOMPurify from "dompurify";
 import { fetcherWithTokenUseSWR } from "@/app/api/useswr";
-import { fetcherUseSWR } from "../../api/useswr/index";
+import { fetcherUseSWR } from "@/app/api/useswr/index";
 import { Category } from "@/interface/Category";
-import Categories from "@/app/components/Categories";
+import Categories from "@/components/Categories";
 import { createFromIconfontCN } from "@ant-design/icons";
 
 const IconFont = createFromIconfontCN({
@@ -32,11 +32,10 @@ const ItemPostPage = () => {
       );
     }
   );
-  const {
-    data: categories,
-    error: errorCategories,
-    isLoading: isLoadingCategories,
-  } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/category`, fetcherUseSWR);
+  const { data: categories } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    fetcherUseSWR
+  );
 
   if (!isSignedIn) return <p>You are not logged in</p>;
   if (isLoading) return <p>Loading...</p>;
@@ -52,7 +51,10 @@ const ItemPostPage = () => {
           </h1>
           <div className="flex items-center gap-2 text-gray-400 text-sm">
             <span>Written by</span>
-            <Link href="" className="text-blue-800">
+            <Link
+              href={`/posts?author=${data?.user?.username}`}
+              className="text-blue-800"
+            >
               {data?.user?.username}
             </Link>
             <span>on</span>
@@ -105,7 +107,10 @@ const ItemPostPage = () => {
                 height={48}
                 alt="userImg"
               />
-              <Link href="#" className="text-blue-800">
+              <Link
+                href={`/posts?author=${data?.user?.username}`}
+                className="text-blue-800"
+              >
                 {data?.user?.username}
               </Link>
             </div>

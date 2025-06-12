@@ -1,4 +1,4 @@
-import SearchInput from "@/app/components/Search";
+import SearchInput from "@/components/Search";
 import { useRouter } from "next/navigation";
 import Categories from "./Categories";
 const SideMenu = () => {

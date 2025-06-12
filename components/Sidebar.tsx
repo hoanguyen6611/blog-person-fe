@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const Siderbar = () => {
+const Siderbar = ({ admin }: { admin: boolean }) => {
   return (
     <div className="w-40 bg-gray-900 text-white h-screen fixed left-0 top-0 flex flex-col">
       {/* <div className="text-2xl font-bold p-4 border-b border-gray-700">CMS</div> */}
@@ -11,18 +11,30 @@ const Siderbar = () => {
         CMS
       </Link>
       <nav className="flex flex-col p-4 gap-2">
-        <Link href="/cms" className="hover:bg-gray-700 p-2 rounded">
-          Dashboard
+        {admin && (
+          <Link href="/cms" className="hover:bg-gray-700 p-2 rounded">
+            Dashboard
+          </Link>
+        )}
+        <Link href="/cms/personal" className="hover:bg-gray-700 p-2 rounded">
+          Personal
         </Link>
         <Link href="/cms/posts" className="hover:bg-gray-700 p-2 rounded">
           Post
         </Link>
-        <Link href="/cms/category" className="hover:bg-gray-700 p-2 rounded">
-          Category
-        </Link>
+        {admin && (
+          <Link href="/cms/category" className="hover:bg-gray-700 p-2 rounded">
+            Category
+          </Link>
+        )}
         <Link href="/cms/media" className="hover:bg-gray-700 p-2 rounded">
           Media
         </Link>
+        {admin && (
+          <Link href="/cms/media" className="hover:bg-gray-700 p-2 rounded">
+            User
+          </Link>
+        )}
       </nav>
     </div>
   );

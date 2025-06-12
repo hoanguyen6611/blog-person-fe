@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useSWR from "swr";
-import { fetcherWithTokenUseSWR } from "../api/useswr";
+import { fetcherWithTokenUseSWR } from "../app/api/useswr";
 import { DeleteOutlined, SaveOutlined, StarOutlined } from "@ant-design/icons";
 
 const PostMenuActions = ({ post }: { post: any }) => {
@@ -25,12 +25,7 @@ const PostMenuActions = ({ post }: { post: any }) => {
     setIsFeatured(post.isFeature);
   }, [post]);
 
-  const {
-    data: savedPosts,
-    isLoading,
-    error,
-    mutate,
-  } = useSWR(
+  const { data: savedPosts, mutate } = useSWR(
     () =>
       token ? [`${process.env.NEXT_PUBLIC_API_URL}/users/saved`, token] : null,
     ([url, token]) => fetcherWithTokenUseSWR(url, token)

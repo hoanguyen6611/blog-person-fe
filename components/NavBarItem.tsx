@@ -9,7 +9,7 @@ const NavBarItem = () => {
       <Link href="posts?sort=trending">Trending</Link>
       <Link href="posts?sort=popular">Most Popular</Link>
       <Link href="#">About</Link>
-      <Link href="/cms">CMS</Link>
+      <Link href="/cms/personal">CMS</Link>
       <SignedOut>
         <Link href="/login">
           <button className="py-2 px-4 rounded-3xl bg-blue-800 text-white cursor-pointer">

@@ -3,7 +3,7 @@ import ImageShow from "./Image";
 import { Post } from "@/interface/Post";
 import { format } from "timeago.js";
 import useSWR from "swr";
-import { fetcherUseSWR } from "../api/useswr";
+import { fetcherUseSWR } from "../app/api/useswr";
 import { Category } from "@/interface/Category";
 
 const PostListItem = ({ post }: { post: Post }) => {
