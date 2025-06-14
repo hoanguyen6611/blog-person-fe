@@ -1,19 +1,22 @@
 "use client";
-import MainCategories from "../components/MainCategories";
-import FeaturedPost from "../components/FeaturedPost";
-import PostList from "../components/PostList";
+
 import Banner from "@/components/Banner";
+import MainCategories from "@/components/MainCategories";
+import FeaturedPostV1 from "@/components/FeaturePostV1";
+import PostList from "@/components/PostList";
 
 export default function Home() {
   return (
-    <div className="mt-4 flex flex-col gap-4">
+    <div className="mt-4 space-y-12">
       <Banner />
       <MainCategories />
-      <FeaturedPost />
-      <div className="">
-        <h1 className="my-8 text-2xl text-gray-600">Recent Posts</h1>
-        <PostList apiUrl="posts" showPagination={true} />
-      </div>
+      <FeaturedPostV1 />
+      <section>
+        <h2 className="mb-6 text-2xl font-semibold text-gray-700">
+          Recent Posts
+        </h2>
+        <PostList apiUrl="posts" showPagination />
+      </section>
     </div>
   );
 }

@@ -9,7 +9,6 @@ import {
   UploadResponse,
 } from "@imagekit/next";
 import { Progress } from "antd";
-import { set } from "date-fns";
 import { useRef, useState } from "react";
 
 interface UploadProps {

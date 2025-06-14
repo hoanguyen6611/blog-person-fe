@@ -12,7 +12,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Category } from "@/interface/Category";
 import { Post } from "@/interface/Post";
-import { usePostStore } from "@/store/usePostStore";
+import { useTableStore } from "@/store/useTableStore";
 
 interface DataType {
   _id: string;
@@ -27,7 +27,7 @@ interface DataType {
 const PostPage = () => {
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
-  const { setIsShowFormDelete, setIdPostDelete } = usePostStore();
+  const { setIsShowFormDelete, setIdDelete } = useTableStore();
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -143,10 +143,8 @@ const PostPage = () => {
       ...post,
     })) || [];
   const showFormDelete = (id: string) => {
-    // setIsShowFormDelete(true);
-    // setIdPostDelete(id);
     setIsShowFormDelete(true);
-    setIdPostDelete(id);
+    setIdDelete(id);
   };
   if (!isSignedIn) return <p>You are not logged in</p>;
   if (isLoading) return <p>Loading...</p>;

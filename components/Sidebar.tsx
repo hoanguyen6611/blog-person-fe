@@ -1,48 +1,47 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Home, FileText, Users, Settings, Shapes, Heart } from "lucide-react";
 
-const Siderbar = ({ admin }: { admin: boolean }) => {
+export default function Sidebar({ admin }: { admin: boolean }) {
+  const pathname = usePathname();
+
+  const links = [
+    { href: "/cms", label: "Dashboard", icon: <Home size={20} /> },
+    { href: "/cms/posts", label: "My Posts", icon: <FileText size={20} /> },
+    ...(admin
+      ? [
+          { href: "/cms/user", label: "Users", icon: <Users size={20} /> },
+          {
+            href: "/cms/category",
+            label: "Categories",
+            icon: <Shapes size={20} />,
+          },
+        ]
+      : []),
+    { href: "/cms/settings", label: "Settings", icon: <Settings size={20} /> },
+    { href: "/cms/save-post", label: "Save Post", icon: <Heart size={20} /> },
+  ];
+
   return (
-    <div className="w-40 bg-gray-900 text-white h-screen fixed left-0 top-0 flex flex-col">
-      {/* <div className="text-2xl font-bold p-4 border-b border-gray-700">CMS</div> */}
-      <Link
-        href="/"
-        className="text-2xl font-bold p-4 border-b border-gray-700"
-      >
-        CMS
-      </Link>
-      <nav className="flex flex-col p-4 gap-2">
-        {admin && (
-          <Link href="/cms" className="hover:bg-gray-700 p-2 rounded">
-            Dashboard
+    <aside className="fixed left-0 top-16 h-[calc(100vh-64px)] w-56 bg-gray-100 shadow-md p-4 hidden md:block z-20">
+      <div className="text-xl font-bold text-blue-700 mb-6">CMS Panel</div>
+      <nav className="flex flex-col gap-2">
+        {links.map(({ href, label, icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-colors ${
+              pathname === href
+                ? "bg-blue-600 text-white"
+                : "text-gray-700 hover:bg-blue-100"
+            }`}
+          >
+            {icon}
+            {label}
           </Link>
-        )}
-        {!admin && (
-          <Link href="/cms/personal" className="hover:bg-gray-700 p-2 rounded">
-            Personal
-          </Link>
-        )}
-        <Link href="/cms/posts" className="hover:bg-gray-700 p-2 rounded">
-          Post
-        </Link>
-        {admin && (
-          <Link href="/cms/category" className="hover:bg-gray-700 p-2 rounded">
-            Category
-          </Link>
-        )}
-        <Link href="/cms/media" className="hover:bg-gray-700 p-2 rounded">
-          Media
-        </Link>
-        {admin && (
-          <Link href="/cms/user" className="hover:bg-gray-700 p-2 rounded">
-            User
-          </Link>
-        )}
-        <Link href="/cms/save-post" className="hover:bg-gray-700 p-2 rounded">
-          Save Post
-        </Link>
+        ))}
       </nav>
-    </div>
+    </aside>
   );
-};
-
-export default Siderbar;
+}

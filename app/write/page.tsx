@@ -1,7 +1,7 @@
 "use client";
-import PostCreate from "@/components/cms/post/PostCreate";
+import PostCreateCMS from "@/components/cms/post/PostCreate";
 const WritePage = () => {
-  return <PostCreate />;
+  return <PostCreateCMS />;
 };
 
 export default WritePage;

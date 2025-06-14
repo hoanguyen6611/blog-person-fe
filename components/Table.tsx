@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { TableRowSelection } from "antd/es/table/interface";
 import { PlusOutlined } from "@ant-design/icons";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
-import { usePostStore } from "@/store/usePostStore";
+import { useTableStore } from "@/store/useTableStore";
 
 interface DataType {
   _id: string;
@@ -36,12 +36,8 @@ const TableCMS = ({
   // const [isShowFormDelete, setIsShowFormDelete] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   // const [idPostDelete, setIdPostDelete] = useState("");
-  const {
-    isShowFormDelete,
-    setIsShowFormDelete,
-    idPostDelete,
-    setIdPostDelete,
-  } = usePostStore();
+  const { isShowFormDelete, setIsShowFormDelete, idDelete, setIdDelete } =
+    useTableStore();
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -92,13 +88,13 @@ const TableCMS = ({
 
   const showFormDelete = (id: string) => {
     setIsShowFormDelete(true);
-    setIdPostDelete(id);
+    setIdDelete(id);
   };
   const handleCancelFormDelete = () => {
     setIsShowFormDelete(false);
   };
   const handleOkFormDelete = () => {
-    handleDeletePost(idPostDelete);
+    handleDeletePost(idDelete);
   };
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
