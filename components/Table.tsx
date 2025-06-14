@@ -1,19 +1,15 @@
 "use client";
 import useSWR from "swr";
-import { Post } from "@/interface/Post";
-import { format } from "date-fns";
-import ImageShow from "@/components/Image";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { Button, Flex, Modal, Space, Table } from "antd";
-import { Category } from "@/interface/Category";
-import type { TableColumnsType } from "antd";
+import { Button, Flex, Modal, Table } from "antd";
 import { useEffect, useState } from "react";
 import { TableRowSelection } from "antd/es/table/interface";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
+import { usePostStore } from "@/store/usePostStore";
 
 interface DataType {
   _id: string;
@@ -24,11 +20,28 @@ interface DataType {
   slug: string;
   visit: number;
 }
-const CmsPostPage = () => {
+interface TableCMSProps {
+  buttonCreate?: boolean;
+  nameButtonCreate?: string;
+  columns: any;
+  dataSource: any;
+}
+const TableCMS = ({
+  buttonCreate,
+  columns,
+  dataSource,
+  nameButtonCreate,
+}: TableCMSProps) => {
   const router = useRouter();
-  const [isShowFormDelete, setIsShowFormDelete] = useState(false);
+  // const [isShowFormDelete, setIsShowFormDelete] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [idPostDelete, setIdPostDelete] = useState("");
+  // const [idPostDelete, setIdPostDelete] = useState("");
+  const {
+    isShowFormDelete,
+    setIsShowFormDelete,
+    idPostDelete,
+    setIdPostDelete,
+  } = usePostStore();
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -76,98 +89,11 @@ const CmsPostPage = () => {
       router.push(`/cms/posts`);
     }
   };
-  const columns: TableColumnsType<DataType> = [
-    {
-      title: "Image",
-      dataIndex: "img",
-      key: "img",
-      render: (text) => (
-        <>
-          <ImageShow
-            src={text}
-            alt={text}
-            className="w-10 h-10"
-            width={100}
-            height={100}
-          />
-        </>
-      ),
-    },
-    {
-      title: "Title",
-      dataIndex: "title",
-      key: "title",
-    },
-    {
-      title: "Description",
-      dataIndex: "desc",
-      key: "desc",
-    },
-    {
-      title: "Visit",
-      dataIndex: "visit",
-      key: "visit",
-    },
-    {
-      title: "Category",
-      dataIndex: "categoryName",
-      key: "categoryName",
-      filters: categories?.categories.map((category: Category) => ({
-        text: category.title,
-        value: category._id,
-      })),
-      onFilter: (value, record) => record.category === value,
-    },
-    {
-      title: "Created At",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (text) => <>{format(new Date(text), "dd/MM/yyyy")}</>,
-      //   defaultSortOrder: 'descend',
-      // sorter: (a, b) => format(new Date(a.createdAt), "dd/MM/yyyy") - b.createdAt,
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <button
-            className="text-blue-500"
-            onClick={() => {
-              router.push(`/cms/edit/post/${record._id}`);
-            }}
-          >
-            <EditOutlined
-              className="cursor-pointer"
-              style={{ fontSize: "16px" }}
-            />
-          </button>
-          <button
-            className="text-red-500"
-            onClick={() => showFormDelete(record._id)}
-          >
-            <DeleteOutlined
-              className="cursor-pointer"
-              style={{ fontSize: "16px" }}
-            />
-          </button>
-        </Space>
-      ),
-    },
-  ];
+
   const showFormDelete = (id: string) => {
     setIsShowFormDelete(true);
     setIdPostDelete(id);
   };
-  const dataSource =
-    data?.posts?.map((post: Post) => ({
-      key: post._id, // 👈 Cần có 'key' ở đây!
-      categoryName: categories?.categories.find(
-        (category: Category) => category._id === post.category
-      )?.title,
-      ...post,
-      // thêm các field cần hiển thị
-    })) || [];
   const handleCancelFormDelete = () => {
     setIsShowFormDelete(false);
   };
@@ -187,18 +113,20 @@ const CmsPostPage = () => {
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Failed to load</p>;
   return (
-    <div className="h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] flex flex-col gap-6">
-      <>
-        <Flex gap="small" wrap>
-          <Button type="primary" onClick={() => router.push("/write")}>
-            <PlusOutlined
-              className="cursor-pointer"
-              style={{ fontSize: "16px" }}
-            />
-            New Post
-          </Button>
-        </Flex>
-      </>
+    <div className="h-[calc(100vh-32px)] md:h-[calc(100vh-80px)] flex flex-col gap-6">
+      {buttonCreate && (
+        <>
+          <Flex gap="small" wrap>
+            <Button type="primary" onClick={() => router.push("/write")}>
+              <PlusOutlined
+                className="cursor-pointer"
+                style={{ fontSize: "16px" }}
+              />
+              {nameButtonCreate}
+            </Button>
+          </Flex>
+        </>
+      )}
       <Table<DataType>
         columns={columns}
         dataSource={dataSource}
@@ -225,4 +153,4 @@ const CmsPostPage = () => {
   );
 };
 
-export default CmsPostPage;
+export default TableCMS;

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useSWR from "swr";
-import { fetcherWithTokenUseSWR } from "../app/api/useswr";
+import { fetcherWithTokenUseSWR } from "../api/useswr";
 import { DeleteOutlined, SaveOutlined, StarOutlined } from "@ant-design/icons";
 
 const PostMenuActions = ({ post }: { post: any }) => {

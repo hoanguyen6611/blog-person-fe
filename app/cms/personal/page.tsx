@@ -1,5 +1,5 @@
 "use client";
-import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/app/api/useswr";
+import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import DashBoard from "@/components/Dashboard";
 import { useAuth } from "@clerk/nextjs";
 import useSWR from "swr";
@@ -24,6 +24,7 @@ const PersonalPage = () => {
       );
     }
   );
+  if (!isSignedIn) return <p>You are not logged in</p>;
   return (
     <div>
       <DashBoard name="Personal Statistics" posts={posts} views={posts} />

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { Comment } from "@/interface/Comment";
-import { fetcherUseSWR } from "../app/api/useswr";
+import { fetcherUseSWR } from "../api/useswr";
 import { toast } from "react-toastify";
 
 const Comments = ({ postId }: { postId: string }) => {

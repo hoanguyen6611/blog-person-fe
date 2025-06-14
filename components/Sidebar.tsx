@@ -16,9 +16,11 @@ const Siderbar = ({ admin }: { admin: boolean }) => {
             Dashboard
           </Link>
         )}
-        <Link href="/cms/personal" className="hover:bg-gray-700 p-2 rounded">
-          Personal
-        </Link>
+        {!admin && (
+          <Link href="/cms/personal" className="hover:bg-gray-700 p-2 rounded">
+            Personal
+          </Link>
+        )}
         <Link href="/cms/posts" className="hover:bg-gray-700 p-2 rounded">
           Post
         </Link>
@@ -31,10 +33,13 @@ const Siderbar = ({ admin }: { admin: boolean }) => {
           Media
         </Link>
         {admin && (
-          <Link href="/cms/media" className="hover:bg-gray-700 p-2 rounded">
+          <Link href="/cms/user" className="hover:bg-gray-700 p-2 rounded">
             User
           </Link>
         )}
+        <Link href="/cms/save-post" className="hover:bg-gray-700 p-2 rounded">
+          Save Post
+        </Link>
       </nav>
     </div>
   );

@@ -1,7 +1,7 @@
 import { Category } from "@/interface/Category";
 import Link from "next/link";
 import useSWR from "swr";
-import { fetcherUseSWR } from "../app/api/useswr";
+import { fetcherUseSWR } from "../api/useswr";
 
 const Categories = () => {
   const { data } = useSWR(

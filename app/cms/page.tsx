@@ -1,8 +1,9 @@
 "use client";
 import useSWR from "swr";
-import { fetcherUseSWR } from "../api/useswr";
+import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../../api/useswr";
 import DashBoard from "@/components/Dashboard";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
+import { useState } from "react";
 
 const CMSPage = () => {
   const { user } = useUser();
@@ -19,9 +20,23 @@ const CMSPage = () => {
     `${process.env.NEXT_PUBLIC_API_URL}/posts/sumVisit`,
     fetcherUseSWR
   );
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  });
+  const { getToken, isSignedIn } = useAuth();
   const { data: users } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/users/sumUser`,
-    fetcherUseSWR
+    isSignedIn
+      ? [`fetch-user-posts`, pagination.current, pagination.pageSize]
+      : null,
+    async ([_, page, limit]) => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/sumUser?page=${page}&limit=${limit}`,
+        token!
+      );
+    }
   );
   if (!isAdmin) {
     return <div>You are not admin</div>;

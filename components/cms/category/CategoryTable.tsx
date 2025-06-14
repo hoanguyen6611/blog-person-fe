@@ -1,5 +1,5 @@
 "use client";
-import { fetcherUseSWR } from "@/app/api/useswr";
+import { fetcherUseSWR } from "@/api/useswr";
 import { TableColumnsType } from "antd";
 import { format } from "date-fns";
 import useSWR from "swr";
@@ -11,6 +11,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Replace } from "lucide-react";
 
 interface DataType {
   _id: string;
@@ -73,10 +74,39 @@ const CategoryTable = () => {
               />
             </button>
           )}
+          {isAdmin && (
+            <button
+              className="text-green-300"
+              onClick={() => changeStatusCategory(record._id)}
+            >
+              <Replace
+                className="cursor-pointer"
+                style={{ fontSize: "16px" }}
+              />
+            </button>
+          )}
         </Space>
       ),
     },
   ];
+  const changeStatusCategory = async (id: string) => {
+    const token = await getToken();
+    const res = await axios.patch(
+      `${process.env.NEXT_PUBLIC_API_URL}/category/changeStatus/${id}`,
+      {
+        categoryId: id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res.status === 200) {
+      toast.success("Change status category successfully");
+      await mutate();
+    }
+  };
   const showFormDeleteCategory = (id: string) => {
     setIsShowFormDelete(true);
     setIdCategoryDelete(id);

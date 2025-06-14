@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import SearchInput from "./Search";
-import { fetcherUseSWR } from "../app/api/useswr";
+import { fetcherUseSWR } from "../api/useswr";
 import useSWR from "swr";
 import { Category } from "@/interface/Category";
 const MainCategories = () => {

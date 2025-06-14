@@ -1,30 +1,26 @@
 "use client";
 import useSWR from "swr";
-import { Post } from "@/interface/Post";
 import { format } from "date-fns";
-import ImageShow from "@/components/Image";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { Button, Flex, Modal, Space, Table } from "antd";
-import { Category } from "@/interface/Category";
+import { Table } from "antd";
 import type { TableColumnsType } from "antd";
 import { useEffect, useState } from "react";
 import { TableRowSelection } from "antd/es/table/interface";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
+import { fetcherWithTokenUseSWR } from "@/api/useswr";
+import ImageShow from "@/components/Image";
+import { User } from "@/interface/User";
 
 interface DataType {
   _id: string;
-  title: string;
-  description: number;
-  category: string;
+  img: string;
+  username: string;
+  email: string;
   createdAt: string;
-  slug: string;
-  visit: number;
 }
-const CmsPostPage = () => {
+const UserTable = () => {
   const router = useRouter();
   const [isShowFormDelete, setIsShowFormDelete] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -42,7 +38,7 @@ const CmsPostPage = () => {
     async ([_, page, limit]) => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(
-        `${process.env.NEXT_PUBLIC_API_URL}/posts/user?page=${page}&limit=${limit}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/users/sumUser?page=${page}&limit=${limit}`,
         token!
       );
     }
@@ -55,10 +51,6 @@ const CmsPostPage = () => {
       }));
     }
   }, [data]);
-  const { data: categories } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/category`,
-    fetcherUseSWR
-  );
   const handleDeletePost = async (id: string) => {
     const token = await getToken();
     const res = await axios.delete(
@@ -73,7 +65,7 @@ const CmsPostPage = () => {
       setIsShowFormDelete(false);
       toast.success("Delete post successfully");
       await mutate();
-      router.push(`/cms/posts`);
+      router.push(`/cms`);
     }
   };
   const columns: TableColumnsType<DataType> = [
@@ -94,29 +86,14 @@ const CmsPostPage = () => {
       ),
     },
     {
-      title: "Title",
-      dataIndex: "title",
-      key: "title",
+      title: "Username",
+      dataIndex: "username",
+      key: "username",
     },
     {
-      title: "Description",
-      dataIndex: "desc",
-      key: "desc",
-    },
-    {
-      title: "Visit",
-      dataIndex: "visit",
-      key: "visit",
-    },
-    {
-      title: "Category",
-      dataIndex: "categoryName",
-      key: "categoryName",
-      filters: categories?.categories.map((category: Category) => ({
-        text: category.title,
-        value: category._id,
-      })),
-      onFilter: (value, record) => record.category === value,
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
     {
       title: "Created At",
@@ -126,47 +103,43 @@ const CmsPostPage = () => {
       //   defaultSortOrder: 'descend',
       // sorter: (a, b) => format(new Date(a.createdAt), "dd/MM/yyyy") - b.createdAt,
     },
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <button
-            className="text-blue-500"
-            onClick={() => {
-              router.push(`/cms/edit/post/${record._id}`);
-            }}
-          >
-            <EditOutlined
-              className="cursor-pointer"
-              style={{ fontSize: "16px" }}
-            />
-          </button>
-          <button
-            className="text-red-500"
-            onClick={() => showFormDelete(record._id)}
-          >
-            <DeleteOutlined
-              className="cursor-pointer"
-              style={{ fontSize: "16px" }}
-            />
-          </button>
-        </Space>
-      ),
-    },
+    // {
+    //   title: "Action",
+    //   key: "action",
+    //   render: (_, record) => (
+    //     <Space size="middle">
+    //       <button
+    //         className="text-blue-500"
+    //         onClick={() => {
+    //           router.push(`/cms/edit/post/${record._id}`);
+    //         }}
+    //       >
+    //         <EditOutlined
+    //           className="cursor-pointer"
+    //           style={{ fontSize: "16px" }}
+    //         />
+    //       </button>
+    //       <button
+    //         className="text-red-500"
+    //         onClick={() => showFormDelete(record._id)}
+    //       >
+    //         <DeleteOutlined
+    //           className="cursor-pointer"
+    //           style={{ fontSize: "16px" }}
+    //         />
+    //       </button>
+    //     </Space>
+    //   ),
+    // },
   ];
-  const showFormDelete = (id: string) => {
-    setIsShowFormDelete(true);
-    setIdPostDelete(id);
-  };
+  // const showFormDelete = (id: string) => {
+  //   setIsShowFormDelete(true);
+  //   setIdPostDelete(id);
+  // };
   const dataSource =
-    data?.posts?.map((post: Post) => ({
-      key: post._id, // 👈 Cần có 'key' ở đây!
-      categoryName: categories?.categories.find(
-        (category: Category) => category._id === post.category
-      )?.title,
-      ...post,
-      // thêm các field cần hiển thị
+    data?.users?.map((user: User) => ({
+      key: user._id,
+      ...user,
     })) || [];
   const handleCancelFormDelete = () => {
     setIsShowFormDelete(false);
@@ -188,17 +161,6 @@ const CmsPostPage = () => {
   if (error) return <p>Failed to load</p>;
   return (
     <div className="h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] flex flex-col gap-6">
-      <>
-        <Flex gap="small" wrap>
-          <Button type="primary" onClick={() => router.push("/write")}>
-            <PlusOutlined
-              className="cursor-pointer"
-              style={{ fontSize: "16px" }}
-            />
-            New Post
-          </Button>
-        </Flex>
-      </>
       <Table<DataType>
         columns={columns}
         dataSource={dataSource}
@@ -212,7 +174,7 @@ const CmsPostPage = () => {
         }}
         rowSelection={rowSelection}
       />
-      <Modal
+      {/* <Modal
         title="Delete post"
         closable={{ "aria-label": "Custom Close Button" }}
         open={isShowFormDelete}
@@ -220,9 +182,9 @@ const CmsPostPage = () => {
         onCancel={handleCancelFormDelete}
       >
         <p>Are you sure you want to delete this post?</p>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };
 
-export default CmsPostPage;
+export default UserTable;

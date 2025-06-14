@@ -6,7 +6,7 @@ import Link from "next/link";
 const NavBar = () => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="w-full h-16 md:h-20 flex items-center justify-between">
+    <div className="bg-amber-50 w-full h-16 md:h-20 flex items-center justify-between sticky top-0 left-0 right-0 px-5">
       {/* LOGO */}
       <Link href="/" className="flex items-center gap-4 text-2xl font-bold">
         <ImageShow

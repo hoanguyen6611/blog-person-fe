@@ -4,16 +4,18 @@ import "react-quill-new/dist/quill.snow.css";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, forwardRef } from "react";
+import { useEffect, useState, forwardRef } from "react";
 import dynamic from "next/dynamic";
 import { toast } from "react-toastify";
 import useSWR from "swr";
 import { Category } from "@/interface/Category";
 import { Modal } from "antd";
-import { fetcherUseSWR } from "@/app/api/useswr";
+import { fetcherUseSWR } from "@/api/useswr";
 import UploadV1 from "@/components/UploadV1";
 import { PlusOutlined } from "@ant-design/icons";
 import SelectOption from "@/components/SelectOption";
+import Editor from "@/components/Editor/Editor";
+import ImageShow from "@/components/Image";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 const QuillWrapper = forwardRef((props: any, ref: any) => {
@@ -21,35 +23,42 @@ const QuillWrapper = forwardRef((props: any, ref: any) => {
 });
 QuillWrapper.displayName = "QuillWrapper";
 
+interface FormPost {
+  title: string;
+  category: string;
+  desc?: string;
+  content: string;
+  img?: string;
+}
+
 const PostCreate = () => {
   const { isLoaded, isSignedIn } = useUser();
   const [isDisabledBtnSend, setIsDisabledBtnSend] = useState(false);
-  const quillRef = useRef<any>(null);
   const router = useRouter();
-  const [value, setValue] = useState("");
   const { getToken } = useAuth();
   const [cover, setCover] = useState("");
   const [coverVideo, setCoverVideo] = useState("");
   const [coverImage, setCoverImage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nameCategory, setNameCategory] = useState("");
+  const [post, setPost] = useState("");
   const { data: dataCategories, mutate } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
     fetcherUseSWR
   );
   useEffect(() => {
     if (coverImage) {
-      setValue(
+      setPost(
         (prev) =>
           prev +
-          `<p><image src="${process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY}${coverImage}"/>
+          `<p><img src="${process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY}${coverImage}"/>
       </p>`
       );
     }
   }, [coverImage]);
   useEffect(() => {
     if (coverVideo) {
-      setValue(
+      setPost(
         (prev) =>
           prev +
           `<p><iframe class="ql-video" src="${process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY}${coverVideo}"/></p>`
@@ -89,7 +98,7 @@ const PostCreate = () => {
     }
   };
 
-  const createCategory = async (dataForm: any) => {
+  const createCategory = async (dataForm: FormPost) => {
     const token = await getToken();
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/posts`,
@@ -114,11 +123,11 @@ const PostCreate = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const dataForm = {
-      title: formData.get("title"),
+    const dataForm: FormPost = {
+      title: formData.get("title") as string,
       category: nameCategory,
-      desc: formData.get("desc"),
-      content: value,
+      desc: formData.get("desc") as string,
+      content: post,
       img: cover,
     };
     if (!dataForm.title) {
@@ -131,6 +140,7 @@ const PostCreate = () => {
     if (!dataForm.content) {
       toast.error("The content field is required");
     } else {
+      setIsDisabledBtnSend(true);
       createCategory(dataForm);
     }
   };
@@ -147,27 +157,46 @@ const PostCreate = () => {
     setIsModalOpen(false);
   };
 
+  const onChange = (content: string) => {
+    setPost(content);
+    console.log(content);
+  };
+
   return (
-    <div className="h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] flex flex-col gap-6">
-      <h1 className="text-xl font-light">Create a New Post</h1>
+    <div className="h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] flex flex-col gap-6 px-5">
+      <h1 className="text-xl font-bold text-center">Create a New Post</h1>
       <form
         action=""
         className="flex flex-col gap-6 flex-1 mb-6"
         onSubmit={handleSubmit}
       >
-        <UploadV1
-          type="image"
-          buttonText="Tải ảnh lên"
-          onSuccess={(res) => setCover(res.filePath || "")}
-        />
+        <div className="flex gap-2 items-center">
+          <UploadV1
+            type="image"
+            buttonText={cover ? "Change image cover" : "Upload image cover"}
+            onSuccess={(res) => setCover(res.filePath || "")}
+          />
+          {cover && (
+            <div className="hidden lg:block w-2/5">
+              <ImageShow
+                src={cover}
+                className="rounded-2xl"
+                width={600}
+                height={400}
+                alt="featured1"
+              />
+            </div>
+          )}
+        </div>
         <input
           className="text-4xl font-semibold bg-transparent outline-none"
           type="text"
-          placeholder="My Awesome Story"
+          placeholder="New Post title here ...."
           name="title"
         />
         <div className="flex gap-2">
           <SelectOption
+            name="Select a category"
             categories={categoryOptions}
             onChangeCategory={(value) => setNameCategory(value)}
           />
@@ -202,7 +231,7 @@ const PostCreate = () => {
         <textarea
           name="desc"
           id="content"
-          placeholder="A Short Description"
+          placeholder="New Post Short Description here .... "
           className="p-4 rounded-xl bg-white shadow-md"
         />
         {/* quill editor */}
@@ -210,21 +239,17 @@ const PostCreate = () => {
           <div className="flex flex-col gap-2 mr-2 w-[20%]">
             <UploadV1
               type="image"
-              buttonText="Tải ảnh lên"
+              buttonText="Upload image"
               onSuccess={(res) => setCoverImage(res.filePath || "")}
-            >
-              🌠
-            </UploadV1>
+            />
             <UploadV1
               type="video"
-              buttonText="Upload video mới"
+              buttonText="Upload video"
               onSuccess={(res) => setCoverVideo(res.filePath || "")}
               // onProgress={(p) => console.log("Đang upload:", p.toFixed(0), "%")}
-            >
-              🎥
-            </UploadV1>
+            />
           </div>
-          <div className="flex w-[80%]">
+          {/* <div className="flex w-[80%]">
             <QuillWrapper
               ref={quillRef}
               theme="snow"
@@ -232,6 +257,9 @@ const PostCreate = () => {
               value={value}
               onChange={setValue}
             />
+          </div> */}
+          <div className="flex w-[80%]">
+            <Editor content={post} onChange={onChange} />
           </div>
         </div>
         <button

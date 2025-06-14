@@ -3,24 +3,25 @@ import ImageShow from "@/components/Image";
 import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
 import { useParams, useRouter } from "next/navigation";
-import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/app/api/useswr";
-import dynamic from "next/dynamic";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
+import { useEffect, useRef, useState } from "react";
 import UploadV1 from "@/components/UploadV1";
 import SelectOption from "@/components/SelectOption";
 import { Category } from "@/interface/Category";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Editor from "@/components/Editor/Editor";
 
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
-const QuillWrapper = forwardRef((props: any, ref: any) => {
-  return <ReactQuill {...props} forwardedRef={ref} />;
-});
-QuillWrapper.displayName = "QuillWrapper";
+// const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+// const QuillWrapper = forwardRef((props: any, ref: any) => {
+//   return <ReactQuill {...props} forwardedRef={ref} />;
+// });
+// QuillWrapper.displayName = "QuillWrapper";
 const PostUpdate = () => {
   const params = useParams();
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
+  const [post, setPost] = useState("");
   const quillRef = useRef<any>(null);
   const { data, error, isLoading } = useSWR(
     isSignedIn && params?.id ? [`post`, params.id] : null,
@@ -79,7 +80,7 @@ const PostUpdate = () => {
     const formData = new FormData(e.target as HTMLFormElement);
     const dataForm = {
       title: formData.get("title"),
-      category: data?.category,
+      category: category,
       desc: formData.get("desc"),
       content: content,
       img: cover,
@@ -97,7 +98,7 @@ const PostUpdate = () => {
       }
     );
     if (res.status === 200) {
-      router.push(`/cms`);
+      router.push(`/cms/posts`);
       toast.success("Post updated successfully");
     } else {
       toast.error("Post updated failed");
@@ -109,6 +110,10 @@ const PostUpdate = () => {
       value: category._id,
     })
   );
+  const onChange = (content: string) => {
+    setPost(content);
+    console.log(content);
+  };
 
   if (!isSignedIn) return <p>You are not logged in</p>;
   if (isLoading) return <p>Loading...</p>;
@@ -152,6 +157,7 @@ const PostUpdate = () => {
         </div>
       </div>
       <SelectOption
+        name="Select a category"
         categories={categoryOptions}
         value={category}
         onChangeCategory={(value: string) => setCategory(value)}
@@ -161,29 +167,26 @@ const PostUpdate = () => {
         <div className="flex flex-col gap-2 mr-2 w-[20%]">
           <UploadV1
             type="image"
-            buttonText="Tải ảnh lên"
+            buttonText="Upload image"
             onSuccess={(res) => setCoverImage(res.filePath || "")}
-          >
-            🌠
-          </UploadV1>
+          />
           <UploadV1
             type="video"
-            buttonText="Upload video mới"
+            buttonText="Upload video"
             onSuccess={(res) => setCoverVideo(res.filePath || "")}
-            onProgress={(p) => console.log("Đang upload:", p.toFixed(0), "%")}
-          >
-            🎥
-          </UploadV1>
+            onProgress={(p) => console.log("Uploading...:", p.toFixed(0), "%")}
+          />
         </div>
       </div>
       <div className="flex flex-col md:flex-row gap-12 w-[80%]">
-        <QuillWrapper
+        {/* <QuillWrapper
           ref={quillRef}
           theme="snow"
           className="flex-1 rounded-xl bg-white shadow-md w-[70%]"
           value={content}
           onChange={changeContent}
-        />
+        /> */}
+        <Editor content={data?.content} onChange={onChange} />
       </div>
       <button className="bg-blue-800 text-white font-medium rounded-xl mt-4 p-2 w-36 disabled:bg-blue-200">
         Update

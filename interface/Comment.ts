@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export interface Comment {
   _id: string;
   user: User;
@@ -5,15 +7,4 @@ export interface Comment {
   desc: string;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface User {
-  _id: string;
-  clerkUserId: string;
-  username: string;
-  email: string;
-  img: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
 }
