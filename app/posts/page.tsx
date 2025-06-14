@@ -15,7 +15,7 @@ const PostListPage = () => {
       </button>
       <div className="flex flex-col-reverse gap-8 md:flex-row">
         <div className="w-[80%]">
-          <PostList />
+          <PostList apiUrl="posts" />
         </div>
         <div className={`${open ? "block" : "hidden"} md:block w-[20%]`}>
           <SideMenu />
