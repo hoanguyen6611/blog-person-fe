@@ -25,7 +25,9 @@ export default function Sidebar({ admin }: { admin: boolean }) {
 
   return (
     <aside className="fixed left-0 top-16 h-[calc(100vh-64px)] w-56 bg-gray-100 shadow-md p-4 hidden md:block z-20">
-      <div className="text-xl font-bold text-blue-700 mb-6">CMS Panel</div>
+      <div className="text-xl font-bold text-blue-700 mb-6 text-center">
+        CMS Panel
+      </div>
       <nav className="flex flex-col gap-2">
         {links.map(({ href, label, icon }) => (
           <Link
