@@ -314,6 +314,7 @@ const Preview = () => {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     __v: 0,
+    tags: [],
     ...formData,
   };
   return (
