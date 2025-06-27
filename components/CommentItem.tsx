@@ -179,7 +179,15 @@ const CommentItem = ({
                 <Button
                   type="text"
                   className="text-sm text-gray-500"
-                  icon={<Heart />}
+                  icon={
+                    <Heart
+                      style={{
+                        color: isLikeComment ? "black" : "gray",
+                        fontSize: 32,
+                      }}
+                    />
+                  }
+                  onClick={() => onLike(reply._id)}
                 >
                   {reply.like} likes
                 </Button>

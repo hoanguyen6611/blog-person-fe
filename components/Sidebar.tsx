@@ -9,6 +9,7 @@ import {
   Shapes,
   Heart,
   PersonStanding,
+  Tag,
 } from "lucide-react";
 
 export default function Sidebar({ admin }: { admin: boolean }) {
@@ -24,13 +25,22 @@ export default function Sidebar({ admin }: { admin: boolean }) {
             label: "Categories",
             icon: <Shapes size={20} />,
           },
+          {
+            href: "/cms/tag",
+            label: "Tags",
+            icon: <Tag size={20} />,
+          },
         ]
       : []),
-    {
-      href: "/cms/personal",
-      label: "Dashboard Personal",
-      icon: <PersonStanding size={20} />,
-    },
+    ...(!admin
+      ? [
+          {
+            href: "/cms/personal",
+            label: "Dashboard Personal",
+            icon: <PersonStanding size={20} />,
+          },
+        ]
+      : []),
     { href: "/cms/posts", label: "My Posts", icon: <FileText size={20} /> },
     { href: "/cms/settings", label: "Settings", icon: <Settings size={20} /> },
     { href: "/cms/save-post", label: "Save Post", icon: <Heart size={20} /> },

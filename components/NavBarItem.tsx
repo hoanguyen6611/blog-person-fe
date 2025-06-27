@@ -78,11 +78,6 @@ const NavBarItem = () => {
       >
         ✍️ New Post
       </Button>
-      {/* <Button
-        type="text"
-        className="hover:bg-blue-700 text-white font-medium rounded-xl"
-        icon={<Bell />}
-      /> */}
       <Dropdown menu={{ items }} trigger={["click"]}>
         <a onClick={(e) => e.preventDefault()}>
           <Space>
@@ -100,7 +95,17 @@ const NavBarItem = () => {
       </SignedOut>
 
       <SignedIn>
-        <UserButton afterSignOutUrl="/" />
+        <UserButton
+          afterSignOutUrl="/"
+          appearance={{
+            elements: {
+              userButtonAvatarBox: "ring-2 ring-blue-500", // custom border
+              userButtonPopoverCard: "rounded-xl shadow-lg bg-white",
+              userButtonPopoverActionButton:
+                "hover:bg-gray-100 text-sm text-gray-700",
+            },
+          }}
+        />
       </SignedIn>
     </>
   );

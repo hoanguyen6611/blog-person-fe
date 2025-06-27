@@ -8,7 +8,7 @@ import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import useSWR from "swr";
 import { Category } from "@/interface/Category";
-import { Modal, Select, Space, Tabs, TabsProps } from "antd";
+import { Checkbox, CheckboxProps, Modal, Select, Tabs, TabsProps } from "antd";
 import { fetcherUseSWR } from "@/api/useswr";
 import UploadV1 from "@/components/UploadV1";
 import { PlusOutlined } from "@ant-design/icons";
@@ -17,7 +17,7 @@ import Editor, { EditorHandle } from "@/components/Editor/Editor";
 import ImageShow from "@/components/Image";
 import { useTableStore } from "@/store/useTableStore";
 import PostDetail from "@/components/PostDetail";
-import { set } from "date-fns";
+import { Tag } from "@/interface/Tag";
 interface FormPost {
   title: string;
   category: string;
@@ -233,10 +233,13 @@ const PostCreate = () => {
   const handleChange = (value: string[]) => {
     setTags(value);
   };
-  const tagsOptions = dataTags?.tags.map((tag: any) => ({
+  const tagsOptions = dataTags?.tags.map((tag: Tag) => ({
     value: tag._id,
     label: tag.name,
   }));
+  const onChangeCheckBox: CheckboxProps["onChange"] = (e) => {
+    console.log(`checked = ${e.target.checked}`);
+  };
 
   return (
     <div className="h-full min-h-screen bg-gray-50 py-8 px-4 md:px-10">
@@ -355,6 +358,11 @@ const PostCreate = () => {
               onChange={(e) => setNameTag(e.target.value)}
             />
           </Modal>
+          <div className="flex gap-3 items-end">
+            <Checkbox onChange={onChangeCheckBox}>
+              Send Email to All Users
+            </Checkbox>
+          </div>
           {/* Description */}
           <div>
             <textarea

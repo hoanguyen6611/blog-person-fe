@@ -10,6 +10,7 @@ import axios from "axios";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import useSWR from "swr";
 
 interface DataType {
@@ -137,11 +138,34 @@ const UserCms = () => {
       key: user._id,
       ...user,
     })) || [];
+  const handleOkFormDelete = async (id: string) => {
+    const token = await getToken();
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res.status === 200) {
+      toast.success("Delete user successfully");
+      await mutate();
+      router.push(`/cms/user`);
+    }
+  };
   if (!isSignedIn) return <p>You are not logged in</p>;
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Failed to load</p>;
-  // return <TableCMS columns={columns} dataSource={dataSource} />;
-  return <UserTable />;
+  return (
+    <TableCMS
+      columns={columns}
+      dataSource={dataSource}
+      nameButtonCreate="New User"
+      onDelete={handleOkFormDelete}
+      nameModalDelete="user"
+    />
+  );
 };
 
 export default UserCms;

@@ -70,15 +70,6 @@ const DashBoard = ({
           </Card>
         )}
       </div>
-
-      {/* Chart */}
-      <div className="bg-white shadow-md rounded-xl p-6">
-        <h2 className="text-xl font-semibold mb-4">Bài viết theo tháng</h2>
-        {/* Placeholder for chart */}
-        <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
-          Biểu đồ đang được tích hợp...
-        </div>
-      </div>
     </div>
   );
 };

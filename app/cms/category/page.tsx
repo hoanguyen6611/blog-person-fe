@@ -11,8 +11,7 @@ import { Replace } from "lucide-react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useTableStore } from "@/store/useTableStore";
-import { useState } from "react";
-import CategoryTable from "@/components/cms/category/CategoryTable";
+import { useRouter } from "next/navigation";
 
 interface DataType {
   _id: string;
@@ -22,28 +21,14 @@ interface DataType {
 }
 const CategoryPage = () => {
   const { user } = useUser();
-  const { getToken, isSignedIn } = useAuth();
+  const router = useRouter();
+  const { getToken } = useAuth();
   const isAdmin = user?.publicMetadata?.role === "admin" || false;
   const { setIsShowFormDelete, setIdDelete } = useTableStore();
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 10,
-    total: 0,
-  });
   const { data: categories, mutate } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    `${process.env.NEXT_PUBLIC_API_URL}/category/all`,
     fetcherUseSWR
   );
-  // const { data: categories, mutate } = useSWR(
-  //   isSignedIn
-  //     ? [`fetch-user-posts`, pagination.current, pagination.pageSize]
-  //     : null,
-  //   async ([_, page, limit]) => {
-  //     return fetcherUseSWR(
-  //       `${process.env.NEXT_PUBLIC_API_URL}/posts/user?page=${page}&limit=${limit}`
-  //     );
-  //   }
-  // );
   const columns: TableColumnsType<DataType> = [
     {
       title: "Title",
@@ -135,15 +120,32 @@ const CategoryPage = () => {
       key: category._id,
       ...category,
     })) || [];
-  // return (
-  //   <TableCMS
-  //     columns={columns}
-  //     dataSource={dataSource}
-  //     buttonCreate={true}
-  //     nameButtonCreate="New Category"
-  //   />
-  // );
-  return <CategoryTable />;
+  const handleOkFormDelete = async (id: string) => {
+    const token = await getToken();
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_API_URL}/category/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res.status === 200) {
+      setIsShowFormDelete(false);
+      toast.success("Delete category successfully");
+      await mutate();
+      router.push(`/cms/category`);
+    }
+  };
+  return (
+    <TableCMS
+      columns={columns}
+      dataSource={dataSource}
+      nameButtonCreate="New Category"
+      onDelete={handleOkFormDelete}
+      nameModalDelete="category"
+    />
+  );
 };
 
 export default CategoryPage;

@@ -4,6 +4,7 @@ import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../../api/useswr";
 import DashBoard from "@/components/Dashboard";
 import { useUser, useAuth } from "@clerk/nextjs";
 import { useState } from "react";
+import Statistic from "@/components/Statistic";
 
 const CMSPage = () => {
   const { user } = useUser();
@@ -50,6 +51,7 @@ const CMSPage = () => {
         views={views}
         users={users}
       />
+      <Statistic />
     </div>
   );
 };

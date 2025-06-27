@@ -12,6 +12,7 @@ interface TableCMSProps {
   columns: any;
   dataSource: any;
   onDelete: (id: string) => void;
+  nameModalDelete?: string;
 }
 const TableCMS = ({
   buttonCreate,
@@ -19,6 +20,7 @@ const TableCMS = ({
   dataSource,
   nameButtonCreate,
   onDelete,
+  nameModalDelete,
 }: TableCMSProps) => {
   const router = useRouter();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -45,7 +47,7 @@ const TableCMS = ({
   };
 
   return (
-    <div className="h-[calc(100vh-32px)] md:h-[calc(100vh-80px)] flex flex-col gap-6">
+    <div className="h-[calc(100vh-32px)] md:h-[calc(100vh-80px)] flex flex-col gap-6 ml-8 mr-6 mb-4">
       {buttonCreate && (
         <>
           <Flex gap="small" wrap>
@@ -60,6 +62,7 @@ const TableCMS = ({
         </>
       )}
       <Table
+        className="mt-4 w-full h-full"
         columns={columns}
         dataSource={dataSource}
         pagination={{
@@ -73,13 +76,13 @@ const TableCMS = ({
         rowSelection={rowSelection}
       />
       <Modal
-        title="Delete post"
+        title={`Delete ${nameModalDelete}`}
         closable={{ "aria-label": "Custom Close Button" }}
         open={isShowFormDelete}
         onOk={handleOkFormDelete}
         onCancel={handleCancelFormDelete}
       >
-        <p>Are you sure you want to delete this post?</p>
+        <p>Are you sure you want to {`Delete ${nameModalDelete}`}?</p>
       </Modal>
     </div>
   );

@@ -18,6 +18,7 @@ import { fetcherUseSWR } from "@/api/useswr";
 import { Post } from "@/interface/Post";
 import { Category } from "@/interface/Category";
 import { Flex, Tag } from "antd";
+import ShareButtons from "./ShareButtons";
 
 const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js",
@@ -79,7 +80,7 @@ export default function PostDetail({ post }: { post: Post }) {
 
           <p className="text-gray-600">{post.desc}</p>
         </div>
-
+        <ShareButtons title={post.title} />
         {/* Cover Image */}
         {post?.img && (
           <ImageShow

@@ -1,6 +1,5 @@
 "use client";
-import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
-import ImageShow from "@/components/Image";
+import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import TableCMS from "@/components/Table";
 import { useAuth } from "@clerk/nextjs";
 import { Space, TableColumnsType } from "antd";
@@ -9,24 +8,18 @@ import useSWR from "swr";
 import { format } from "date-fns";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { Category } from "@/interface/Category";
-import { Post } from "@/interface/Post";
 import { useTableStore } from "@/store/useTableStore";
-import { User } from "@/interface/User";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Tag } from "@/interface/Tag";
 
 interface DataType {
   _id: string;
-  title: string;
-  description: number;
-  category: string;
+  name: string;
   createdAt: string;
   slug: string;
-  visit: number;
-  user: User;
 }
-const PostPage = () => {
+const TagPage = () => {
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
   const { setIsShowFormDelete, setIdDelete } = useTableStore();
@@ -35,57 +28,11 @@ const PostPage = () => {
     pageSize: 10,
     total: 0,
   });
-  const { data: categories } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/category`,
-    fetcherUseSWR
-  );
   const columns: TableColumnsType<DataType> = [
     {
-      title: "Image",
-      dataIndex: "img",
-      key: "img",
-      render: (text) => (
-        <>
-          <ImageShow
-            src={text}
-            alt={text}
-            className="w-10 h-10"
-            width={100}
-            height={100}
-          />
-        </>
-      ),
-    },
-    {
-      title: "Title",
-      dataIndex: "title",
-      key: "title",
-    },
-    {
-      title: "Description",
-      dataIndex: "desc",
-      key: "desc",
-    },
-    {
-      title: "Author",
-      dataIndex: "user",
-      key: "user",
-      render: (text) => <>{text.username}</>,
-    },
-    {
-      title: "Visit",
-      dataIndex: "visit",
-      key: "visit",
-    },
-    {
-      title: "Category",
-      dataIndex: "categoryName",
-      key: "categoryName",
-      filters: categories?.categories.map((category: Category) => ({
-        text: category.title,
-        value: category._id,
-      })),
-      onFilter: (value, record) => record.category === value,
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Created At",
@@ -131,23 +78,20 @@ const PostPage = () => {
     async ([_, page, limit]) => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(
-        `${process.env.NEXT_PUBLIC_API_URL}/posts/user?page=${page}&limit=${limit}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/tags`,
         token!
       );
     }
   );
   const dataSource =
-    data?.posts?.map((post: Post) => ({
-      key: post._id,
-      categoryName: categories?.categories.find(
-        (category: Category) => category._id === post.category
-      )?.title,
-      ...post,
+    data?.tags?.map((tag: Tag) => ({
+      key: tag._id,
+      ...tag,
     })) || [];
   const handleDeletePost = async (id: string) => {
     const token = await getToken();
     const res = await axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/tags/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -156,9 +100,9 @@ const PostPage = () => {
     );
     if (res.status === 200) {
       setIsShowFormDelete(false);
-      toast.success("Delete post successfully");
+      toast.success("Delete tag successfully");
       await mutate();
-      router.push(`/cms/posts`);
+      router.push(`/cms/tag`);
     }
   };
   const showFormDelete = (id: string) => {
@@ -172,12 +116,11 @@ const PostPage = () => {
     <TableCMS
       columns={columns}
       dataSource={dataSource}
-      buttonCreate={true}
-      nameButtonCreate="New Post"
+      nameButtonCreate="New Tag"
       onDelete={handleDeletePost}
-      nameModalDelete="post"
+      nameModalDelete="tag"
     />
   );
 };
 
-export default PostPage;
+export default TagPage;
