@@ -5,23 +5,15 @@ import { Post } from "@/interface/Post";
 import { User } from "@/interface/User";
 import { useAuth } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
-} from "recharts";
 import useSWR from "swr";
 import ImageShow from "./Image";
 import MonthlyPostChart from "./MonthlyPostChart";
-import MultiYearPostChart from "./MultiYearPostChart";
 import CategoryPieChart from "./CategoryPieChart";
 import AuthorStatsTable from "./AuthorStatsTable";
 
 export default function Statistic() {
+  const { getToken, isSignedIn } = useAuth();
+  const [token, setToken] = useState<string | null>(null);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -31,11 +23,19 @@ export default function Statistic() {
     `${process.env.NEXT_PUBLIC_API_URL}/category/all`,
     fetcherUseSWR
   );
+  useEffect(() => {
+    (async () => {
+      const t = await getToken();
+      setToken(t);
+    })();
+  }, [getToken]);
   const { data: stats } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/posts/statistic`,
-    fetcherUseSWR
+    () =>
+      token
+        ? [`${process.env.NEXT_PUBLIC_API_URL}/posts/statistic`, token]
+        : null,
+    ([url, token]) => fetcherWithTokenUseSWR(url, token)
   );
-  const { getToken, isSignedIn } = useAuth();
   const { data: users } = useSWR(
     isSignedIn
       ? [`fetch-user-posts`, pagination.current, pagination.pageSize]
