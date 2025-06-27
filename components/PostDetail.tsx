@@ -17,6 +17,7 @@ import Categories from "@/components/Categories";
 import { fetcherUseSWR } from "@/api/useswr";
 import { Post } from "@/interface/Post";
 import { Category } from "@/interface/Category";
+import { Flex, Tag } from "antd";
 
 const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js",
@@ -29,13 +30,19 @@ export default function PostDetail({ post }: { post: Post }) {
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
     fetcherUseSWR
   );
+  const { data: tags } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/tags`,
+    fetcherUseSWR
+  );
 
   if (!isSignedIn) return <p>You are not logged in</p>;
 
   const categoryTitle = categories?.categories.find(
     (cat: Category) => cat._id === post?.category
   )?.title;
-
+  const tagNames = tags?.tags
+    .filter((tag: any) => post.tags.includes(tag._id))
+    .map((tag: any) => tag.name);
   return (
     <div className="container mx-auto px-4 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
       {/* Main content */}
@@ -62,6 +69,14 @@ export default function PostDetail({ post }: { post: Post }) {
             </Link>
             <span>{format(post?.createdAt)}</span>
           </div>
+          <div className="flex flex-wrap items-center gap-2 text-sm mb-4">
+            {tagNames?.map((tag: any) => (
+              <Flex gap="4px 0" wrap key={tag}>
+                <Tag color="processing">{tag}</Tag>
+              </Flex>
+            ))}
+          </div>
+
           <p className="text-gray-600">{post.desc}</p>
         </div>
 
@@ -97,7 +112,7 @@ export default function PostDetail({ post }: { post: Post }) {
               height={48}
             />
             <Link
-              href={`/posts?author=${post?.user?.username}`}
+              href={`/user/${post?.user?._id}`}
               className="text-blue-600 font-medium"
             >
               {post?.user?.username}

@@ -8,7 +8,7 @@ import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import useSWR from "swr";
 import { Category } from "@/interface/Category";
-import { Modal, Tabs, TabsProps } from "antd";
+import { Modal, Select, Space, Tabs, TabsProps } from "antd";
 import { fetcherUseSWR } from "@/api/useswr";
 import UploadV1 from "@/components/UploadV1";
 import { PlusOutlined } from "@ant-design/icons";
@@ -17,12 +17,14 @@ import Editor, { EditorHandle } from "@/components/Editor/Editor";
 import ImageShow from "@/components/Image";
 import { useTableStore } from "@/store/useTableStore";
 import PostDetail from "@/components/PostDetail";
+import { set } from "date-fns";
 interface FormPost {
   title: string;
   category: string;
   desc?: string;
   content: string;
   img?: string;
+  tags?: string[];
 }
 
 const PostCreate = () => {
@@ -34,13 +36,20 @@ const PostCreate = () => {
   const [coverVideo, setCoverVideo] = useState("");
   const [coverImage, setCoverImage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenTag, setIsModalOpenTag] = useState(false);
   const [nameCategory, setNameCategory] = useState("");
+  const [nameTag, setNameTag] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
   const [post, setPost] = useState("");
   const { setFormData, setContentCreatePost, contentCreatePost } =
     useTableStore();
   const editorRef = useRef<EditorHandle>(null);
   const { data: dataCategories, mutate } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    fetcherUseSWR
+  );
+  const { data: dataTags, mutate: mutateTags } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/tags`,
     fetcherUseSWR
   );
   useEffect(() => {
@@ -78,6 +87,32 @@ const PostCreate = () => {
     return <div>You should login</div>;
   }
 
+  const handleOkTag = async () => {
+    const dataForm = {
+      name: nameTag,
+    };
+    const token = await getToken();
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/tags`,
+      {
+        ...dataForm,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res.status === 200) {
+      toast.success("Name tag created successfully");
+      setIsModalOpenTag(false);
+      await mutateTags();
+      setNameTag("");
+    } else {
+      toast.error("Name tag created failed");
+    }
+  };
+
   const handleOk = async () => {
     const dataForm = {
       title: nameCategory,
@@ -97,7 +132,8 @@ const PostCreate = () => {
     if (res.status === 200) {
       toast.success("Category created successfully");
       setIsModalOpen(false);
-      mutate();
+      await mutate();
+      setNameCategory("");
     } else {
       toast.error("Category created failed");
     }
@@ -142,6 +178,7 @@ const PostCreate = () => {
       desc: formData.get("desc") as string,
       content: post,
       img: cover,
+      tags: tags,
     };
     if (!dataForm.title) {
       toast.error("The title field is required");
@@ -168,8 +205,14 @@ const PostCreate = () => {
   const showModalFormCategory = () => {
     setIsModalOpen(true);
   };
+  const showModalFormTag = () => {
+    setIsModalOpenTag(true);
+  };
   const handleCancelFormCategory = () => {
     setIsModalOpen(false);
+  };
+  const handleCancelFormTag = () => {
+    setIsModalOpenTag(false);
   };
   const changeUploadImage = (res: any) => {
     setCover(res.filePath || "");
@@ -187,6 +230,13 @@ const PostCreate = () => {
     setNameCategory(value);
     setFormData((prev) => ({ ...prev, category: value }));
   };
+  const handleChange = (value: string[]) => {
+    setTags(value);
+  };
+  const tagsOptions = dataTags?.tags.map((tag: any) => ({
+    value: tag._id,
+    label: tag.name,
+  }));
 
   return (
     <div className="h-full min-h-screen bg-gray-50 py-8 px-4 md:px-10">
@@ -262,6 +312,49 @@ const PostCreate = () => {
             />
           </Modal>
 
+          {/* Tag */}
+          <div className="flex gap-3 items-end">
+            <div className="flex-1">
+              <Select
+                mode="multiple"
+                style={{ width: "100%" }}
+                placeholder="Select name tag"
+                onChange={handleChange}
+                options={tagsOptions}
+                // optionRender={(option) => (
+                //   <Space>
+                //     <span role="img" aria-label={option.data.label}>
+                //       {option.data.emoji}
+                //     </span>
+                //     {option.data.desc}
+                //   </Space>
+                // )}
+              />
+            </div>
+            <button
+              type="button"
+              onClick={showModalFormTag}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+            >
+              <PlusOutlined />
+              New Tag
+            </button>
+          </div>
+          <Modal
+            title="Create New Tag"
+            open={isModalOpenTag}
+            onOk={handleOkTag}
+            onCancel={handleCancelFormTag}
+          >
+            <input
+              type="text"
+              name="nameTag"
+              value={nameTag}
+              placeholder="Awesome Tag"
+              className="w-full p-3 text-xl rounded-lg border border-gray-300 outline-none"
+              onChange={(e) => setNameTag(e.target.value)}
+            />
+          </Modal>
           {/* Description */}
           <div>
             <textarea
@@ -330,6 +423,7 @@ const Preview = () => {
   const { formData } = useTableStore();
   const mockPost = {
     _id: "preview",
+    tags: [],
     user: {
       _id: "preview-user",
       clerkUserId: "preview-clerk",

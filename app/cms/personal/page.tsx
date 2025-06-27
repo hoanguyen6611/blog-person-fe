@@ -24,10 +24,22 @@ const PersonalPage = () => {
       );
     }
   );
+  const { data: views } = useSWR(
+    isSignedIn
+      ? [`fetch-user-posts`, pagination.current, pagination.pageSize]
+      : null,
+    async ([_, ,]) => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/sumPostUser`,
+        token!
+      );
+    }
+  );
   if (!isSignedIn) return <p>You are not logged in</p>;
   return (
     <div>
-      <DashBoard name="Personal Statistics" posts={posts} views={posts} />
+      <DashBoard name="Personal Statistics" posts={posts} views={views} />
     </div>
   );
 };

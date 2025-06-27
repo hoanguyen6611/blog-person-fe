@@ -1,18 +1,20 @@
 "use client";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
-import PostTable from "@/components/cms/post/PostTable";
 import ImageShow from "@/components/Image";
 import TableCMS from "@/components/Table";
 import { useAuth } from "@clerk/nextjs";
 import { Space, TableColumnsType } from "antd";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Category } from "@/interface/Category";
 import { Post } from "@/interface/Post";
 import { useTableStore } from "@/store/useTableStore";
+import { User } from "@/interface/User";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 interface DataType {
   _id: string;
@@ -22,7 +24,7 @@ interface DataType {
   createdAt: string;
   slug: string;
   visit: number;
-  user: any;
+  user: User;
 }
 const PostPage = () => {
   const router = useRouter();
@@ -122,7 +124,7 @@ const PostPage = () => {
       ),
     },
   ];
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     isSignedIn
       ? [`fetch-user-posts`, pagination.current, pagination.pageSize]
       : null,
@@ -142,6 +144,23 @@ const PostPage = () => {
       )?.title,
       ...post,
     })) || [];
+  const handleDeletePost = async (id: string) => {
+    const token = await getToken();
+    const res = await axios.delete(
+      `${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res.status === 200) {
+      setIsShowFormDelete(false);
+      toast.success("Delete post successfully");
+      await mutate();
+      router.push(`/cms/posts`);
+    }
+  };
   const showFormDelete = (id: string) => {
     setIsShowFormDelete(true);
     setIdDelete(id);
@@ -149,13 +168,13 @@ const PostPage = () => {
   if (!isSignedIn) return <p>You are not logged in</p>;
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Failed to load</p>;
-  // return <PostTable />;
   return (
     <TableCMS
       columns={columns}
       dataSource={dataSource}
       buttonCreate={true}
       nameButtonCreate="New Post"
+      onDelete={handleDeletePost}
     />
   );
 };

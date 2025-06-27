@@ -6,6 +6,7 @@ export interface Post {
   title: string;
   slug: string;
   content: string;
+  tags: string[];
   desc: string;
   isFeature: boolean;
   category: string;

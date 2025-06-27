@@ -1,6 +1,13 @@
 "use client";
-import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
-import { Button } from "antd";
+import {
+  SignedIn,
+  SignedOut,
+  UserButton,
+  UserProfile,
+  useUser,
+} from "@clerk/nextjs";
+import { Button, Dropdown, MenuProps, Space } from "antd";
+import { Bell } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -12,6 +19,39 @@ const NavBarItem = () => {
 
   const linkStyle =
     "hover:text-blue-600 transition-colors duration-200 underline-offset-4";
+  const items: MenuProps["items"] = [
+    {
+      label: (
+        <a
+          href="https://www.antgroup.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Ban dang co 1 bai viet moi tu huyhoa2001
+        </a>
+      ),
+      key: "0",
+    },
+    {
+      label: (
+        <a
+          href="https://www.aliyun.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          2nd menu item
+        </a>
+      ),
+      key: "1",
+    },
+    {
+      type: "divider",
+    },
+    {
+      label: "3rd menu item",
+      key: "3",
+    },
+  ];
 
   return (
     <>
@@ -38,6 +78,18 @@ const NavBarItem = () => {
       >
         ✍️ New Post
       </Button>
+      {/* <Button
+        type="text"
+        className="hover:bg-blue-700 text-white font-medium rounded-xl"
+        icon={<Bell />}
+      /> */}
+      <Dropdown menu={{ items }} trigger={["click"]}>
+        <a onClick={(e) => e.preventDefault()}>
+          <Space>
+            <Bell />
+          </Space>
+        </a>
+      </Dropdown>
 
       <SignedOut>
         <Link href="/login">

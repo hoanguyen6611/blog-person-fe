@@ -1,19 +1,35 @@
 import CommentItem from "./CommentItem";
 import useSWR from "swr";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { Comment } from "@/interface/Comment";
-import { fetcherUseSWR } from "../api/useswr";
+import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../api/useswr";
 import { toast } from "react-toastify";
 
 const Comments = ({ postId }: { postId: string }) => {
   const { getToken } = useAuth();
   const [desc, setDesc] = useState("");
+  const [token, setToken] = useState<string | null>(null);
+
   const { data, error, isLoading, mutate } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/comments/${postId}`,
     fetcherUseSWR
   );
+  useEffect(() => {
+    (async () => {
+      const t = await getToken();
+      setToken(t);
+    })();
+  }, [getToken]);
+  const { data: likeComments } = useSWR(
+    () =>
+      token
+        ? [`${process.env.NEXT_PUBLIC_API_URL}/users/likeComment`, token]
+        : null,
+    ([url, token]) => fetcherWithTokenUseSWR(url, token)
+  );
+  // console.log("likeComments", likeComments);
 
   const handleDeleteComment = async (id: string) => {
     const token = await getToken();
@@ -53,6 +69,61 @@ const Comments = ({ postId }: { postId: string }) => {
       setDesc("");
     }
   };
+  const handleReply = async (dataForm: {
+    desc: string;
+    post: string;
+    parentId?: string | null;
+  }) => {
+    const token = await getToken();
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/comments`,
+      {
+        ...dataForm,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res.status === 200) {
+      await mutate();
+    }
+  };
+  const handleLike = async (id: string) => {
+    const token = await getToken();
+    const res = await axios.patch(
+      `${process.env.NEXT_PUBLIC_API_URL}/comments/like`,
+      {
+        id: id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res.status === 200) {
+      await mutate();
+    }
+  };
+  const handleDisLike = async (id: string) => {
+    const token = await getToken();
+    const res = await axios.patch(
+      `${process.env.NEXT_PUBLIC_API_URL}/comments/disLike`,
+      {
+        id: id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res.status === 200) {
+      await mutate();
+    }
+  };
   const comments = Array.isArray(data) ? data : data?.comments || [];
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Failed to load</p>;
@@ -79,7 +150,12 @@ const Comments = ({ postId }: { postId: string }) => {
         <CommentItem
           key={comment._id}
           comment={comment}
+          postId={postId}
           onDelete={handleDeleteComment}
+          onReply={handleReply}
+          onLike={handleLike}
+          onDisLike={handleDisLike}
+          likeComments={likeComments}
         />
       ))}
     </div>

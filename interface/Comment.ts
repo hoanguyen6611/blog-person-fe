@@ -7,4 +7,6 @@ export interface Comment {
   desc: string;
   createdAt: string;
   updatedAt: string;
+  like: number;
+  replies?: Comment[];
 }
