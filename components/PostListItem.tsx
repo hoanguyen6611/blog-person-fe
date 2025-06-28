@@ -7,11 +7,11 @@ import { fetcherUseSWR } from "../api/useswr";
 import { Category } from "@/interface/Category";
 
 const PostListItem = ({ post }: { post: Post }) => {
-  const {
-    data: categories,
-    error,
-    isLoading,
-  } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/category`, fetcherUseSWR);
+  const { data: categories } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    fetcherUseSWR
+  );
+  console.log(post);
   return (
     <div className="flex flex-col xl:flex-row gap-8">
       {/* image */}
@@ -31,10 +31,7 @@ const PostListItem = ({ post }: { post: Post }) => {
         </Link>
         <div className="flex items-center gap-2 text-gray-400 text-sm">
           <span>Written by</span>
-          <Link
-            href={`/posts?author=${post.user.username}`}
-            className="text-blue-800"
-          >
+          <Link href={`/user/${post?.user?._id}`} className="text-blue-800">
             {post.user.username}
           </Link>
           <span>on</span>

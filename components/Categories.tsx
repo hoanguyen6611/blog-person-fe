@@ -10,14 +10,14 @@ const Categories = () => {
   );
   return (
     <div className="flex flex-col gap-2 text-sm">
-      <Link href="/posts" className="underline">
+      <Link href="/posts" className="hover:text-blue-600">
         All
       </Link>
       {(data?.categories || []).map((category: Category) => (
         <Link
           href={`/posts?cat=${category._id}`}
-          className="underline"
           key={category._id}
+          className="hover:text-blue-600"
         >
           {category.title}
         </Link>
