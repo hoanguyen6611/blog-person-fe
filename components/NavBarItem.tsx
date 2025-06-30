@@ -61,7 +61,8 @@ const NavBarItem = () => {
       key: notification._id,
     })
   );
-  useNotificationSocket(() => {
+  useNotificationSocket((data) => {
+    toast.success(data.message); // Hoặc cập nhật UI thông báo
     mutate();
   });
 
