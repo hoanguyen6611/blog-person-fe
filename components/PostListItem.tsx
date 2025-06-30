@@ -11,7 +11,6 @@ const PostListItem = ({ post }: { post: Post }) => {
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
     fetcherUseSWR
   );
-  console.log(post);
   return (
     <div className="flex flex-col xl:flex-row gap-8">
       {/* image */}

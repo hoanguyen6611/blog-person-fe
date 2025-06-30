@@ -3,15 +3,25 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import ImageShow from "@/components/Image";
 import PostList from "@/components/PostList";
 import { useParams } from "next/navigation";
-import { fetcherWithTokenUseSWR } from "@/api/useswr";
-import useSWR from "swr";
+import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
+import useSWR, { mutate as globalMutate } from "swr";
+import { Button } from "antd";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
+import FollowStats from "@/components/FollowStats";
 
 const UserPage = () => {
   const params = useParams();
   const { user } = useUser();
   const { getToken, isSignedIn } = useAuth();
-  const { data } = useSWR(
-    isSignedIn && params?.id ? [`post`, params.id] : null,
+
+  const [token, setToken] = useState<string | null>(null);
+  const [loadingFollow, setLoadingFollow] = useState(false);
+
+  // Lấy dữ liệu user đang xem
+  const { data: profileData } = useSWR(
+    isSignedIn && params?.id ? [`user`, params.id] : null,
     async ([, id]) => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(
@@ -20,28 +30,100 @@ const UserPage = () => {
       );
     }
   );
+
+  // Lấy token một lần
+  useEffect(() => {
+    (async () => {
+      const t = await getToken();
+      setToken(t);
+    })();
+  }, [getToken]);
+
+  // Lấy danh sách user mình đang theo dõi
+  const { data: followers, mutate } = useSWR(
+    () =>
+      token ? [`${process.env.NEXT_PUBLIC_API_URL}/users/follow`, token] : null,
+    ([url, token]) => fetcherWithTokenUseSWR(url, token)
+  );
+
+  // Tính xem có đang follow user này không
+  const isFollow = useMemo(() => {
+    return followers?.includes(params.id) || false;
+  }, [followers, params.id]);
+
+  // Lấy số người theo dõi user đang xem
+  const { data: numberFollow } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/getNumberFollow/${params.id}`,
+    fetcherUseSWR
+  );
+
+  // Hàm Follow / Unfollow
+  const handleFollow = async () => {
+    const token = await getToken();
+    try {
+      setLoadingFollow(true);
+      const res = await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/follow`,
+        { userId: params.id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (res.status === 200) {
+        toast.success(res.data || "Followed successfully");
+
+        // 🔁 Cập nhật lại danh sách followers
+        await mutate(undefined, { revalidate: true });
+
+        // 🔁 Cập nhật lại số lượng followers
+        await globalMutate(
+          `${process.env.NEXT_PUBLIC_API_URL}/users/getNumberFollow/${params.id}`
+        );
+      } else {
+        toast.error("Follow failed");
+      }
+    } catch (err) {
+      toast.error("Error while following");
+    } finally {
+      setLoadingFollow(false);
+    }
+  };
+
   if (!user) return <p className="text-center">You are not signed in.</p>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
-      {/* 🧑 User Info */}
+      {/* 👤 User Info */}
       <div className="flex items-center gap-6">
         <ImageShow
-          src={data?.img || ""}
+          src={profileData?.img || ""}
           alt="Avatar"
           width={100}
           height={100}
           className="rounded-full"
         />
         <div>
-          <h2 className="text-2xl font-bold">{data?.username}</h2>
-          <p className="text-gray-600">{data?.email}</p>
+          <h2 className="text-2xl font-bold">{profileData?.username}</h2>
+          <p className="text-gray-600">{profileData?.email}</p>
         </div>
+        {/* Nút Follow */}
+        <Button
+          type={isFollow ? "default" : "primary"}
+          onClick={handleFollow}
+          loading={loadingFollow}
+        >
+          {isFollow ? "Following" : "Follow"}
+        </Button>
       </div>
 
-      {/* 📝 Posts */}
+      {/* 📊 Thống kê follow */}
+      <FollowStats
+        followersCount={numberFollow?.followerCounts}
+        followingCount={followers?.length}
+      />
+
+      {/* 📝 Danh sách bài viết */}
       <div>
-        <h3 className="text-xl font-semibold mb-4">📝 Your Posts</h3>
+        <h3 className="text-xl font-semibold mb-4">📝 Their Posts</h3>
         <PostList
           apiUrl={`posts/user/${params.id}`}
           showPagination={false}

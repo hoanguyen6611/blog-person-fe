@@ -62,7 +62,6 @@ const Editor = forwardRef<EditorHandle, EditorProps>(
         },
       },
       onUpdate: ({ editor }) => {
-        // console.log(editor.getHTML());
         onChange(editor.getHTML());
       },
     });

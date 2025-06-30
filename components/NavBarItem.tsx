@@ -2,56 +2,68 @@
 import {
   SignedIn,
   SignedOut,
+  useAuth,
   UserButton,
-  UserProfile,
   useUser,
 } from "@clerk/nextjs";
-import { Button, Dropdown, MenuProps, Space } from "antd";
+import { Badge, Button, Dropdown, MenuProps, Space } from "antd";
 import { Bell } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ThemeToggle from "./ThemeToggle";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
+import { fetcherWithTokenUseSWR } from "@/api/useswr";
+import { toast } from "react-toastify";
+import { useNotificationSocket } from "@/hook/useNotificationSocket";
 
 const NavBarItem = () => {
   const { user } = useUser();
+  const { getToken } = useAuth();
+  const [token, setToken] = useState<string | null>(null);
   const isAdmin = user?.publicMetadata?.role === "admin";
   const cmsHref = isAdmin ? "/cms" : "/cms/personal";
   const router = useRouter();
 
   const linkStyle =
     "hover:text-blue-600 transition-colors duration-200 underline-offset-4";
+
+  useEffect(() => {
+    (async () => {
+      const t = await getToken();
+      setToken(t);
+    })();
+  }, [getToken]);
+  const { data: notifications, mutate } = useSWR(
+    () =>
+      token
+        ? [`${process.env.NEXT_PUBLIC_API_URL}/notifications`, token]
+        : null,
+    ([url, token]) => fetcherWithTokenUseSWR(url, token)
+  );
   const items: MenuProps["items"] = [
     {
-      label: (
-        <a
-          href="https://www.antgroup.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Ban dang co 1 bai viet moi tu huyhoa2001
-        </a>
-      ),
+      label: "Khong co thong bao",
       key: "0",
     },
-    {
+  ];
+  const notificationItems: MenuProps["items"] = notifications?.map(
+    (notification: any) => ({
       label: (
         <a
-          href="https://www.aliyun.com"
+          href={`/posts/${notification.postId}`}
           target="_blank"
           rel="noopener noreferrer"
         >
-          2nd menu item
+          {notification.message}
         </a>
       ),
-      key: "1",
-    },
-    {
-      type: "divider",
-    },
-    {
-      label: "3rd menu item",
-      key: "3",
-    },
-  ];
+      key: notification._id,
+    })
+  );
+  useNotificationSocket(() => {
+    mutate();
+  });
 
   return (
     <>
@@ -78,13 +90,19 @@ const NavBarItem = () => {
       >
         ✍️ New Post
       </Button>
-      <Dropdown menu={{ items }} trigger={["click"]}>
+      <Dropdown
+        menu={{ items: notificationItems ? notificationItems : items }}
+        trigger={["click"]}
+      >
         <a onClick={(e) => e.preventDefault()}>
           <Space>
-            <Bell />
+            <Badge count={notifications?.filter((n: any) => !n.read).length}>
+              <Bell />
+            </Badge>
           </Space>
         </a>
       </Dropdown>
+      {/* <ThemeToggle /> */}
 
       <SignedOut>
         <Link href="/login">

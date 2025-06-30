@@ -47,8 +47,6 @@ const CommentItem = ({
   const isLikeComment = likeComments?.some(
     (likeComment: any) => likeComment === comment._id
   );
-  console.log("likeComments", likeComments);
-  console.log("isLikeComment", isLikeComment);
   const handleLikeOrDisLike = async (id: string) => {
     onLike(id);
   };

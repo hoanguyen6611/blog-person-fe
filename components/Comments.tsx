@@ -1,3 +1,4 @@
+"use client";
 import CommentItem from "./CommentItem";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
@@ -8,8 +9,8 @@ import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../api/useswr";
 import { toast } from "react-toastify";
 
 const Comments = ({ postId }: { postId: string }) => {
-  const { getToken } = useAuth();
   const [desc, setDesc] = useState("");
+  const { getToken } = useAuth();
   const [token, setToken] = useState<string | null>(null);
 
   const { data, error, isLoading, mutate } = useSWR(
@@ -29,7 +30,6 @@ const Comments = ({ postId }: { postId: string }) => {
         : null,
     ([url, token]) => fetcherWithTokenUseSWR(url, token)
   );
-  // console.log("likeComments", likeComments);
 
   const handleDeleteComment = async (id: string) => {
     const token = await getToken();
@@ -64,9 +64,10 @@ const Comments = ({ postId }: { postId: string }) => {
         },
       }
     );
-    if (res.status === 200) {
-      await mutate();
+    if (res.status === 200 || res.status === 201) {
+      toast.success("Comment successfully");
       setDesc("");
+      await mutate();
     }
   };
   const handleReply = async (dataForm: {
@@ -143,7 +144,7 @@ const Comments = ({ postId }: { postId: string }) => {
           name="desc"
         />
         <button className="bg-blue-500 text-white px-4 py-3 font-medium rounded-xl">
-          Send
+          Comment
         </button>
       </form>
       {comments.map((comment: Comment) => (

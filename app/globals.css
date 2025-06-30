@@ -5,6 +5,12 @@ body {
   width: 100vw;
   overflow-x: hidden;
 }
+/* html {
+  @apply bg-white text-black;
+}
+html.dark {
+  @apply bg-gray-950 text-white;
+} */
 .animateButton {
   animation-duration: 10000ms;
 }
