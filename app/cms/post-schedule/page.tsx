@@ -26,7 +26,7 @@ interface DataType {
   visit: number;
   user: User;
 }
-const PostPage = () => {
+const PostSchedulePage = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
@@ -132,7 +132,7 @@ const PostPage = () => {
     async ([_, page, limit]) => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(
-        `${process.env.NEXT_PUBLIC_API_URL}/posts/user?page=${page}&limit=${limit}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/user/schedule?page=${page}&limit=${limit}`,
         token!
       );
     }
@@ -184,4 +184,4 @@ const PostPage = () => {
   );
 };
 
-export default PostPage;
+export default PostSchedulePage;

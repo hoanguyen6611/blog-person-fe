@@ -39,7 +39,13 @@ const PersonalPage = () => {
   if (!isSignedIn) return <p>You are not logged in</p>;
   return (
     <div>
-      <DashBoard name="Personal Statistics" posts={posts} views={views} />
+      <DashBoard
+        name="Personal Statistics"
+        posts={posts}
+        views={views}
+        followers={5}
+        following={7}
+      />
     </div>
   );
 };

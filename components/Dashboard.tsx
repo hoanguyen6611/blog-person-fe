@@ -1,5 +1,12 @@
 "use client";
-import { BarChart, User, Folder, FileText } from "lucide-react";
+import {
+  BarChart,
+  User,
+  Folder,
+  FileText,
+  Users,
+  UserPlus,
+} from "lucide-react";
 import { Card, CardContent } from "./Card";
 
 type DashBoardProps = {
@@ -8,6 +15,8 @@ type DashBoardProps = {
   categories?: any;
   views?: any;
   users?: any;
+  followers?: any;
+  following?: any;
 };
 const DashBoard = ({
   name,
@@ -15,6 +24,8 @@ const DashBoard = ({
   categories,
   views,
   users,
+  followers,
+  following,
 }: DashBoardProps) => {
   return (
     <div className="space-y-8">
@@ -66,6 +77,28 @@ const DashBoard = ({
                 <p className="text-xl font-semibold">{views?.totalVisits}</p>
               </div>
               <BarChart className="w-6 h-6 text-red-600" />
+            </CardContent>
+          </Card>
+        )}
+        {followers && (
+          <Card>
+            <CardContent className="p-4 flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500">Follower</p>
+                <p className="text-xl font-semibold">{followers}</p>
+              </div>
+              <Users className="w-6 h-6 " />
+            </CardContent>
+          </Card>
+        )}
+        {following && (
+          <Card>
+            <CardContent className="p-4 flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500">Following</p>
+                <p className="text-xl font-semibold">{following}</p>
+              </div>
+              <UserPlus className="w-6 h-6" />
             </CardContent>
           </Card>
         )}

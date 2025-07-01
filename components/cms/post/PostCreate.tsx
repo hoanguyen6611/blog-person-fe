@@ -8,7 +8,15 @@ import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
 import useSWR from "swr";
 import { Category } from "@/interface/Category";
-import { Checkbox, CheckboxProps, Modal, Select, Tabs, TabsProps } from "antd";
+import {
+  Checkbox,
+  CheckboxProps,
+  DatePicker,
+  Modal,
+  Select,
+  Tabs,
+  TabsProps,
+} from "antd";
 import { fetcherUseSWR } from "@/api/useswr";
 import UploadV1 from "@/components/UploadV1";
 import { PlusOutlined } from "@ant-design/icons";
@@ -18,6 +26,7 @@ import ImageShow from "@/components/Image";
 import { useTableStore } from "@/store/useTableStore";
 import PostDetail from "@/components/PostDetail";
 import { Tag } from "@/interface/Tag";
+import dayjs from "dayjs";
 interface FormPost {
   title: string;
   category: string;
@@ -25,6 +34,7 @@ interface FormPost {
   content: string;
   img?: string;
   tags?: string[];
+  publishedAt?: Date | null;
 }
 
 const PostCreate = () => {
@@ -41,6 +51,9 @@ const PostCreate = () => {
   const [nameTag, setNameTag] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [post, setPost] = useState("");
+  const [publishedAt, setPublishedAt] = useState<Date | null>(new Date());
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
   const { setFormData, setContentCreatePost, contentCreatePost } =
     useTableStore();
   const editorRef = useRef<EditorHandle>(null);
@@ -139,7 +152,7 @@ const PostCreate = () => {
     }
   };
 
-  const createCategory = async (dataForm: FormPost) => {
+  const createPost = async (dataForm: FormPost) => {
     const token = await getToken();
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/posts`,
@@ -152,6 +165,7 @@ const PostCreate = () => {
         },
       }
     );
+    console.log(res.data);
     if (res.status === 200) {
       setIsDisabledBtnSend(true);
       setFormData({
@@ -168,14 +182,42 @@ const PostCreate = () => {
       toast.error("Post updated failed");
     }
   };
+  const createPostSchedule = async (dataForm: FormPost) => {
+    const token = await getToken();
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/posts`,
+      {
+        ...dataForm,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(res.data);
+    if (res.status === 200) {
+      setIsDisabledBtnSend(true);
+      setFormData({
+        title: "",
+        category: "",
+        desc: "",
+        content: "",
+        img: "",
+      });
+      toast.success("Post created successfully and scheduled");
+      setContentCreatePost("");
+      router.push(`/cms/posts/schedule`);
+    } else {
+      toast.error("Post updated failed");
+    }
+  };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
+  const handleSubmit = async () => {
     const dataForm: FormPost = {
-      title: formData.get("title") as string,
+      title,
       category: nameCategory,
-      desc: formData.get("desc") as string,
+      desc,
       content: post,
       img: cover,
       tags: tags,
@@ -193,7 +235,7 @@ const PostCreate = () => {
       return;
     } else {
       setIsDisabledBtnSend(true);
-      createCategory(dataForm);
+      createPost(dataForm);
     }
   };
   const categoryOptions = dataCategories?.categories.map(
@@ -219,6 +261,7 @@ const PostCreate = () => {
     setFormData((prev) => ({ ...prev, img: res.filePath || "" }));
   };
   const changeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
     setFormData((prev) => ({ ...prev, title: e.target.value }));
   };
   const onChange = (content: string) => {
@@ -240,6 +283,33 @@ const PostCreate = () => {
   const onChangeCheckBox: CheckboxProps["onChange"] = (e) => {
     console.log(`checked = ${e.target.checked}`);
   };
+  const handleSubmitSchedule = async () => {
+    console.log(publishedAt);
+    const dataForm: FormPost = {
+      title,
+      category: nameCategory,
+      desc,
+      content: post,
+      img: cover,
+      tags: tags,
+      publishedAt,
+    };
+    if (!dataForm.title) {
+      toast.error("The title field is required");
+      return;
+    }
+    if (!dataForm.category) {
+      toast.error("The category field is required");
+      return;
+    }
+    if (!dataForm.content) {
+      toast.error("The content field is required");
+      return;
+    } else {
+      setIsDisabledBtnSend(true);
+      createPostSchedule(dataForm);
+    }
+  };
 
   return (
     <div className="h-full min-h-screen bg-gray-50 py-8 px-4 md:px-10">
@@ -248,7 +318,7 @@ const PostCreate = () => {
           📝 Create a New Post
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form className="space-y-6">
           {/* Upload cover */}
           <div className="space-y-2">
             <label className="block font-medium">Cover Image</label>
@@ -369,9 +439,10 @@ const PostCreate = () => {
               name="desc"
               placeholder="Short description..."
               className="w-full min-h-[100px] p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, desc: e.target.value }))
-              }
+              onChange={(e) => {
+                setFormData((prev) => ({ ...prev, desc: e.target.value }));
+                setDesc(e.target.value);
+              }}
             />
           </div>
 
@@ -413,14 +484,31 @@ const PostCreate = () => {
           </div>
 
           {/* Submit */}
-          <div className="text-center">
-            <button
-              type="submit"
-              disabled={isDisabledBtnSend}
-              className="px-6 py-3 text-white bg-blue-700 hover:bg-blue-800 rounded-lg font-medium disabled:opacity-50"
-            >
-              {isDisabledBtnSend ? "Creating..." : "Create Post"}
-            </button>
+          <div className="flex gap-3 items-end">
+            <div className="text-center">
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                disabled={isDisabledBtnSend}
+                className="px-6 py-3 text-white bg-blue-700 hover:bg-blue-800 rounded-lg font-medium disabled:opacity-50"
+              >
+                {isDisabledBtnSend ? "Creating..." : "Create Post"}
+              </button>
+            </div>
+            <div className="flex gap-3 items-end">
+              <DatePicker
+                showTime
+                className="w-full"
+                defaultValue={dayjs()}
+                onChange={(date) => setPublishedAt(date?.toDate() || null)}
+              />
+              <button
+                onClick={handleSubmitSchedule}
+                className="px-6 py-3 text-white bg-blue-700 hover:bg-blue-800 rounded-lg font-medium disabled:opacity-50"
+              >
+                Schedule
+              </button>
+            </div>
           </div>
         </form>
       </div>

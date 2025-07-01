@@ -10,6 +10,7 @@ import {
   Heart,
   PersonStanding,
   Tag,
+  AlarmClockCheck,
 } from "lucide-react";
 
 export default function Sidebar({ admin }: { admin: boolean }) {
@@ -42,6 +43,11 @@ export default function Sidebar({ admin }: { admin: boolean }) {
         ]
       : []),
     { href: "/cms/posts", label: "My Posts", icon: <FileText size={20} /> },
+    {
+      href: "/cms/post-schedule",
+      label: "My Posts Schedule",
+      icon: <AlarmClockCheck size={20} />,
+    },
     { href: "/cms/settings", label: "Settings", icon: <Settings size={20} /> },
     { href: "/cms/save-post", label: "Save Post", icon: <Heart size={20} /> },
   ];

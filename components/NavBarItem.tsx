@@ -10,7 +10,6 @@ import { Badge, Button, Dropdown, MenuProps, Space } from "antd";
 import { Bell } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import ThemeToggle from "./ThemeToggle";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
@@ -19,7 +18,8 @@ import { useNotificationSocket } from "@/hook/useNotificationSocket";
 
 const NavBarItem = () => {
   const { user } = useUser();
-  const { getToken } = useAuth();
+  const { getToken, isSignedIn } = useAuth();
+
   const [token, setToken] = useState<string | null>(null);
   const isAdmin = user?.publicMetadata?.role === "admin";
   const cmsHref = isAdmin ? "/cms" : "/cms/personal";
@@ -91,18 +91,20 @@ const NavBarItem = () => {
       >
         ✍️ New Post
       </Button>
-      <Dropdown
-        menu={{ items: notificationItems ? notificationItems : items }}
-        trigger={["click"]}
-      >
-        <a onClick={(e) => e.preventDefault()}>
-          <Space>
-            <Badge count={notifications?.filter((n: any) => !n.read).length}>
-              <Bell />
-            </Badge>
-          </Space>
-        </a>
-      </Dropdown>
+      {isSignedIn && (
+        <Dropdown
+          menu={{ items: notificationItems ? notificationItems : items }}
+          trigger={["click"]}
+        >
+          <a onClick={(e) => e.preventDefault()}>
+            <Space>
+              <Badge count={notifications?.filter((n: any) => !n.read).length}>
+                <Bell />
+              </Badge>
+            </Space>
+          </a>
+        </Dropdown>
+      )}
       {/* <ThemeToggle /> */}
 
       <SignedOut>
