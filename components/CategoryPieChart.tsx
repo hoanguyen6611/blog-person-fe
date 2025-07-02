@@ -67,7 +67,7 @@ export default function CategoryPieChart({ data }: { data: Category[] }) {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: any) => [`${value} bài viết`, "Số lượng"]}
+              formatter={(value: number) => [`${value} bài viết`, "Số lượng"]}
             />
             <Legend verticalAlign="bottom" height={36} />
           </PieChart>

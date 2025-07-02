@@ -6,8 +6,9 @@ import { toast } from "react-toastify";
 import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "../api/useswr";
 import { DeleteOutlined, SaveOutlined, StarOutlined } from "@ant-design/icons";
+import { Post } from "@/interface/Post";
 
-const PostMenuActions = ({ post }: { post: any }) => {
+const PostMenuActions = ({ post }: { post: Post }) => {
   const { getToken } = useAuth();
   const { user } = useUser();
   const router = useRouter();
@@ -32,7 +33,7 @@ const PostMenuActions = ({ post }: { post: any }) => {
   );
 
   const isSavedPost = savedPosts?.some(
-    (savedPost: any) => savedPost === post._id
+    (savedPost: string) => savedPost === post._id
   );
   const isAdmin = user?.publicMetadata?.role === "admin" || false;
 

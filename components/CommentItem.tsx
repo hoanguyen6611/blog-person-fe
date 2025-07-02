@@ -4,7 +4,7 @@ import { Comment } from "@/interface/Comment";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useUser } from "@clerk/nextjs";
 import { Button, Tooltip } from "antd";
-import { Heart, MessageCircle } from "lucide-react";
+import { Heart, MessageCircle, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
 import { format } from "timeago.js";
 
@@ -18,8 +18,8 @@ type Props = {
     parentId?: string | null;
   }) => void;
   onLike: (id: string) => void;
-  onDisLike: (id: string) => void;
   likeComments: any;
+  onDisLike: (id: string) => void;
 };
 
 const CommentItem = ({
@@ -28,8 +28,8 @@ const CommentItem = ({
   postId,
   onReply,
   onLike,
-  onDisLike,
   likeComments,
+  onDisLike,
 }: Props) => {
   const [isReply, setIsReply] = useState(false);
   const [desc, setDesc] = useState("");
@@ -45,11 +45,12 @@ const CommentItem = ({
     setDesc("");
   };
   const isLikeComment = likeComments?.some(
-    (likeComment: any) => likeComment === comment._id
+    (likeComment: string) => likeComment === comment._id
   );
   const handleLikeOrDisLike = async (id: string) => {
     onLike(id);
   };
+  const isLiked = likeComments?.includes(comment._id);
 
   return (
     <div>
@@ -83,22 +84,16 @@ const CommentItem = ({
         </div>
       </div>
       {!isReply && (
-        <div className="">
-          <Tooltip title="Like" placement="bottom">
-            <Button
-              type="text"
-              className="text-sm text-gray-500"
-              onClick={() => handleLikeOrDisLike(comment._id)}
-            >
-              <Heart
-                style={{
-                  color: isLikeComment ? "black" : "gray",
-                  fontSize: 32,
-                }}
-              />
-              {comment.like} likes
-            </Button>
-          </Tooltip>
+        <div className="flex">
+          <Button
+            type="text"
+            onClick={() =>
+              isLiked ? onDisLike(comment._id) : onLike(comment._id)
+            }
+          >
+            <ThumbsUp className={isLiked ? "text-blue-800" : "text-gray-500"} />
+            {comment.like}
+          </Button>
           <Button
             type="text"
             className="text-sm text-gray-500"
@@ -173,23 +168,23 @@ const CommentItem = ({
                   <p>{reply.desc}</p>
                 </div>
               </div>
-              <Tooltip title="Like" placement="bottom">
-                <Button
-                  type="text"
-                  className="text-sm text-gray-500"
-                  icon={
-                    <Heart
-                      style={{
-                        color: isLikeComment ? "black" : "gray",
-                        fontSize: 32,
-                      }}
-                    />
+              <Button
+                type="text"
+                onClick={() =>
+                  likeComments?.includes(reply._id)
+                    ? onDisLike(reply._id)
+                    : onLike(reply._id)
+                }
+              >
+                <ThumbsUp
+                  className={
+                    likeComments?.includes(reply._id)
+                      ? "text-blue-800"
+                      : "text-gray-500"
                   }
-                  onClick={() => onLike(reply._id)}
-                >
-                  {reply.like} likes
-                </Button>
-              </Tooltip>
+                />
+                {reply.like}
+              </Button>
             </div>
           ))}
         </div>

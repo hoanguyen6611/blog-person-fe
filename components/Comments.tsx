@@ -23,7 +23,7 @@ const Comments = ({ postId }: { postId: string }) => {
       setToken(t);
     })();
   }, [getToken]);
-  const { data: likeComments } = useSWR(
+  const { data: likeComments, mutate: mutateLikeComments } = useSWR(
     () =>
       token
         ? [`${process.env.NEXT_PUBLIC_API_URL}/users/likeComment`, token]
@@ -89,15 +89,48 @@ const Comments = ({ postId }: { postId: string }) => {
     );
     if (res.status === 200) {
       await mutate();
+      await mutateLikeComments();
     }
   };
+  // const handleLike = async (id: string) => {
+  //   const token = await getToken();
+  //   const res = await axios.patch(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/comments/like`,
+  //     {
+  //       id: id,
+  //     },
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   );
+  //   if (res.status === 200) {
+  //     await mutate();
+  //   }
+  // };
+  // const handleDisLike = async (id: string) => {
+  //   const token = await getToken();
+  //   const res = await axios.patch(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/comments/disLike`,
+  //     {
+  //       id: id,
+  //     },
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   );
+  //   if (res.status === 200) {
+  //     await mutate();
+  //   }
+  // };
   const handleLike = async (id: string) => {
     const token = await getToken();
     const res = await axios.patch(
       `${process.env.NEXT_PUBLIC_API_URL}/comments/like`,
-      {
-        id: id,
-      },
+      { id },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -106,15 +139,15 @@ const Comments = ({ postId }: { postId: string }) => {
     );
     if (res.status === 200) {
       await mutate();
+      await mutateLikeComments();
     }
   };
+
   const handleDisLike = async (id: string) => {
     const token = await getToken();
     const res = await axios.patch(
       `${process.env.NEXT_PUBLIC_API_URL}/comments/disLike`,
-      {
-        id: id,
-      },
+      { id },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -123,6 +156,7 @@ const Comments = ({ postId }: { postId: string }) => {
     );
     if (res.status === 200) {
       await mutate();
+      await mutateLikeComments();
     }
   };
   const comments = Array.isArray(data) ? data : data?.comments || [];
@@ -130,7 +164,7 @@ const Comments = ({ postId }: { postId: string }) => {
   if (error) return <p>Failed to load</p>;
   return (
     <div className="flex flex-col gap-8 lg:w-3/5">
-      <h1 className="text-xl text-gray-500 underline">Comments</h1>
+      <h1 className="text-xl text-black font-bold">Comments</h1>
       <form
         action=""
         className="flex items-center justify-between gap-8 w-full"
@@ -155,8 +189,8 @@ const Comments = ({ postId }: { postId: string }) => {
           onDelete={handleDeleteComment}
           onReply={handleReply}
           onLike={handleLike}
-          onDisLike={handleDisLike}
           likeComments={likeComments}
+          onDisLike={handleDisLike}
         />
       ))}
     </div>

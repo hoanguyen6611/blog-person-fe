@@ -20,6 +20,7 @@ import { Category } from "@/interface/Category";
 import { Flex, Tag } from "antd";
 import ShareButtons from "./ShareButtons";
 import RelatedPosts from "./RelatedPosts";
+import { Tag as TagInterface } from "@/interface/Tag";
 
 const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js",
@@ -47,8 +48,8 @@ export default function PostDetail({ post }: { post: Post }) {
     (cat: Category) => cat._id === post?.category
   )?.title;
   const tagNames = tags?.tags
-    .filter((tag: any) => post.tags.includes(tag._id))
-    .map((tag: any) => tag.name);
+    .filter((tag: TagInterface) => post.tags.includes(tag._id))
+    .map((tag: TagInterface) => tag.name);
   return (
     <div className="mb-10">
       <div className="container mx-auto px-4 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -77,7 +78,7 @@ export default function PostDetail({ post }: { post: Post }) {
               <span>{format(post?.createdAt)}</span>
             </div>
             <div className="flex flex-wrap items-center gap-2 text-sm mb-4">
-              {tagNames?.map((tag: any) => (
+              {tagNames?.map((tag: string) => (
                 <Flex gap="4px 0" wrap key={tag}>
                   <Tag color="processing">{tag}</Tag>
                 </Flex>

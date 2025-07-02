@@ -1,6 +1,5 @@
 "use client";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
-import UserTable from "@/components/cms/user/UserTable";
 import ImageShow from "@/components/Image";
 import TableCMS from "@/components/Table";
 import { User } from "@/interface/User";
@@ -48,23 +47,6 @@ const UserCms = () => {
       }));
     }
   }, [data]);
-  // const handleDeletePost = async (id: string) => {
-  //   const token = await getToken();
-  //   const res = await axios.delete(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`,
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     }
-  //   );
-  //   if (res.status === 200) {
-  //     setIsShowFormDelete(false);
-  //     toast.success("Delete post successfully");
-  //     await mutate();
-  //     router.push(`/cms`);
-  //   }
-  // };
   const columns: TableColumnsType<DataType> = [
     {
       title: "Image",
@@ -100,39 +82,7 @@ const UserCms = () => {
       //   defaultSortOrder: 'descend',
       // sorter: (a, b) => format(new Date(a.createdAt), "dd/MM/yyyy") - b.createdAt,
     },
-    // {
-    //   title: "Action",
-    //   key: "action",
-    //   render: (_, record) => (
-    //     <Space size="middle">
-    //       <button
-    //         className="text-blue-500"
-    //         onClick={() => {
-    //           router.push(`/cms/edit/post/${record._id}`);
-    //         }}
-    //       >
-    //         <EditOutlined
-    //           className="cursor-pointer"
-    //           style={{ fontSize: "16px" }}
-    //         />
-    //       </button>
-    //       <button
-    //         className="text-red-500"
-    //         onClick={() => showFormDelete(record._id)}
-    //       >
-    //         <DeleteOutlined
-    //           className="cursor-pointer"
-    //           style={{ fontSize: "16px" }}
-    //         />
-    //       </button>
-    //     </Space>
-    //   ),
-    // },
   ];
-  // const showFormDelete = (id: string) => {
-  //   setIsShowFormDelete(true);
-  //   setIdPostDelete(id);
-  // };
   const dataSource =
     data?.users?.map((user: User) => ({
       key: user._id,

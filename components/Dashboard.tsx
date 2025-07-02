@@ -11,12 +11,20 @@ import { Card, CardContent } from "./Card";
 
 type DashBoardProps = {
   name: string;
-  posts: any;
-  categories?: any;
-  views?: any;
-  users?: any;
-  followers?: any;
-  following?: any;
+  posts: {
+    totalPosts: number;
+  };
+  categories?: {
+    totalCategories: number;
+  };
+  views?: {
+    totalVisits: number;
+  };
+  users?: {
+    totalUsers: number;
+  };
+  followers?: number;
+  following?: number;
 };
 const DashBoard = ({
   name,

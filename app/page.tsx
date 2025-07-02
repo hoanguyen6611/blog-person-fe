@@ -4,8 +4,6 @@ import Banner from "@/components/Banner";
 import MainCategories from "@/components/MainCategories";
 import FeaturedPostV1 from "@/components/FeaturePostV1";
 import PostList from "@/components/PostList";
-import { useEffect } from "react";
-import { io as clientIO } from "socket.io-client";
 
 export default function Home() {
   return (

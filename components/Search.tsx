@@ -1,9 +1,8 @@
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Suspense } from "react";
 
 const SearchInput = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       const query = e.currentTarget.value;

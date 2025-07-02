@@ -10,11 +10,10 @@ const FeaturedPost = () => {
     `${process.env.NEXT_PUBLIC_API_URL}/posts?featured=true&limit=4&sort=newest`,
     fetcherUseSWR
   );
-  const {
-    data: categories,
-    error: errorCategories,
-    isLoading: isLoadingCategories,
-  } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/category`, fetcherUseSWR);
+  const { data: categories } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    fetcherUseSWR
+  );
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Failed to load</p>;
   const posts = data.posts;

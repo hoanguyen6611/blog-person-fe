@@ -3,7 +3,8 @@ import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import DashBoard from "@/components/Dashboard";
 import { useAuth } from "@clerk/nextjs";
 import useSWR from "swr";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import FollowList from "@/components/FollowList";
 
 const PersonalPage = () => {
   const [pagination, setPagination] = useState({
@@ -12,6 +13,13 @@ const PersonalPage = () => {
     total: 0,
   });
   const { getToken, isSignedIn } = useAuth();
+  const [token, setToken] = useState<string | null>(null);
+  useEffect(() => {
+    (async () => {
+      const t = await getToken();
+      setToken(t);
+    })();
+  }, [getToken]);
   const { data: posts } = useSWR(
     isSignedIn
       ? [`fetch-user-posts`, pagination.current, pagination.pageSize]
@@ -36,6 +44,11 @@ const PersonalPage = () => {
       );
     }
   );
+  const { data, isLoading } = useSWR(
+    () =>
+      token ? [`${process.env.NEXT_PUBLIC_API_URL}/users/follow`, token] : null,
+    ([url, token]) => fetcherWithTokenUseSWR(url, token)
+  );
   if (!isSignedIn) return <p>You are not logged in</p>;
   return (
     <div>
@@ -43,9 +56,10 @@ const PersonalPage = () => {
         name="Personal Statistics"
         posts={posts}
         views={views}
-        followers={5}
-        following={7}
+        followers={data?.followers?.length}
+        following={data?.following?.length}
       />
+      <FollowList data={data} loading={isLoading} />
     </div>
   );
 };

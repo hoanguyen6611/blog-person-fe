@@ -55,7 +55,7 @@ const Upload = ({
     }
     const { signature, expire, token, publicKey } = authParams;
     try {
-      const uploadResponse = await upload({
+      await upload({
         expire,
         token,
         signature,

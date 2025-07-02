@@ -27,6 +27,7 @@ import { useTableStore } from "@/store/useTableStore";
 import PostDetail from "@/components/PostDetail";
 import { Tag } from "@/interface/Tag";
 import dayjs from "dayjs";
+import { UploadResponse } from "@imagekit/next";
 interface FormPost {
   title: string;
   category: string;
@@ -54,6 +55,7 @@ const PostCreate = () => {
   const [publishedAt, setPublishedAt] = useState<Date | null>(new Date());
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
   const { setFormData, setContentCreatePost, contentCreatePost } =
     useTableStore();
   const editorRef = useRef<EditorHandle>(null);
@@ -92,6 +94,9 @@ const PostCreate = () => {
       );
     }
   }, [coverVideo, setContentCreatePost]);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   if (!isLoaded) {
     return <div>Loading</div>;
@@ -256,7 +261,7 @@ const PostCreate = () => {
   const handleCancelFormTag = () => {
     setIsModalOpenTag(false);
   };
-  const changeUploadImage = (res: any) => {
+  const changeUploadImage = (res: UploadResponse) => {
     setCover(res.filePath || "");
     setFormData((prev) => ({ ...prev, img: res.filePath || "" }));
   };
@@ -284,7 +289,6 @@ const PostCreate = () => {
     console.log(`checked = ${e.target.checked}`);
   };
   const handleSubmitSchedule = async () => {
-    console.log(publishedAt);
     const dataForm: FormPost = {
       title,
       category: nameCategory,
@@ -343,6 +347,7 @@ const PostCreate = () => {
           {/* Title */}
           <div>
             <input
+              ref={inputRef}
               name="title"
               onChange={changeTitle}
               className="w-full text-2xl font-semibold p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -394,14 +399,6 @@ const PostCreate = () => {
                 placeholder="Select name tag"
                 onChange={handleChange}
                 options={tagsOptions}
-                // optionRender={(option) => (
-                //   <Space>
-                //     <span role="img" aria-label={option.data.label}>
-                //       {option.data.emoji}
-                //     </span>
-                //     {option.data.desc}
-                //   </Space>
-                // )}
               />
             </div>
             <button
@@ -454,25 +451,11 @@ const PostCreate = () => {
                 buttonText="Upload image"
                 onSuccess={(res) => setCoverImage(res.filePath || "")}
               />
-              {/* {coverImage && (
-                <ImageShow
-                  src={coverImage}
-                  className="rounded-lg"
-                  width={300}
-                  height={200}
-                  alt="inserted"
-                />
-              )} */}
               <UploadV1
                 type="video"
                 buttonText="Upload video"
                 onSuccess={(res) => setCoverVideo(res.filePath || "")}
               />
-              {/* {coverVideo && (
-                <video className="rounded-lg w-full" controls>
-                  <source src={coverVideo} type="video/mp4" />
-                </video>
-              )} */}
             </div>
             <div className="md:col-span-3">
               <Editor
@@ -484,27 +467,29 @@ const PostCreate = () => {
           </div>
 
           {/* Submit */}
-          <div className="flex gap-3 items-end">
-            <div className="text-center">
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                disabled={isDisabledBtnSend}
-                className="px-6 py-3 text-white bg-blue-700 hover:bg-blue-800 rounded-lg font-medium disabled:opacity-50"
-              >
-                {isDisabledBtnSend ? "Creating..." : "Create Post"}
-              </button>
-            </div>
-            <div className="flex gap-3 items-end">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mt-6">
+            {/* Nút Create Post */}
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              disabled={isDisabledBtnSend}
+              className="w-full md:w-auto px-6 py-3 text-white bg-blue-700 hover:bg-blue-800 rounded-xl font-semibold disabled:opacity-50 transition-all"
+            >
+              {isDisabledBtnSend ? "Creating..." : "Create Post"}
+            </button>
+
+            {/* Lên lịch đăng */}
+            <div className="flex flex-col md:flex-row items-start md:items-end gap-3 w-full md:w-auto">
               <DatePicker
                 showTime
-                className="w-full"
+                className="w-full md:w-60"
                 defaultValue={dayjs()}
                 onChange={(date) => setPublishedAt(date?.toDate() || null)}
+                placeholder="Select publish time"
               />
               <button
                 onClick={handleSubmitSchedule}
-                className="px-6 py-3 text-white bg-blue-700 hover:bg-blue-800 rounded-lg font-medium disabled:opacity-50"
+                className="w-full md:w-auto px-6 py-3 text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl font-semibold transition-all"
               >
                 Schedule
               </button>
@@ -558,4 +543,3 @@ const items: TabsProps["items"] = [
 const PostCreateCMS = () => <Tabs defaultActiveKey="1" items={items} />;
 
 export default PostCreateCMS;
-// export default PostCreate;

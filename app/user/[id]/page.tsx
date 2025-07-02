@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import FollowStats from "@/components/FollowStats";
+import FollowList from "@/components/FollowList";
 
 const UserPage = () => {
   const params = useParams();
@@ -42,7 +43,9 @@ const UserPage = () => {
   // Lấy danh sách user mình đang theo dõi
   const { data: followers, mutate } = useSWR(
     () =>
-      token ? [`${process.env.NEXT_PUBLIC_API_URL}/users/follow`, token] : null,
+      token
+        ? [`${process.env.NEXT_PUBLIC_API_URL}/users/followList`, token]
+        : null,
     ([url, token]) => fetcherWithTokenUseSWR(url, token)
   );
 
@@ -55,6 +58,20 @@ const UserPage = () => {
   const { data: numberFollow } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/users/getNumberFollow/${params.id}`,
     fetcherUseSWR
+  );
+  const {
+    data,
+    isLoading: loadingFollowing,
+    mutate: mutateFollow,
+  } = useSWR(
+    () =>
+      token
+        ? [
+            `${process.env.NEXT_PUBLIC_API_URL}/users/follow/${params.id}`,
+            token,
+          ]
+        : null,
+    ([url, token]) => fetcherWithTokenUseSWR(url, token)
   );
 
   // Hàm Follow / Unfollow
@@ -70,13 +87,14 @@ const UserPage = () => {
 
       if (res.status === 200) {
         toast.success(res.data || "Followed successfully");
+        await mutateFollow();
 
         // 🔁 Cập nhật lại danh sách followers
         await mutate(undefined, { revalidate: true });
 
         // 🔁 Cập nhật lại số lượng followers
         await globalMutate(
-          `${process.env.NEXT_PUBLIC_API_URL}/users/getNumberFollow/${params.id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/users/follow/${params.id}`
         );
       } else {
         toast.error("Follow failed");
@@ -117,9 +135,10 @@ const UserPage = () => {
 
       {/* 📊 Thống kê follow */}
       <FollowStats
-        followersCount={numberFollow?.followerCounts}
-        followingCount={followers?.length}
+        followersCount={data?.followers?.length}
+        followingCount={data?.following?.length}
       />
+      <FollowList data={data} loading={loadingFollowing} />
 
       {/* 📝 Danh sách bài viết */}
       <div>

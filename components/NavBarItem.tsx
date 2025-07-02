@@ -15,6 +15,8 @@ import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import { toast } from "react-toastify";
 import { useNotificationSocket } from "@/hook/useNotificationSocket";
+import { Notification } from "@/interface/Notification";
+import axios from "axios";
 
 const NavBarItem = () => {
   const { user } = useUser();
@@ -41,30 +43,100 @@ const NavBarItem = () => {
         : null,
     ([url, token]) => fetcherWithTokenUseSWR(url, token)
   );
-  const items: MenuProps["items"] = [
+  const markAllAsRead = async () => {
+    const token = await getToken();
+    await axios.patch(
+      `${process.env.NEXT_PUBLIC_API_URL}/notifications/readAll`,
+      null,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    mutate(); // refresh UI
+  };
+  const notificationItems: MenuProps["items"] = [
     {
-      label: "Khong co thong bao",
-      key: "0",
+      label: "🔔 Mark all as read",
+      key: "mark_all",
+    },
+    ...(notifications?.length
+      ? notifications.map((n: Notification) => ({
+          label:
+            n.type === "comment" ? (
+              <a
+                href={`/posts/${n.postId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={n.isRead ? "text-gray-400" : "font-semibold"}
+              >
+                {n.message}
+              </a>
+            ) : (
+              <a href={`/user`}>{n.message}</a>
+            ),
+          key: n._id,
+        }))
+      : [{ label: "Không có thông báo", key: "0", disabled: true }]),
+    {
+      label: "📄 Xem tất cả",
+      key: "view_all",
     },
   ];
-  const notificationItems: MenuProps["items"] = notifications?.map(
-    (notification: any) => ({
-      label: (
-        <a
-          href={`/posts/${notification.postId}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {notification.message}
-        </a>
-      ),
-      key: notification._id,
-    })
-  );
-  useNotificationSocket((data) => {
-    toast.success(data.message); // Hoặc cập nhật UI thông báo
+  const unreadCount =
+    notifications?.filter((n: Notification) => !n.isRead).length || 0;
+
+  const socketStatus = useNotificationSocket((data) => {
+    toast.success(data.message);
     mutate();
   });
+
+  // ⬇️ Chấm trạng thái mạng socket
+  const renderStatusDot = () => {
+    const colorMap = {
+      connected: "bg-green-500",
+      disconnected: "bg-red-500",
+      connecting: "bg-yellow-500",
+    };
+    const color = colorMap[socketStatus];
+
+    return (
+      <div
+        className={`w-3 h-3 rounded-full ${color}`}
+        title={`Socket status: ${socketStatus}`}
+      ></div>
+    );
+  };
+
+  const markAsRead = async (id: string) => {
+    try {
+      const token = await getToken();
+
+      // Optional: Hiện loading toast
+      const toastId = toast.loading("Marking as read...");
+
+      await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/notifications/${id}/read`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.update(toastId, {
+        render: "Marked as read ✅",
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+      });
+
+      mutate(); // Refresh lại SWR data
+    } catch (error) {
+      toast.error("Something went wrong while marking as read ❌");
+      console.error("Error in markAsRead:", error);
+    }
+  };
 
   return (
     <>
@@ -93,13 +165,25 @@ const NavBarItem = () => {
       </Button>
       {isSignedIn && (
         <Dropdown
-          menu={{ items: notificationItems ? notificationItems : items }}
+          menu={{
+            items: notificationItems,
+            onClick: ({ key }) => {
+              if (key === "mark_all") {
+                markAllAsRead(); // Gọi API mark tất cả
+              } else if (key === "view_all") {
+                router.push("/notifications");
+              } else {
+                markAsRead(key); // Gọi API mark từng thông báo theo id
+              }
+            }, // 👈 Gọi API đánh dấu đã đọc với ID là key
+          }}
           trigger={["click"]}
         >
           <a onClick={(e) => e.preventDefault()}>
             <Space>
-              <Badge count={notifications?.filter((n: any) => !n.read).length}>
-                <Bell />
+              <Badge count={unreadCount}>
+                <Bell className="cursor-pointer" />
+                {renderStatusDot()}
               </Badge>
             </Space>
           </a>
