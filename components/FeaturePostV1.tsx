@@ -41,9 +41,15 @@ const FeaturedPost = () => {
           </h1>
           <Link
             href={`/posts/${posts[0]._id}`}
-            className="text-xl lg:text-3xl font-semibold lg:font-bold"
+            className="block hover:scale-[1.02] transition-all"
           >
-            {posts[0].title}
+            <div className="rounded-2xl shadow-lg overflow-hidden">
+              <div className="p-4">
+                <h3 className="text-lg font-semibold line-clamp-2">
+                  {posts[0].title}
+                </h3>
+              </div>
+            </div>
           </Link>
         </div>
         <div className="flex items-center gap-4 ml-16">
@@ -83,9 +89,15 @@ const FeaturedPost = () => {
                 </h1>
                 <Link
                   href={`/posts/${posts[1]._id}`}
-                  className="text-base sm:text-lg md:text-2xl lg:text-xl xl:text-2xl font-medium"
+                  className="block hover:scale-[1.02] transition-all"
                 >
-                  {posts[1].title}
+                  <div className="rounded-2xl shadow-lg overflow-hidden">
+                    <div className="p-4">
+                      <h3 className="text-lg font-semibold line-clamp-2">
+                        {posts[1].title}
+                      </h3>
+                    </div>
+                  </div>
                 </Link>
               </div>
               <div className="flex items-center gap-4 ml-16">
@@ -127,9 +139,15 @@ const FeaturedPost = () => {
                 </h1>
                 <Link
                   href={`/posts/${posts[2]._id}`}
-                  className="text-base sm:text-lg md:text-2xl lg:text-xl xl:text-2xl font-medium"
+                  className="block hover:scale-[1.02] transition-all"
                 >
-                  {posts[2].title}
+                  <div className="rounded-2xl shadow-lg overflow-hidden">
+                    <div className="p-4">
+                      <h3 className="text-lg font-semibold line-clamp-2">
+                        {posts[2].title}
+                      </h3>
+                    </div>
+                  </div>
                 </Link>
               </div>
               <div className="flex items-center gap-4 ml-16">
@@ -171,9 +189,15 @@ const FeaturedPost = () => {
                 </h1>
                 <Link
                   href={`/posts/${posts[3]._id}`}
-                  className="text-base sm:text-lg md:text-2xl lg:text-xl xl:text-2xl font-medium"
+                  className="block hover:scale-[1.02] transition-all"
                 >
-                  {posts[3].title}
+                  <div className="rounded-2xl shadow-lg overflow-hidden">
+                    <div className="p-4">
+                      <h3 className="text-lg font-semibold line-clamp-2">
+                        {posts[3].title}
+                      </h3>
+                    </div>
+                  </div>
                 </Link>
               </div>
               <div className="flex items-center gap-4 ml-16">

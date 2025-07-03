@@ -24,7 +24,7 @@ const PostListItem = ({ post }: { post: Post }) => {
         />
       </div>
       {/* details */}
-      <div className="flex flex-col gap-4 xl:w-2/3">
+      {/* <div className="flex flex-col gap-4 xl:w-2/3">
         <Link href={`/posts/${post._id}`} className="text-4xl font-semibold">
           {post.title}
         </Link>
@@ -54,6 +54,18 @@ const PostListItem = ({ post }: { post: Post }) => {
         <Link href={`/posts/${post._id}`} className="underline text-blue-800">
           Read More
         </Link>
+      </div> */}
+      <div className="p-6 rounded-xl bg-white shadow hover:shadow-md transition-all space-y-4 flex flex-col gap-4 xl:w-2/3">
+        <Link href={`/posts/${post._id}`}>
+          <h3 className="text-xl font-bold text-gray-900 hover:underline">
+            {post.title}
+          </h3>
+        </Link>
+        <p className="text-sm text-gray-600">{post.desc}</p>
+        <div className="flex gap-4 text-xs text-gray-400">
+          <span>{post.user.username}</span>
+          <span>{format(post.createdAt)}</span>
+        </div>
       </div>
     </div>
   );

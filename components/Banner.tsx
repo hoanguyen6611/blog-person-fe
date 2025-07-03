@@ -5,13 +5,17 @@ const Banner = () => {
   return (
     <div className="flex flex-col md:flex-row justify-between items-center gap-8">
       <div className="flex-1 space-y-6">
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight">
-          Technology synthesizes knowledge, creates progress and changes our
-          lives.
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-snug">
+          Transform ideas into impact.
         </h1>
-        <p className="text-lg text-gray-600">
-          Technology is an endless source of inspiration for creativity.
+        <p className="text-lg text-gray-600 mt-4">
+          Share your insights, inspire others, and stay ahead with technology.
         </p>
+        <Link href="/write">
+          <button className="mt-6 px-6 py-3 bg-blue-800 text-white font-medium rounded-full hover:bg-blue-700 transition-all">
+            Start Writing →
+          </button>
+        </Link>
       </div>
 
       <Link href="/write" className="relative hidden md:block">

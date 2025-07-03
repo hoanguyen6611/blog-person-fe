@@ -29,17 +29,6 @@ const FollowList = ({ data, loading }: { data: any; loading: boolean }) => {
       fetcherWithTokenUseSWR(`${process.env.NEXT_PUBLIC_API_URL}${url}`, token)
   );
 
-  // const { data: following, isLoading: loadingFollowing } = useSWR(
-  //   () => (token ? ["/users/following", token] : null),
-  //   ([url, token]) =>
-  //     fetcherWithTokenUseSWR(`${process.env.NEXT_PUBLIC_API_URL}${url}`, token)
-  // );
-  // const { data, isLoading: loading } = useSWR(
-  //   () =>
-  //     token ? [`${process.env.NEXT_PUBLIC_API_URL}/users/follow`, token] : null,
-  //   ([url, token]) => fetcherWithTokenUseSWR(url, token)
-  // );
-
   const renderUserList = (users: UserItem[], title: string) => (
     <div>
       <h2 className="text-lg font-semibold mb-2">{title}</h2>
@@ -76,8 +65,8 @@ const FollowList = ({ data, loading }: { data: any; loading: boolean }) => {
         <p>Loading...</p>
       ) : (
         <>
-          {renderUserList(data?.followers || [], "👥 Người đang theo dõi bạn")}
-          {renderUserList(data?.following || [], "🚶‍♂️ Bạn đang theo dõi")}
+          {renderUserList(data?.followers || [], "👥 Followers")}
+          {renderUserList(data?.following || [], "🚶‍♂️ Following")}
         </>
       )}
     </div>

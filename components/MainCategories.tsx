@@ -13,10 +13,10 @@ const MainCategories = () => {
 
   return (
     <div className="hidden md:flex items-center justify-between gap-4 p-4 bg-white rounded-3xl xl:rounded-full shadow-md">
-      <div className="flex items-center gap-4 flex-wrap">
+      <div className="flex overflow-x-auto gap-3 scrollbar-hide md:flex-wrap">
         <Link
           href="/posts"
-          className="bg-blue-800 text-white px-4 py-2 rounded-full font-medium"
+          className="bg-blue-800 text-white px-4 py-2 rounded-full font-medium hover:bg-blue-700 transition-all whitespace-nowrap"
         >
           All Posts
         </Link>
@@ -24,7 +24,7 @@ const MainCategories = () => {
           <Link
             key={cat._id}
             href={`/posts?cat=${cat._id}`}
-            className="hover:bg-blue-50 px-4 py-2 rounded-full text-gray-800"
+            className="px-4 py-2 rounded-full bg-gray-100 hover:bg-blue-100 text-gray-800 font-medium whitespace-nowrap transition-all"
           >
             {cat.title}
           </Link>

@@ -65,7 +65,7 @@ export default function Statistic() {
     <div className="p-6 space-y-6">
       <div className="bg-white p-6 rounded-xl shadow">
         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          🔥 Top 5 bài viết nổi bật
+          🔥 Top 5 featured articles
         </h2>
 
         <div className="space-y-4">

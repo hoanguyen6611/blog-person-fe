@@ -24,7 +24,7 @@ const SearchInput = () => {
       </svg>
       <input
         type="text"
-        placeholder="search a post ..."
+        placeholder="Search a post ..."
         className="bg-transparent"
         onKeyDown={handleKeyPress}
       />

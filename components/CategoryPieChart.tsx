@@ -28,14 +28,14 @@ export default function CategoryPieChart({ data }: { data: Category[] }) {
   const total = data?.reduce((sum, item) => sum + item.count, 0);
 
   const formattedData = data?.map((item) => ({
-    name: item._id || "Không rõ",
+    name: item._id || "Unknown",
     value: item.count,
   }));
 
   return (
     <div className="bg-white p-6 rounded-xl shadow mt-8">
       <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        🏷️ Tỷ lệ bài viết theo chuyên mục
+        🏷️ Article by category
       </h2>
 
       <div className="h-80 w-full">
@@ -67,14 +67,17 @@ export default function CategoryPieChart({ data }: { data: Category[] }) {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: number) => [`${value} bài viết`, "Số lượng"]}
+              formatter={(value: number) => [
+                `${value} articles`,
+                "Number of articles",
+              ]}
             />
             <Legend verticalAlign="bottom" height={36} />
           </PieChart>
         </ResponsiveContainer>
       </div>
 
-      <p className="text-sm text-gray-500 mt-4">Tổng: {total} bài viết</p>
+      <p className="text-sm text-gray-500 mt-4">Total: {total} articles</p>
     </div>
   );
 }

@@ -7,7 +7,6 @@ import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
 import useSWR, { mutate as globalMutate } from "swr";
 import { Button } from "antd";
 import { useEffect, useMemo, useState } from "react";
-import { toast } from "react-toastify";
 import axios from "axios";
 import FollowStats from "@/components/FollowStats";
 import FollowList from "@/components/FollowList";
@@ -54,11 +53,6 @@ const UserPage = () => {
     return followers?.includes(params.id) || false;
   }, [followers, params.id]);
 
-  // Lấy số người theo dõi user đang xem
-  const { data: numberFollow } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/users/getNumberFollow/${params.id}`,
-    fetcherUseSWR
-  );
   const {
     data,
     isLoading: loadingFollowing,
@@ -86,7 +80,6 @@ const UserPage = () => {
       );
 
       if (res.status === 200) {
-        toast.success(res.data || "Followed successfully");
         await mutateFollow();
 
         // 🔁 Cập nhật lại danh sách followers
@@ -97,10 +90,10 @@ const UserPage = () => {
           `${process.env.NEXT_PUBLIC_API_URL}/users/follow/${params.id}`
         );
       } else {
-        toast.error("Follow failed");
+        console.log("Follow failed");
       }
     } catch (err) {
-      toast.error("Error while following");
+      console.log("Error while following");
     } finally {
       setLoadingFollow(false);
     }

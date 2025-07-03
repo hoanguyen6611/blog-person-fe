@@ -6,7 +6,6 @@ import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { Comment } from "@/interface/Comment";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../api/useswr";
-import { toast } from "react-toastify";
 
 const Comments = ({ postId }: { postId: string }) => {
   const [desc, setDesc] = useState("");
@@ -42,7 +41,6 @@ const Comments = ({ postId }: { postId: string }) => {
       }
     );
     if (res.status === 200) {
-      toast.success("Delete comment successfully");
       await mutate();
     }
   };
@@ -65,7 +63,6 @@ const Comments = ({ postId }: { postId: string }) => {
       }
     );
     if (res.status === 200 || res.status === 201) {
-      toast.success("Comment successfully");
       setDesc("");
       await mutate();
     }
@@ -92,40 +89,6 @@ const Comments = ({ postId }: { postId: string }) => {
       await mutateLikeComments();
     }
   };
-  // const handleLike = async (id: string) => {
-  //   const token = await getToken();
-  //   const res = await axios.patch(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/comments/like`,
-  //     {
-  //       id: id,
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     }
-  //   );
-  //   if (res.status === 200) {
-  //     await mutate();
-  //   }
-  // };
-  // const handleDisLike = async (id: string) => {
-  //   const token = await getToken();
-  //   const res = await axios.patch(
-  //     `${process.env.NEXT_PUBLIC_API_URL}/comments/disLike`,
-  //     {
-  //       id: id,
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     }
-  //   );
-  //   if (res.status === 200) {
-  //     await mutate();
-  //   }
-  // };
   const handleLike = async (id: string) => {
     const token = await getToken();
     const res = await axios.patch(

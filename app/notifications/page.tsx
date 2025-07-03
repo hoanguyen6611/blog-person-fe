@@ -23,7 +23,9 @@ export default function NotificationsPage() {
   }, [getToken]);
 
   const { data: notifications = [], mutate } = useSWR(
-    token ? [`${process.env.NEXT_PUBLIC_API_URL}/notifications`, token] : null,
+    token
+      ? [`${process.env.NEXT_PUBLIC_API_URL}/notifications/all`, token]
+      : null,
     ([url, token]) => fetcherWithTokenUseSWR(url, token)
   );
 

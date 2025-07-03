@@ -37,7 +37,7 @@ export default function MonthlyPostChart({ data }: { data: DataPoint[] }) {
     <div className="bg-white p-6 rounded-xl shadow">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold flex items-center gap-2">
-          📅 Bài viết theo tháng ({selectedYear})
+          📅 Articles by month ({selectedYear})
         </h2>
 
         <select
@@ -60,13 +60,13 @@ export default function MonthlyPostChart({ data }: { data: DataPoint[] }) {
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="month"
-              label={{ value: "Tháng", position: "bottom", offset: 10 }}
+              label={{ value: "Month", position: "bottom", offset: 10 }}
               tick={{ fontSize: 12 }}
             />
             <YAxis
               allowDecimals={false}
               label={{
-                value: "Số bài",
+                value: "Number of articles",
                 angle: -90,
                 position: "insideLeft",
                 offset: 10,

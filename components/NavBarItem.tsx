@@ -112,7 +112,7 @@ const NavBarItem = () => {
       const token = await getToken();
 
       // Optional: Hiện loading toast
-      const toastId = toast.loading("Marking as read...");
+      // const toastId = toast.loading("Marking as read...");
 
       await axios.patch(
         `${process.env.NEXT_PUBLIC_API_URL}/notifications/${id}/read`,
@@ -124,12 +124,12 @@ const NavBarItem = () => {
         }
       );
 
-      toast.update(toastId, {
-        render: "Marked as read ✅",
-        type: "success",
-        isLoading: false,
-        autoClose: 2000,
-      });
+      // toast.update(toastId, {
+      //   render: "Marked as read ✅",
+      //   type: "success",
+      //   isLoading: false,
+      //   autoClose: 2000,
+      // });
 
       mutate(); // Refresh lại SWR data
     } catch (error) {
