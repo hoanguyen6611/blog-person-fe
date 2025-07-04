@@ -12,23 +12,25 @@ import {
   Tag,
   AlarmClockCheck,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function Sidebar({ admin }: { admin: boolean }) {
   const pathname = usePathname();
+  const t = useTranslations("Sidebar");
 
   const links = [
     ...(admin
       ? [
-          { href: "/cms", label: "Dashboard", icon: <Home size={20} /> },
-          { href: "/cms/user", label: "Users", icon: <Users size={20} /> },
+          { href: "/cms", label: t("dashboard"), icon: <Home size={20} /> },
+          { href: "/cms/user", label: t("users"), icon: <Users size={20} /> },
           {
             href: "/cms/category",
-            label: "Categories",
+            label: t("categories"),
             icon: <Shapes size={20} />,
           },
           {
             href: "/cms/tag",
-            label: "Tags",
+            label: t("tags"),
             icon: <Tag size={20} />,
           },
         ]
@@ -37,19 +39,23 @@ export default function Sidebar({ admin }: { admin: boolean }) {
       ? [
           {
             href: "/cms/personal",
-            label: "Dashboard Personal",
+            label: t("dashboardPersonal"),
             icon: <PersonStanding size={20} />,
           },
         ]
       : []),
-    { href: "/cms/posts", label: "My Posts", icon: <FileText size={20} /> },
+    { href: "/cms/posts", label: t("myPosts"), icon: <FileText size={20} /> },
     {
       href: "/cms/post-schedule",
-      label: "My Posts Schedule",
+      label: t("myPostsSchedule"),
       icon: <AlarmClockCheck size={20} />,
     },
-    { href: "/cms/settings", label: "Settings", icon: <Settings size={20} /> },
-    { href: "/cms/save-post", label: "Save Post", icon: <Heart size={20} /> },
+    {
+      href: "/cms/settings",
+      label: t("settings"),
+      icon: <Settings size={20} />,
+    },
+    { href: "/cms/save-post", label: t("savePost"), icon: <Heart size={20} /> },
   ];
 
   return (

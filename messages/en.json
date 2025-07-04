@@ -1,0 +1,133 @@
+{
+  "HomePage": {
+    "home": "Home",
+    "about": "About",
+    "greeting": "Hello {{name}}!",
+    "exploreCategories": "Explore Categories",
+    "featuredPosts": "Featured Posts",
+    "recentPosts": "Recent Posts"
+  },
+  "MainCategories": {
+    "allPosts": "All Posts"
+  },
+  "Banner": {
+    "title": "Transform ideas into impact.",
+    "description": "Share your insights, inspire others, and stay ahead with technology.",
+    "startWriting": "Start Writing →"
+  },
+  "NavBar": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "markAllAsRead": "Mark all as read",
+    "viewAll": "View all",
+    "noNotification": "No notification",
+    "trending": "Trending",
+    "mostPopular": "Most Popular",
+    "cms": "CMS",
+    "personal": "Personal",
+    "newPost": "New Post"
+  },
+  "Comments": {
+    "title": "All comments",
+    "comment": "Comment",
+    "writeComment": "Write comment...",
+    "reply": "Reply",
+    "like": "Like",
+    "dislike": "Dislike",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "send": "Send"
+  },
+  "PostDetail": {
+    "author": "Author",
+    "categories": "Categories",
+    "search": "Search",
+    "all": "All"
+  },
+  "PostMenuActions": {
+    "save": "Save this Post",
+    "feature": "Feature this Post",
+    "delete": "Delete this Post"
+  },
+  "Dashboard": {
+    "title": "Dashboard",
+    "posts": "Posts",
+    "categories": "Categories",
+    "users": "Users",
+    "comments": "Comments",
+    "settings": "Settings",
+    "totalPosts": "Total posts",
+    "totalCategories": "Total categories",
+    "totalUsers": "Total users",
+    "totalComments": "Total comments",
+    "totalViews": "Total views",
+    "totalFollowers": "Total followers",
+    "totalFollowing": "Total following"
+  },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "posts": "Posts",
+    "categories": "Categories",
+    "users": "Users",
+    "comments": "Comments",
+    "settings": "Settings",
+    "dashboardPersonal": "Dashboard Personal",
+    "myPosts": "My Posts",
+    "myPostsSchedule": "My Posts Schedule",
+    "savePost": "Save Post",
+    "tags": "Tags"
+  },
+  "Statistic": {
+    "title": "Statistic",
+    "posts": "Posts",
+    "categories": "Categories",
+    "users": "Users",
+    "comments": "Comments",
+    "views": "Views",
+    "top5FeaturedArticles": "Top 5 Featured Articles",
+    "articlesByMonth": "Articles by month",
+    "articleByCategory": "Article by category",
+    "articleByAuthor": "Article by author",
+    "numberOfArticles": "Number of articles",
+    "articles": "articles",
+    "author": "Author",
+    "total": "Total",
+    "month": "Month",
+    "year": "Year"
+  },
+  "PostTable": {
+    "image": "Image",
+    "title": "Title",
+    "description": "Description",
+    "author": "Author",
+    "visit": "Visit",
+    "category": "Category",
+    "createdAt": "Created At",
+    "action": "Action",
+    "newPost": "New Post"
+  },
+  "CategoryTable": {
+    "title": "Title",
+    "status": "Status",
+    "createdAt": "Created At",
+    "action": "Action",
+    "newCategory": "New Category"
+  },
+  "UserTable": {
+    "image": "Image",
+    "username": "Username",
+    "email": "Email",
+    "createdAt": "Created At",
+    "action": "Action",
+    "newUser": "New User"
+  },
+  "TagTable": {
+    "name": "Name",
+    "createdAt": "Created At",
+    "action": "Action",
+    "newTag": "New Tag"
+  }
+}

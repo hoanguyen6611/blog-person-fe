@@ -1,19 +1,19 @@
 "use client";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 const Banner = () => {
+  const t = useTranslations("Banner");
   return (
     <div className="flex flex-col md:flex-row justify-between items-center gap-8">
       <div className="flex-1 space-y-6">
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-snug">
-          Transform ideas into impact.
+          {t("title")}
         </h1>
-        <p className="text-lg text-gray-600 mt-4">
-          Share your insights, inspire others, and stay ahead with technology.
-        </p>
+        <p className="text-lg text-gray-600 mt-4">{t("description")}</p>
         <Link href="/write">
           <button className="mt-6 px-6 py-3 bg-blue-800 text-white font-medium rounded-full hover:bg-blue-700 transition-all">
-            Start Writing →
+            {t("startWriting")}
           </button>
         </Link>
       </div>

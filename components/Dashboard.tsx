@@ -8,7 +8,7 @@ import {
   UserPlus,
 } from "lucide-react";
 import { Card, CardContent } from "./Card";
-
+import { useTranslations } from "next-intl";
 type DashBoardProps = {
   name: string;
   posts: {
@@ -35,6 +35,7 @@ const DashBoard = ({
   followers,
   following,
 }: DashBoardProps) => {
+  const t = useTranslations("Dashboard");
   return (
     <div className="space-y-8">
       <h1 className="text-3xl font-bold">📊 {name}</h1>
@@ -44,7 +45,7 @@ const DashBoard = ({
         <Card>
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Total posts</p>
+              <p className="text-sm text-gray-500">{t("totalPosts")}</p>
               <p className="text-xl font-semibold">{posts?.totalPosts}</p>
             </div>
             <FileText className="w-6 h-6 text-blue-600" />
@@ -55,7 +56,7 @@ const DashBoard = ({
           <Card>
             <CardContent className="p-4 flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Users</p>
+                <p className="text-sm text-gray-500">{t("totalUsers")}</p>
                 <p className="text-xl font-semibold">{users?.totalUsers}</p>
               </div>
               <User className="w-6 h-6 text-green-600" />
@@ -67,7 +68,7 @@ const DashBoard = ({
           <Card>
             <CardContent className="p-4 flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Categories</p>
+                <p className="text-sm text-gray-500">{t("totalCategories")}</p>
                 <p className="text-xl font-semibold">
                   {categories?.totalCategories}
                 </p>
@@ -81,7 +82,7 @@ const DashBoard = ({
           <Card>
             <CardContent className="p-4 flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Views</p>
+                <p className="text-sm text-gray-500">{t("totalViews")}</p>
                 <p className="text-xl font-semibold">{views?.totalVisits}</p>
               </div>
               <BarChart className="w-6 h-6 text-red-600" />
@@ -92,7 +93,7 @@ const DashBoard = ({
           <Card>
             <CardContent className="p-4 flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Follower</p>
+                <p className="text-sm text-gray-500">{t("totalFollowers")}</p>
                 <p className="text-xl font-semibold">{followers}</p>
               </div>
               <Users className="w-6 h-6 " />
@@ -103,7 +104,7 @@ const DashBoard = ({
           <Card>
             <CardContent className="p-4 flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Following</p>
+                <p className="text-sm text-gray-500">{t("totalFollowing")}</p>
                 <p className="text-xl font-semibold">{following}</p>
               </div>
               <UserPlus className="w-6 h-6" />

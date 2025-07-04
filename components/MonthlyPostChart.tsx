@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 type DataPoint = {
   _id: string; // YYYY-MM
@@ -16,6 +17,7 @@ type DataPoint = {
 };
 
 export default function MonthlyPostChart({ data }: { data: DataPoint[] }) {
+  const t = useTranslations("Statistic");
   const [selectedYear, setSelectedYear] = useState<string>(() => {
     const yearNow = new Date().getFullYear().toString();
     return yearNow;
@@ -37,7 +39,7 @@ export default function MonthlyPostChart({ data }: { data: DataPoint[] }) {
     <div className="bg-white p-6 rounded-xl shadow">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold flex items-center gap-2">
-          📅 Articles by month ({selectedYear})
+          📅 {t("articlesByMonth")} ({selectedYear})
         </h2>
 
         <select
@@ -60,13 +62,13 @@ export default function MonthlyPostChart({ data }: { data: DataPoint[] }) {
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="month"
-              label={{ value: "Month", position: "bottom", offset: 10 }}
+              label={{ value: t("month"), position: "bottom", offset: 10 }}
               tick={{ fontSize: 12 }}
             />
             <YAxis
               allowDecimals={false}
               label={{
-                value: "Number of articles",
+                value: t("numberOfArticles"),
                 angle: -90,
                 position: "insideLeft",
                 offset: 10,

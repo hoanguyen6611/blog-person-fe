@@ -5,6 +5,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { useUser } from "@clerk/nextjs";
 import { Button, Tooltip } from "antd";
 import { Heart, MessageCircle, ThumbsDown, ThumbsUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { format } from "timeago.js";
 
@@ -34,6 +35,7 @@ const CommentItem = ({
   const [isReply, setIsReply] = useState(false);
   const [desc, setDesc] = useState("");
   const { user } = useUser();
+  const t = useTranslations("Comments");
   const isAdmin = user?.publicMetadata?.role === "admin" || false;
   const handleReply = () => {
     onReply({
@@ -100,7 +102,7 @@ const CommentItem = ({
             icon={<MessageCircle />}
             onClick={() => setIsReply(true)}
           >
-            Reply
+            {t("reply")}
           </Button>
         </div>
       )}
@@ -123,13 +125,13 @@ const CommentItem = ({
                 disabled={desc.length === 0}
                 className="bg-blue-500 text-white px-4 py-3 font-medium rounded-xl disabled:opacity-50"
               >
-                Send
+                {t("send")}
               </button>
               <button
                 onClick={() => setIsReply(false)}
                 className="bg-red-500 text-white px-4 py-3 font-medium rounded-xl"
               >
-                Cancel
+                {t("cancel")}
               </button>
             </div>
           </form>

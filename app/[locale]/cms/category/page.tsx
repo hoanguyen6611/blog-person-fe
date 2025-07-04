@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useTableStore } from "@/store/useTableStore";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface DataType {
   _id: string;
@@ -20,6 +21,7 @@ interface DataType {
   createdAt: string;
 }
 const CategoryPage = () => {
+  const t = useTranslations("CategoryTable");
   const { user } = useUser();
   const router = useRouter();
   const { getToken } = useAuth();
@@ -31,19 +33,19 @@ const CategoryPage = () => {
   );
   const columns: TableColumnsType<DataType> = [
     {
-      title: "Title",
+      title: t("title"),
       dataIndex: "title",
       key: "title",
     },
     {
-      title: "Status",
+      title: t("status"),
       dataIndex: "status",
       key: "status",
       render: (text) => <>{text ? "Active" : "Inactive"}</>,
     },
 
     {
-      title: "Created At",
+      title: t("createdAt"),
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text) => <>{format(new Date(text), "dd/MM/yyyy")}</>,
@@ -51,7 +53,7 @@ const CategoryPage = () => {
       // sorter: (a, b) => format(new Date(a.createdAt), "dd/MM/yyyy") - b.createdAt,
     },
     {
-      title: "Action",
+      title: t("action"),
       key: "action",
       render: (_, record) => (
         <Space size="middle">
@@ -141,7 +143,7 @@ const CategoryPage = () => {
     <TableCMS
       columns={columns}
       dataSource={dataSource}
-      nameButtonCreate="New Category"
+      nameButtonCreate={t("newCategory")}
       onDelete={handleOkFormDelete}
       nameModalDelete="category"
     />

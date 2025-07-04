@@ -21,6 +21,7 @@ import { Flex, Tag } from "antd";
 import ShareButtons from "./ShareButtons";
 import RelatedPosts from "./RelatedPosts";
 import { Tag as TagInterface } from "@/interface/Tag";
+import { useTranslations } from "next-intl";
 
 const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js",
@@ -28,7 +29,7 @@ const IconFont = createFromIconfontCN({
 
 export default function PostDetail({ post }: { post: Post }) {
   const { isSignedIn } = useAuth();
-
+  const t = useTranslations("PostDetail");
   const { data: categories } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
     fetcherUseSWR
@@ -112,7 +113,7 @@ export default function PostDetail({ post }: { post: Post }) {
         <aside className="lg:col-span-4 sticky top-20 self-start space-y-10">
           {/* Author box */}
           <div className="p-4 rounded-xl shadow bg-white">
-            <h2 className="font-semibold text-sm mb-3">Author</h2>
+            <h2 className="font-semibold text-sm mb-3">{t("author")}</h2>
             <div className="flex items-center gap-4 mb-3">
               <ImageShow
                 src={post?.user?.img}
@@ -147,12 +148,12 @@ export default function PostDetail({ post }: { post: Post }) {
           <PostMenuActions post={post} />
 
           <div className="p-4 rounded-xl shadow bg-white">
-            <h2 className="font-semibold text-sm mb-3">Categories</h2>
+            <h2 className="font-semibold text-sm mb-3">{t("categories")}</h2>
             <Categories />
           </div>
 
           <div className="p-4 rounded-xl shadow bg-white">
-            <h2 className="font-semibold text-sm mb-3">Search</h2>
+            <h2 className="font-semibold text-sm mb-3">{t("search")}</h2>
             <SearchInput />
           </div>
         </aside>

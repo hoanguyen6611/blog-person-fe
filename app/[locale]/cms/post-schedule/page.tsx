@@ -1,25 +1,35 @@
 "use client";
-import { fetcherWithTokenUseSWR } from "@/api/useswr";
+import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
+import ImageShow from "@/components/Image";
 import TableCMS from "@/components/Table";
 import { useAuth } from "@clerk/nextjs";
 import { Space, TableColumnsType } from "antd";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import useSWR from "swr";
 import { format } from "date-fns";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Category } from "@/interface/Category";
+import { Post } from "@/interface/Post";
 import { useTableStore } from "@/store/useTableStore";
+import { User } from "@/interface/User";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Tag } from "@/interface/Tag";
+import { useTranslations } from "next-intl";
 
 interface DataType {
   _id: string;
-  name: string;
+  title: string;
+  description: number;
+  category: string;
   createdAt: string;
   slug: string;
+  visit: number;
+  user: User;
 }
-const TagPage = () => {
+const PostSchedulePage = () => {
+  const t = useTranslations("PostTable");
+  const pathname = usePathname();
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
   const { setIsShowFormDelete, setIdDelete } = useTableStore();
@@ -28,14 +38,60 @@ const TagPage = () => {
     pageSize: 10,
     total: 0,
   });
+  const { data: categories } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    fetcherUseSWR
+  );
   const columns: TableColumnsType<DataType> = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: t("image"),
+      dataIndex: "img",
+      key: "img",
+      render: (text) => (
+        <>
+          <ImageShow
+            src={text}
+            alt={text}
+            className="w-10 h-10"
+            width={100}
+            height={100}
+          />
+        </>
+      ),
     },
     {
-      title: "Created At",
+      title: t("title"),
+      dataIndex: "title",
+      key: "title",
+    },
+    {
+      title: t("description"),
+      dataIndex: "desc",
+      key: "desc",
+    },
+    {
+      title: t("author"),
+      dataIndex: "user",
+      key: "user",
+      render: (text) => <>{text.username}</>,
+    },
+    {
+      title: t("visit"),
+      dataIndex: "visit",
+      key: "visit",
+    },
+    {
+      title: t("category"),
+      dataIndex: "categoryName",
+      key: "categoryName",
+      filters: categories?.categories.map((category: Category) => ({
+        text: category.title,
+        value: category._id,
+      })),
+      onFilter: (value, record) => record.category === value,
+    },
+    {
+      title: t("createdAt"),
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text) => <>{format(new Date(text), "dd/MM/yyyy")}</>,
@@ -43,7 +99,7 @@ const TagPage = () => {
       // sorter: (a, b) => format(new Date(a.createdAt), "dd/MM/yyyy") - b.createdAt,
     },
     {
-      title: "Action",
+      title: t("action"),
       key: "action",
       render: (_, record) => (
         <Space size="middle">
@@ -78,20 +134,26 @@ const TagPage = () => {
     async ([_, page, limit]) => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(
-        `${process.env.NEXT_PUBLIC_API_URL}/tags`,
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/user/schedule?page=${page}&limit=${limit}`,
         token!
       );
     }
   );
+  useEffect(() => {
+    mutate(); // force revalidation
+  }, [pathname]);
   const dataSource =
-    data?.tags?.map((tag: Tag) => ({
-      key: tag._id,
-      ...tag,
+    data?.posts?.map((post: Post) => ({
+      key: post._id,
+      categoryName: categories?.categories.find(
+        (category: Category) => category._id === post.category
+      )?.title,
+      ...post,
     })) || [];
   const handleDeletePost = async (id: string) => {
     const token = await getToken();
     const res = await axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/tags/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -100,9 +162,9 @@ const TagPage = () => {
     );
     if (res.status === 200) {
       setIsShowFormDelete(false);
-      toast.success("Delete tag successfully");
+      toast.success("Delete post successfully");
       await mutate();
-      router.push(`/cms/tag`);
+      router.push(`/cms/posts`);
     }
   };
   const showFormDelete = (id: string) => {
@@ -116,11 +178,12 @@ const TagPage = () => {
     <TableCMS
       columns={columns}
       dataSource={dataSource}
-      nameButtonCreate="New Tag"
+      buttonCreate={true}
+      nameButtonCreate="New Post"
       onDelete={handleDeletePost}
-      nameModalDelete="tag"
+      nameModalDelete="post"
     />
   );
 };
 
-export default TagPage;
+export default PostSchedulePage;

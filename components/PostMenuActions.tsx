@@ -7,7 +7,7 @@ import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "../api/useswr";
 import { DeleteOutlined, SaveOutlined, StarOutlined } from "@ant-design/icons";
 import { Post } from "@/interface/Post";
-
+import { useTranslations } from "next-intl";
 const PostMenuActions = ({ post }: { post: Post }) => {
   const { getToken } = useAuth();
   const { user } = useUser();
@@ -15,7 +15,7 @@ const PostMenuActions = ({ post }: { post: Post }) => {
   const [isSaved, setIsSaved] = useState(true);
   const [token, setToken] = useState<string | null>(null);
   const [isFeatured, setIsFeatured] = useState(post.isFeature);
-
+  const t = useTranslations("PostMenuActions");
   useEffect(() => {
     (async () => {
       const t = await getToken();
@@ -113,7 +113,7 @@ const PostMenuActions = ({ post }: { post: Post }) => {
         <SaveOutlined
           style={{ color: isSavedPost ? "black" : "gray", fontSize: 32 }}
         />
-        <span>Save this Post</span>
+        <span>{t("save")}</span>
       </div>
       {isAdmin && (
         <div
@@ -123,7 +123,7 @@ const PostMenuActions = ({ post }: { post: Post }) => {
           <StarOutlined
             style={{ color: isFeatured ? "black" : "gray", fontSize: 32 }}
           />
-          <span>Featured this Post</span>
+          <span>{t("feature")}</span>
         </div>
       )}
       {(post?.user?.username === user?.username || isAdmin) && (
@@ -135,7 +135,7 @@ const PostMenuActions = ({ post }: { post: Post }) => {
             className="cursor-pointer"
             style={{ color: "red", fontSize: "32px" }}
           />
-          <span>Delete this Post</span>
+          <span>{t("delete")}</span>
         </div>
       )}
     </div>

@@ -7,7 +7,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-
+import { useTranslations } from "next-intl";
 type Category = {
   _id: string;
   count: number;
@@ -26,7 +26,7 @@ const COLORS = [
 
 export default function CategoryPieChart({ data }: { data: Category[] }) {
   const total = data?.reduce((sum, item) => sum + item.count, 0);
-
+  const t = useTranslations("Statistic");
   const formattedData = data?.map((item) => ({
     name: item._id || "Unknown",
     value: item.count,
@@ -35,7 +35,7 @@ export default function CategoryPieChart({ data }: { data: Category[] }) {
   return (
     <div className="bg-white p-6 rounded-xl shadow mt-8">
       <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        🏷️ Article by category
+        🏷️ {t("articleByCategory")}
       </h2>
 
       <div className="h-80 w-full">
@@ -68,8 +68,8 @@ export default function CategoryPieChart({ data }: { data: Category[] }) {
             </Pie>
             <Tooltip
               formatter={(value: number) => [
-                `${value} articles`,
-                "Number of articles",
+                `${value} ${t("articles")}`,
+                `${t("numberOfArticles")}`,
               ]}
             />
             <Legend verticalAlign="bottom" height={36} />
@@ -77,7 +77,9 @@ export default function CategoryPieChart({ data }: { data: Category[] }) {
         </ResponsiveContainer>
       </div>
 
-      <p className="text-sm text-gray-500 mt-4">Total: {total} articles</p>
+      <p className="text-sm text-gray-500 mt-4">
+        {t("total")}: {total} {t("articles")}
+      </p>
     </div>
   );
 }

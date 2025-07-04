@@ -10,8 +10,10 @@ import ImageShow from "./Image";
 import MonthlyPostChart from "./MonthlyPostChart";
 import CategoryPieChart from "./CategoryPieChart";
 import AuthorStatsTable from "./AuthorStatsTable";
+import { useTranslations } from "next-intl";
 
 export default function Statistic() {
+  const t = useTranslations("Statistic");
   const { getToken, isSignedIn } = useAuth();
   const [token, setToken] = useState<string | null>(null);
   const [pagination, setPagination] = useState({
@@ -65,7 +67,7 @@ export default function Statistic() {
     <div className="p-6 space-y-6">
       <div className="bg-white p-6 rounded-xl shadow">
         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          🔥 Top 5 featured articles
+          🔥 {t("top5FeaturedArticles")}
         </h2>
 
         <div className="space-y-4">
@@ -94,7 +96,7 @@ export default function Statistic() {
                   {post.title}
                 </a>
                 <p className="text-xs text-gray-500 mt-1">
-                  {post.visit} lượt xem
+                  {post.visit} {t("views")}
                 </p>
               </div>
             </div>

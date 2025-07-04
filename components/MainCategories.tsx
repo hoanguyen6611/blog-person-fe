@@ -4,12 +4,14 @@ import SearchInput from "./Search";
 import useSWR from "swr";
 import { fetcherUseSWR } from "@/api/useswr";
 import { Category } from "@/interface/Category";
+import { useTranslations } from "next-intl";
 
 const MainCategories = () => {
   const { data } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/category/getLimit`,
     fetcherUseSWR
   );
+  const t = useTranslations("MainCategories");
 
   return (
     <div className="hidden md:flex items-center justify-between gap-4 p-4 bg-white rounded-3xl xl:rounded-full shadow-md">
@@ -18,7 +20,7 @@ const MainCategories = () => {
           href="/posts"
           className="bg-blue-800 text-white px-4 py-2 rounded-full font-medium hover:bg-blue-700 transition-all whitespace-nowrap"
         >
-          All Posts
+          {t("allPosts")}
         </Link>
         {data?.categories?.map((cat: Category) => (
           <Link

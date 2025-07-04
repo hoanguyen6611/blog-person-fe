@@ -5,8 +5,10 @@ import MainCategories from "@/components/MainCategories";
 import FeaturedPostV1 from "@/components/FeaturePostV1";
 import PostList from "@/components/PostList";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 export default function Home() {
+  const t = useTranslations("HomePage");
   return (
     <div className="mt-8 space-y-20">
       <motion.div
@@ -24,7 +26,7 @@ export default function Home() {
         viewport={{ once: true }}
       >
         <h2 className="mb-6 text-3xl font-semibold text-gray-800 tracking-tight">
-          Explore Categories
+          {t("exploreCategories")}
         </h2>
         <MainCategories />
       </motion.section>
@@ -36,7 +38,7 @@ export default function Home() {
         viewport={{ once: true }}
       >
         <h2 className="mb-6 text-3xl font-semibold text-gray-800 tracking-tight">
-          Featured Posts
+          {t("featuredPosts")}
         </h2>
         <FeaturedPostV1 />
       </motion.section>
@@ -48,7 +50,7 @@ export default function Home() {
         viewport={{ once: true }}
       >
         <h2 className="mb-6 text-3xl font-semibold text-gray-800 tracking-tight">
-          Recent Posts
+          {t("recentPosts")}
         </h2>
         <PostList apiUrl="posts" showPagination />
       </motion.section>

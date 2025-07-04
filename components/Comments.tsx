@@ -6,12 +6,13 @@ import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { Comment } from "@/interface/Comment";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../api/useswr";
+import { useTranslations } from "next-intl";
 
 const Comments = ({ postId }: { postId: string }) => {
   const [desc, setDesc] = useState("");
   const { getToken } = useAuth();
   const [token, setToken] = useState<string | null>(null);
-
+  const t = useTranslations("Comments");
   const { data, error, isLoading, mutate } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/comments/${postId}`,
     fetcherUseSWR
@@ -127,21 +128,21 @@ const Comments = ({ postId }: { postId: string }) => {
   if (error) return <p>Failed to load</p>;
   return (
     <div className="flex flex-col gap-8 lg:w-3/5">
-      <h1 className="text-xl text-black font-bold">Comments</h1>
+      <h1 className="text-xl text-black font-bold">{t("title")}</h1>
       <form
         action=""
         className="flex items-center justify-between gap-8 w-full"
         onSubmit={handleSubmit}
       >
         <textarea
-          placeholder="Write a comment..."
+          placeholder={t("writeComment")}
           className="w-full p-4 rounded-xl bg-white"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
           name="desc"
         />
         <button className="bg-blue-500 text-white px-4 py-3 font-medium rounded-xl">
-          Comment
+          {t("comment")}
         </button>
       </form>
       {comments.map((comment: Comment) => (

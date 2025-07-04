@@ -17,11 +17,13 @@ import { toast } from "react-toastify";
 import { useNotificationSocket } from "@/hook/useNotificationSocket";
 import { Notification } from "@/interface/Notification";
 import axios from "axios";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslations } from "next-intl";
 
 const NavBarItem = () => {
   const { user } = useUser();
   const { getToken, isSignedIn } = useAuth();
-
+  const t = useTranslations("NavBar");
   const [token, setToken] = useState<string | null>(null);
   const isAdmin = user?.publicMetadata?.role === "admin";
   const cmsHref = isAdmin ? "/cms" : "/cms/personal";
@@ -56,7 +58,7 @@ const NavBarItem = () => {
   };
   const notificationItems: MenuProps["items"] = [
     {
-      label: "🔔 Mark all as read",
+      label: <Button type="primary"> 🔔 {t("markAllAsRead")}</Button>,
       key: "mark_all",
     },
     ...(notifications?.length
@@ -76,9 +78,9 @@ const NavBarItem = () => {
             ),
           key: n._id,
         }))
-      : [{ label: "Không có thông báo", key: "0", disabled: true }]),
+      : [{ label: t("noNotification"), key: "0", disabled: true }]),
     {
-      label: "📄 Xem tất cả",
+      label: <Button type="primary"> 📄 {t("viewAll")}</Button>,
       key: "view_all",
     },
   ];
@@ -141,19 +143,19 @@ const NavBarItem = () => {
   return (
     <>
       <Link href="/" className={linkStyle}>
-        Home
+        {t("home")}
       </Link>
       <Link href="/posts?sort=trending" className={linkStyle}>
-        Trending
+        {t("trending")}
       </Link>
       <Link href="/posts?sort=popular" className={linkStyle}>
-        Most Popular
+        {t("mostPopular")}
       </Link>
       <Link href="/about" className={linkStyle}>
-        About
+        {t("about")}
       </Link>
       <Link href={cmsHref} className={linkStyle}>
-        CMS
+        {t("cms")}
       </Link>
 
       <Button
@@ -161,7 +163,7 @@ const NavBarItem = () => {
         onClick={() => router.push("/write")}
         className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl"
       >
-        ✍️ New Post
+        ✍️ {t("newPost")}
       </Button>
       {isSignedIn && (
         <Dropdown
@@ -189,12 +191,13 @@ const NavBarItem = () => {
           </a>
         </Dropdown>
       )}
+      <LanguageSwitcher />
       {/* <ThemeToggle /> */}
 
       <SignedOut>
         <Link href="/login">
           <button className="py-2 px-4 rounded-3xl bg-blue-800 text-white hover:bg-blue-900 transition">
-            Login ✋
+            {t("login")} ✋
           </button>
         </Link>
       </SignedOut>

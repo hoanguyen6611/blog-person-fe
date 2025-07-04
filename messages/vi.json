@@ -1,0 +1,133 @@
+{
+  "HomePage": {
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "greeting": "Xin chào {{name}}!",
+    "exploreCategories": "Khám phá danh mục",
+    "featuredPosts": "Bài viết nổi bật",
+    "recentPosts": "Bài viết gần đây"
+  },
+  "MainCategories": {
+    "allPosts": "Tất cả bài viết"
+  },
+  "Banner": {
+    "title": "Chuyển đổi ý tưởng thành tác động.",
+    "description": "Chia sẻ ý tưởng của bạn, thúc đẩy người khác, và đứng đầu với công nghệ.",
+    "startWriting": "Bắt đầu viết →"
+  },
+  "NavBar": {
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "markAllAsRead": "Đánh dấu tất cả đã đọc",
+    "viewAll": "Xem tất cả",
+    "noNotification": "Không có thông báo",
+    "trending": "Xu hướng",
+    "mostPopular": "Phổ biến nhất",
+    "cms": "Trang quản lý",
+    "personal": "Trang cá nhân",
+    "newPost": "Bài viết mới"
+  },
+  "Comments": {
+    "title": "Tất cả bình luận",
+    "comment": "Bình luận",
+    "writeComment": "Viết bình luận ...",
+    "reply": "Trả lời",
+    "like": "Thích",
+    "dislike": "Không thích",
+    "delete": "Xóa",
+    "cancel": "Hủy",
+    "send": "Gửi"
+  },
+  "PostDetail": {
+    "author": "Tác giả",
+    "categories": "Danh mục",
+    "search": "Tìm kiếm",
+    "all": "Tất cả"
+  },
+  "PostMenuActions": {
+    "save": "Lưu bài viết này",
+    "feature": "Bài viết nổi bật",
+    "delete": "Xóa bài viết này"
+  },
+  "Dashboard": {
+    "title": "Bảng điều khiển",
+    "posts": "Bài viết",
+    "categories": "Danh mục",
+    "users": "Người dùng",
+    "comments": "Bình luận",
+    "settings": "Cài đặt",
+    "totalPosts": "Tổng số bài viết",
+    "totalCategories": "Tổng số danh mục",
+    "totalUsers": "Tổng số người dùng",
+    "totalComments": "Tổng số bình luận",
+    "totalViews": "Tổng số lượt xem",
+    "totalFollowers": "Tổng số người theo dõi",
+    "totalFollowing": "Tổng số người được theo dõi"
+  },
+  "Sidebar": {
+    "dashboard": "Bảng điều khiển",
+    "posts": "Bài viết",
+    "categories": "Danh mục",
+    "users": "Người dùng",
+    "comments": "Bình luận",
+    "settings": "Cài đặt",
+    "dashboardPersonal": "Bảng điều khiển cá nhân",
+    "myPosts": "Bài viết của tôi",
+    "myPostsSchedule": "Bài viết đã lên lịch",
+    "savePost": "Bài viết đã lưu",
+    "tags": "Thẻ"
+  },
+  "Statistic": {
+    "title": "Thống kê",
+    "posts": "Bài viết",
+    "categories": "Danh mục",
+    "users": "Người dùng",
+    "comments": "Bình luận",
+    "views": "Lượt xem",
+    "top5FeaturedArticles": "Top 5 Bài viết nổi bật",
+    "articlesByMonth": "Bài viết theo tháng",
+    "articleByCategory": "Bài viết theo danh mục",
+    "articleByAuthor": "Bài viết theo tác giả",
+    "numberOfArticles": "Số lượng bài viết",
+    "articles": "bài viết",
+    "author": "Tác giả",
+    "total": "Tổng số",
+    "month": "Tháng",
+    "year": "Năm"
+  },
+  "PostTable": {
+    "image": "Hình ảnh",
+    "title": "Tiêu đề",
+    "description": "Mô tả",
+    "author": "Tác giả",
+    "visit": "Lượt xem",
+    "category": "Danh mục",
+    "createdAt": "Ngày tạo",
+    "action": "Tác vụ",
+    "newPost": "Thêm bài viết"
+  },
+  "CategoryTable": {
+    "title": "Tiêu đề",
+    "status": "Trạng thái",
+    "createdAt": "Ngày tạo",
+    "action": "Tác vụ",
+    "newCategory": "Thêm danh mục"
+  },
+  "UserTable": {
+    "image": "Hình ảnh",
+    "username": "Tên người dùng",
+    "email": "Email",
+    "createdAt": "Ngày tạo",
+    "action": "Tác vụ",
+    "newUser": "Thêm người dùng"
+  },
+  "TagTable": {
+    "name": "Tên",
+    "createdAt": "Ngày tạo",
+    "action": "Tác vụ",
+    "newTag": "Thêm thẻ"
+  }
+}

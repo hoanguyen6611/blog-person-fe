@@ -23,12 +23,6 @@ const FollowList = ({ data, loading }: { data: any; loading: boolean }) => {
     })();
   }, [getToken]);
 
-  const { data: followers, isLoading: loadingFollowers } = useSWR(
-    () => (token ? ["/users/followers", token] : null),
-    ([url, token]) =>
-      fetcherWithTokenUseSWR(`${process.env.NEXT_PUBLIC_API_URL}${url}`, token)
-  );
-
   const renderUserList = (users: UserItem[], title: string) => (
     <div>
       <h2 className="text-lg font-semibold mb-2">{title}</h2>

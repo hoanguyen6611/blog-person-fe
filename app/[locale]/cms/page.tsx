@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../../api/useswr";
+import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../../../api/useswr";
 import DashBoard from "@/components/Dashboard";
 import { useUser, useAuth } from "@clerk/nextjs";
 import { useState } from "react";

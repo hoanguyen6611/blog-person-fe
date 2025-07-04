@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useSWR from "swr";
-
+import { useTranslations } from "next-intl";
 interface DataType {
   _id: string;
   img: string;
@@ -20,6 +20,7 @@ interface DataType {
   createdAt: string;
 }
 const UserCms = () => {
+  const t = useTranslations("UserTable");
   const router = useRouter();
   const [pagination, setPagination] = useState({
     current: 1,
@@ -49,7 +50,7 @@ const UserCms = () => {
   }, [data]);
   const columns: TableColumnsType<DataType> = [
     {
-      title: "Image",
+      title: t("image"),
       dataIndex: "img",
       key: "img",
       render: (text) => (
@@ -65,17 +66,17 @@ const UserCms = () => {
       ),
     },
     {
-      title: "Username",
+      title: t("username"),
       dataIndex: "username",
       key: "username",
     },
     {
-      title: "Email",
+      title: t("email"),
       dataIndex: "email",
       key: "email",
     },
     {
-      title: "Created At",
+      title: t("createdAt"),
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text) => <>{format(new Date(text), "dd/MM/yyyy")}</>,
@@ -111,7 +112,7 @@ const UserCms = () => {
     <TableCMS
       columns={columns}
       dataSource={dataSource}
-      nameButtonCreate="New User"
+      nameButtonCreate={t("newUser")}
       onDelete={handleOkFormDelete}
       nameModalDelete="user"
     />

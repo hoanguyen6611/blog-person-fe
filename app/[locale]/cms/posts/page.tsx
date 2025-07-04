@@ -15,6 +15,7 @@ import { useTableStore } from "@/store/useTableStore";
 import { User } from "@/interface/User";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useTranslations } from "next-intl";
 
 interface DataType {
   _id: string;
@@ -28,6 +29,7 @@ interface DataType {
 }
 const PostPage = () => {
   const pathname = usePathname();
+  const t = useTranslations("PostTable");
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
   const { setIsShowFormDelete, setIdDelete } = useTableStore();
@@ -42,7 +44,7 @@ const PostPage = () => {
   );
   const columns: TableColumnsType<DataType> = [
     {
-      title: "Image",
+      title: t("image"),
       dataIndex: "img",
       key: "img",
       render: (text) => (
@@ -58,28 +60,28 @@ const PostPage = () => {
       ),
     },
     {
-      title: "Title",
+      title: t("title"),
       dataIndex: "title",
       key: "title",
     },
     {
-      title: "Description",
+      title: t("description"),
       dataIndex: "desc",
       key: "desc",
     },
     {
-      title: "Author",
+      title: t("author"),
       dataIndex: "user",
       key: "user",
       render: (text) => <>{text.username}</>,
     },
     {
-      title: "Visit",
+      title: t("visit"),
       dataIndex: "visit",
       key: "visit",
     },
     {
-      title: "Category",
+      title: t("category"),
       dataIndex: "categoryName",
       key: "categoryName",
       filters: categories?.categories.map((category: Category) => ({
@@ -89,7 +91,7 @@ const PostPage = () => {
       onFilter: (value, record) => record.category === value,
     },
     {
-      title: "Created At",
+      title: t("createdAt"),
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text) => <>{format(new Date(text), "dd/MM/yyyy")}</>,
@@ -97,7 +99,7 @@ const PostPage = () => {
       // sorter: (a, b) => format(new Date(a.createdAt), "dd/MM/yyyy") - b.createdAt,
     },
     {
-      title: "Action",
+      title: t("action"),
       key: "action",
       render: (_, record) => (
         <Space size="middle">
@@ -177,7 +179,7 @@ const PostPage = () => {
       columns={columns}
       dataSource={dataSource}
       buttonCreate={true}
-      nameButtonCreate="New Post"
+      nameButtonCreate={t("newPost")}
       onDelete={handleDeletePost}
       nameModalDelete="post"
     />
