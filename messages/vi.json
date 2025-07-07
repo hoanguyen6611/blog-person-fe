@@ -1,4 +1,7 @@
 {
+  "Common": {
+    "search": "Tìm kiếm bài viết ..."
+  },
   "HomePage": {
     "home": "Trang chủ",
     "about": "Giới thiệu",
@@ -8,7 +11,7 @@
     "recentPosts": "Bài viết gần đây"
   },
   "MainCategories": {
-    "allPosts": "Tất cả bài viết"
+    "allPosts": "Tất cả"
   },
   "Banner": {
     "title": "Chuyển đổi ý tưởng thành tác động.",

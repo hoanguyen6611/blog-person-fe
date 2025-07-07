@@ -9,7 +9,7 @@ import { format } from "timeago.js";
 import Link from "next/link";
 import { Notification } from "@/interface/Notification";
 import { Button, Empty } from "antd";
-import { Heart, MessageCircle, UserPlus } from "lucide-react";
+import { Heart, MessageCircle, UserPlus, Newspaper } from "lucide-react";
 
 export default function NotificationsPage() {
   const { getToken, isSignedIn } = useAuth();
@@ -80,6 +80,9 @@ export default function NotificationsPage() {
                 )}
                 {n.type === "follow" && (
                   <UserPlus className="text-green-500" size={20} />
+                )}
+                {n.type === "post" && (
+                  <Newspaper className="text-green-500" size={20} />
                 )}
               </div>
 

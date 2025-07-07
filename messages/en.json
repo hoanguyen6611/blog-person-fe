@@ -1,4 +1,7 @@
 {
+  "Common": {
+    "search": "Search a post ..."
+  },
   "HomePage": {
     "home": "Home",
     "about": "About",

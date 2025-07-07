@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
 
@@ -9,6 +10,7 @@ const SearchInput = () => {
       router.push(`/posts?search=${query}`);
     }
   };
+  const t = useTranslations("Common");
   return (
     <div className="bg-gray-100 p-2 rounded-full flex items-center gap-2">
       <svg
@@ -24,7 +26,7 @@ const SearchInput = () => {
       </svg>
       <input
         type="text"
-        placeholder="Search a post ..."
+        placeholder={t("search")}
         className="bg-transparent"
         onKeyDown={handleKeyPress}
       />

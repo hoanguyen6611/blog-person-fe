@@ -64,7 +64,7 @@ const NavBarItem = () => {
     ...(notifications?.length
       ? notifications.map((n: Notification) => ({
           label:
-            n.type === "comment" ? (
+            n.type === "comment" || n.type === "like" ? (
               <a
                 href={`/posts/${n.postId}`}
                 target="_blank"

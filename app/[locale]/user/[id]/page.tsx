@@ -117,13 +117,15 @@ const UserPage = () => {
           <p className="text-gray-600">{profileData?.email}</p>
         </div>
         {/* Nút Follow */}
-        <Button
-          type={isFollow ? "default" : "primary"}
-          onClick={handleFollow}
-          loading={loadingFollow}
-        >
-          {isFollow ? "Following" : "Follow"}
-        </Button>
+        {profileData?.username !== user?.username && (
+          <Button
+            type={isFollow ? "default" : "primary"}
+            onClick={handleFollow}
+            loading={loadingFollow}
+          >
+            {isFollow ? "Following" : "Follow"}
+          </Button>
+        )}
       </div>
 
       {/* 📊 Thống kê follow */}
@@ -135,7 +137,12 @@ const UserPage = () => {
 
       {/* 📝 Danh sách bài viết */}
       <div>
-        <h3 className="text-xl font-semibold mb-4">📝 Their Posts</h3>
+        <h3 className="text-xl font-semibold mb-4">
+          📝{" "}
+          {profileData?.username !== user?.username
+            ? "Their Posts"
+            : "Your Posts"}
+        </h3>
         <PostList
           apiUrl={`posts/user/${params.id}`}
           showPagination={false}

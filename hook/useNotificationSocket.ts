@@ -46,11 +46,20 @@ export function useNotificationSocket(
       // Tránh trùng lặp
       socket.off("new-comment", onReceive);
       socket.on("new-comment", onReceive);
+      socket.off("new-like", onReceive);
+      socket.on("new-like", onReceive);
+      socket.off("new-post", onReceive);
+      socket.on("new-post", onReceive);
+      socket.off("new-follow", onReceive);
+      socket.on("new-follow", onReceive);
     })();
 
     return () => {
       if (socketRef.current) {
         socketRef.current.off("new-comment", onReceive);
+        socketRef.current.off("new-like", onReceive);
+        socketRef.current.off("new-post", onReceive);
+        socketRef.current.off("new-follow", onReceive);
         socketRef.current.disconnect();
         socketRef.current = null;
       }
