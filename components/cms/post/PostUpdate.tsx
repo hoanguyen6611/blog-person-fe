@@ -12,6 +12,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Editor, { EditorHandle } from "@/components/Editor/Editor";
 import { useTableStore } from "@/store/useTableStore";
+import BackToTopButton from "@/components/BackToTopButton";
 const PostUpdate = () => {
   const params = useParams();
   const router = useRouter();
@@ -198,6 +199,7 @@ const PostUpdate = () => {
               />
             </div>
           </div>
+          <BackToTopButton />
           <div className="text-center">
             <button
               type="submit"

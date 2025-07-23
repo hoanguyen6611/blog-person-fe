@@ -28,6 +28,7 @@ import PostDetail from "@/components/PostDetail";
 import { Tag } from "@/interface/Tag";
 import dayjs from "dayjs";
 import { UploadResponse } from "@imagekit/next";
+import BackToTopButton from "@/components/BackToTopButton";
 interface FormPost {
   title: string;
   category: string;
@@ -121,7 +122,7 @@ const PostCreate = () => {
         },
       }
     );
-    if (res.status === 200) {
+    if (res.status === 201) {
       toast.success("Name tag created successfully");
       setIsModalOpenTag(false);
       await mutateTags();
@@ -147,7 +148,7 @@ const PostCreate = () => {
         },
       }
     );
-    if (res.status === 200) {
+    if (res.status === 201) {
       toast.success("Category created successfully");
       setIsModalOpen(false);
       await mutate();
@@ -170,8 +171,7 @@ const PostCreate = () => {
         },
       }
     );
-    console.log(res.data);
-    if (res.status === 200) {
+    if (res.status === 201) {
       setIsDisabledBtnSend(true);
       setFormData({
         title: "",
@@ -200,8 +200,7 @@ const PostCreate = () => {
         },
       }
     );
-    console.log(res.data);
-    if (res.status === 200) {
+    if (res.status === 201) {
       setIsDisabledBtnSend(true);
       setFormData({
         title: "",
@@ -465,7 +464,7 @@ const PostCreate = () => {
               />
             </div>
           </div>
-
+          <BackToTopButton />
           {/* Submit */}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mt-6">
             {/* Nút Create Post */}

@@ -64,7 +64,7 @@ const NavBarItem = () => {
     ...(notifications?.length
       ? notifications.map((n: Notification) => ({
           label:
-            n.type === "comment" || n.type === "like" ? (
+            n.type === "comment" || n.type === "like" || n.type === "post" ? (
               <a
                 href={`/posts/${n.postId}`}
                 target="_blank"
@@ -74,7 +74,14 @@ const NavBarItem = () => {
                 {n.message}
               </a>
             ) : (
-              <a href={`/user`}>{n.message}</a>
+              <a
+                href={`/user`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={n.isRead ? "text-gray-400" : "font-semibold"}
+              >
+                {n.message}
+              </a>
             ),
           key: n._id,
         }))

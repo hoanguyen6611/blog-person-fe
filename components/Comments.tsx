@@ -85,7 +85,7 @@ const Comments = ({ postId }: { postId: string }) => {
         },
       }
     );
-    if (res.status === 200) {
+    if (res.status === 201) {
       await mutate();
       await mutateLikeComments();
     }
