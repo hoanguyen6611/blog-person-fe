@@ -28,7 +28,7 @@ export default async function LocaleLayout({
   }
   return (
     <ClerkProvider>
-      <html lang={locale}>
+      <html lang={locale} suppressHydrationWarning>
         <body>
           <ThemeProvider
             attribute="class"

@@ -111,7 +111,7 @@ const PostMenuActions = ({ post }: { post: Post }) => {
         onClick={handleSave}
       >
         <SaveOutlined
-          style={{ color: isSavedPost ? "black" : "gray", fontSize: 32 }}
+          style={{ color: isSavedPost ? "blue" : "gray", fontSize: 32 }}
         />
         <span>{t("save")}</span>
       </div>
@@ -121,7 +121,7 @@ const PostMenuActions = ({ post }: { post: Post }) => {
           onClick={featurePost}
         >
           <StarOutlined
-            style={{ color: isFeatured ? "black" : "gray", fontSize: 32 }}
+            style={{ color: isFeatured ? "blue" : "gray", fontSize: 32 }}
           />
           <span>{t("feature")}</span>
         </div>

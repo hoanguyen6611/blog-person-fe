@@ -188,6 +188,7 @@ const NavBarItem = () => {
             }, // 👈 Gọi API đánh dấu đã đọc với ID là key
           }}
           trigger={["click"]}
+          className="dark:text-gray-400 dark:bg-gray-800"
         >
           <a onClick={(e) => e.preventDefault()}>
             <Space>

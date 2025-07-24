@@ -67,7 +67,9 @@ export default function NotificationsPage() {
             <li
               key={n._id}
               className={`p-4 rounded-lg flex gap-4 items-start ${
-                n.isRead ? "bg-white text-gray-500" : "bg-blue-50 font-semibold"
+                n.isRead
+                  ? "bg-white text-gray-500 dark:text-gray-400 dark:bg-gray-800"
+                  : "bg-blue-50 font-semibold"
               }`}
             >
               {/* ICON theo loại */}

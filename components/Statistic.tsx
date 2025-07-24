@@ -65,7 +65,7 @@ export default function Statistic() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="bg-white p-6 rounded-xl shadow">
+      <div className="bg-white p-6 rounded-xl shadow dark:text-gray-400 dark:bg-gray-800">
         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
           🔥 {t("top5FeaturedArticles")}
         </h2>
@@ -91,7 +91,7 @@ export default function Statistic() {
               <div className="flex-1">
                 <a
                   href={`/posts/${post._id}`}
-                  className="text-sm font-medium text-blue-700 hover:underline line-clamp-2"
+                  className="text-sm font-medium text-blue-400 hover:underline line-clamp-2"
                 >
                   {post.title}
                 </a>

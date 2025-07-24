@@ -315,9 +315,9 @@ const PostCreate = () => {
   };
 
   return (
-    <div className="h-full min-h-screen bg-gray-50 py-8 px-4 md:px-10">
-      <div className="max-w-6xl mx-auto bg-white p-6 md:p-10 rounded-xl shadow-lg space-y-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800">
+    <div className="h-full min-h-screen bg-gray-50 py-8 px-4 md:px-10 dark:bg-gray-800 dark:text-gray-400">
+      <div className="max-w-6xl mx-auto bg-white p-6 md:p-10 rounded-xl shadow-lg space-y-8 dark:bg-gray-800">
+        <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-gray-400">
           📝 Create a New Post
         </h1>
 
@@ -539,6 +539,8 @@ const items: TabsProps["items"] = [
     children: <Preview />,
   },
 ];
-const PostCreateCMS = () => <Tabs defaultActiveKey="1" items={items} />;
+const PostCreateCMS = () => (
+  <Tabs defaultActiveKey="1" items={items} className="dark:text-white p-3" />
+);
 
 export default PostCreateCMS;
