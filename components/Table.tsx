@@ -62,7 +62,7 @@ const TableCMS = ({
         </>
       )}
       <Table
-        className="mt-4 w-full h-full"
+        className="mt-4 w-full h-full dark:text-gray-400 dark:bg-gray-800"
         columns={columns}
         dataSource={dataSource}
         pagination={{

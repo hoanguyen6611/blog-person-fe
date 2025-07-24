@@ -14,11 +14,12 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import { toast } from "react-toastify";
-import { useNotificationSocket } from "@/hook/useNotificationSocket";
+import { useNotificationSocket } from "@/hooks/useNotificationSocket";
 import { Notification } from "@/interface/Notification";
 import axios from "axios";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslations } from "next-intl";
+import ThemeToggle from "./ThemeToggle";
 
 const NavBarItem = () => {
   const { user } = useUser();
@@ -191,7 +192,7 @@ const NavBarItem = () => {
           <a onClick={(e) => e.preventDefault()}>
             <Space>
               <Badge count={unreadCount}>
-                <Bell className="cursor-pointer" />
+                <Bell className="cursor-pointer dark:text-gray-400" />
                 {renderStatusDot()}
               </Badge>
             </Space>
@@ -199,7 +200,7 @@ const NavBarItem = () => {
         </Dropdown>
       )}
       <LanguageSwitcher />
-      {/* <ThemeToggle /> */}
+      <ThemeToggle />
 
       <SignedOut>
         <Link href="/login">

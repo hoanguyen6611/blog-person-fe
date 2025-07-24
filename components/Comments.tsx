@@ -136,7 +136,7 @@ const Comments = ({ postId }: { postId: string }) => {
       >
         <textarea
           placeholder={t("writeComment")}
-          className="w-full p-4 rounded-xl bg-white"
+          className="w-full p-4 rounded-xl bg-white dark:text-black"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
           name="desc"

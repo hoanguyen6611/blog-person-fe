@@ -12,7 +12,7 @@ const PostListItem = ({ post }: { post: Post }) => {
     fetcherUseSWR
   );
   return (
-    <div className="flex flex-col xl:flex-row gap-8">
+    <div className="flex flex-col xl:flex-row gap-8 ">
       {/* image */}
       <div className="md:hidden xl:block xl:w-1/3">
         <ImageShow
@@ -55,14 +55,14 @@ const PostListItem = ({ post }: { post: Post }) => {
           Read More
         </Link>
       </div> */}
-      <div className="p-6 rounded-xl bg-white shadow hover:shadow-md transition-all space-y-4 flex flex-col gap-4 xl:w-2/3">
+      <div className="p-6 rounded-xl bg-white shadow hover:shadow-md transition-all space-y-4 flex flex-col gap-4 xl:w-2/3 dark:bg-gray-800">
         <Link href={`/posts/${post._id}`}>
-          <h3 className="text-xl font-bold text-gray-900 hover:underline">
+          <h3 className="text-xl font-bold text-gray-900 hover:underline dark:text-gray-400">
             {post.title}
           </h3>
         </Link>
-        <p className="text-sm text-gray-600">{post.desc}</p>
-        <div className="flex gap-4 text-xs text-gray-400">
+        <p className="text-sm text-gray-600 dark:text-gray-200">{post.desc}</p>
+        <div className="flex gap-4 text-xs text-gray-400 dark:text-gray-200">
           <span>{post.user.username}</span>
           <span>{format(post.createdAt)}</span>
         </div>

@@ -27,7 +27,7 @@ const SearchInput = () => {
       <input
         type="text"
         placeholder={t("search")}
-        className="bg-transparent"
+        className="bg-transparent dark:text-black"
         onKeyDown={handleKeyPress}
       />
     </div>

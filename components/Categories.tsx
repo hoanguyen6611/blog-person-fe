@@ -11,7 +11,7 @@ const Categories = () => {
     fetcherUseSWR
   );
   return (
-    <div className="flex flex-col gap-2 text-sm">
+    <div className="flex flex-col gap-2 text-sm ">
       <Link href="/posts" className="hover:text-blue-600 font-bold">
         {t("all")}
       </Link>

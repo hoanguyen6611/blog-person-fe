@@ -8,7 +8,7 @@ type AuthorStats = {
 export default function AuthorStatsTable({ data }: { data: AuthorStats[] }) {
   const t = useTranslations("Statistic");
   return (
-    <div className="bg-white p-6 rounded-xl shadow mt-8">
+    <div className="bg-white p-6 rounded-xl shadow mt-8 dark:bg-gray-800">
       <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
         👤 {t("articleByAuthor")}
       </h2>

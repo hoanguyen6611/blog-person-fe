@@ -7,12 +7,14 @@ const Banner = () => {
   return (
     <div className="flex flex-col md:flex-row justify-between items-center gap-8">
       <div className="flex-1 space-y-6">
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-snug">
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-snug dark:text-gray-400">
           {t("title")}
         </h1>
-        <p className="text-lg text-gray-600 mt-4">{t("description")}</p>
+        <p className="text-lg text-gray-600 mt-4 dark:text-gray-400">
+          {t("description")}
+        </p>
         <Link href="/write">
-          <button className="mt-6 px-6 py-3 bg-blue-800 text-white font-medium rounded-full hover:bg-blue-700 transition-all">
+          <button className="mt-6 px-6 py-3 bg-blue-800 text-white font-medium rounded-full hover:bg-blue-700 transition-all dark:bg-white dark:text-black">
             {t("startWriting")}
           </button>
         </Link>
@@ -30,7 +32,7 @@ const Banner = () => {
             fill="none"
             d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0"
           />
-          <text>
+          <text className="dark:text-gray-400">
             <textPath href="#circlePath" startOffset="0%">
               Write your story.{" "}
             </textPath>

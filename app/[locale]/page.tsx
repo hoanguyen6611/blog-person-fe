@@ -25,7 +25,7 @@ export default function Home() {
         transition={{ duration: 0.5 }}
         viewport={{ once: true }}
       >
-        <h2 className="mb-6 text-3xl font-semibold text-gray-800 tracking-tight">
+        <h2 className="mb-6 text-3xl font-semibold text-gray-800 tracking-tight dark:text-gray-400">
           {t("exploreCategories")}
         </h2>
         <MainCategories />
@@ -37,7 +37,7 @@ export default function Home() {
         transition={{ duration: 0.5, delay: 0.2 }}
         viewport={{ once: true }}
       >
-        <h2 className="mb-6 text-3xl font-semibold text-gray-800 tracking-tight">
+        <h2 className="mb-6 text-3xl font-semibold text-gray-800 tracking-tight dark:text-gray-400">
           {t("featuredPosts")}
         </h2>
         <FeaturedPostV1 />
@@ -49,7 +49,7 @@ export default function Home() {
         transition={{ duration: 0.5, delay: 0.4 }}
         viewport={{ once: true }}
       >
-        <h2 className="mb-6 text-3xl font-semibold text-gray-800 tracking-tight">
+        <h2 className="mb-6 text-3xl font-semibold text-gray-800 tracking-tight dark:text-gray-400">
           {t("recentPosts")}
         </h2>
         <PostList apiUrl="posts" showPagination />

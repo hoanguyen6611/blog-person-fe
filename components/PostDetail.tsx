@@ -58,7 +58,7 @@ export default function PostDetail({ post }: { post: Post }) {
         <div className="lg:col-span-8 flex flex-col gap-8">
           {/* Title & meta */}
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-4 dark:text-gray-400 text-black">
               {post.title}
             </h1>
             <div className="flex flex-wrap items-center gap-2 text-gray-500 text-sm mb-4">
@@ -112,8 +112,10 @@ export default function PostDetail({ post }: { post: Post }) {
         {/* Sidebar */}
         <aside className="lg:col-span-4 sticky top-20 self-start space-y-10">
           {/* Author box */}
-          <div className="p-4 rounded-xl shadow bg-white">
-            <h2 className="font-semibold text-sm mb-3">{t("author")}</h2>
+          <div className="p-4 rounded-xl shadow bg-white dark:bg-gray-800">
+            <h2 className="font-semibold text-sm mb-3 dark:text-gray-400">
+              {t("author")}
+            </h2>
             <div className="flex items-center gap-4 mb-3">
               <ImageShow
                 src={post?.user?.img}
@@ -134,25 +136,33 @@ export default function PostDetail({ post }: { post: Post }) {
             </p>
             <div className="flex gap-3 mt-3">
               <Link href="#">
-                <IconFont
+                {/* <IconFont
                   type="icon-facebook"
                   className="text-blue-600 text-xl"
+                /> */}
+                <IconFont
+                  type="icon-facebook"
+                  className="text-xl"
+                  style={{ color: "#1877F2" }}
                 />
               </Link>
               <Link href="#">
-                <InstagramOutlined className="text-pink-500 text-xl" />
+                <InstagramOutlined
+                  className="text-pink-500 text-xl"
+                  style={{ color: "#C13584" }}
+                />
               </Link>
             </div>
           </div>
 
           <PostMenuActions post={post} />
 
-          <div className="p-4 rounded-xl shadow bg-white">
+          <div className="p-4 rounded-xl shadow bg-white dark:text-gray-400 dark:bg-gray-800">
             <h2 className="font-semibold text-sm mb-3">{t("categories")}</h2>
             <Categories />
           </div>
 
-          <div className="p-4 rounded-xl shadow bg-white">
+          <div className="p-4 rounded-xl shadow bg-white dark:text-gray-400 dark:bg-gray-800">
             <h2 className="font-semibold text-sm mb-3">{t("search")}</h2>
             <SearchInput />
           </div>

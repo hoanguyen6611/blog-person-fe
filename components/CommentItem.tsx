@@ -56,7 +56,7 @@ const CommentItem = ({
 
   return (
     <div>
-      <div className="p-4 bg-slate-50 rounded-xl">
+      <div className="p-4 bg-slate-50 rounded-xl dark:bg-gray-800">
         <div className="flex items-center gap-4">
           <ImageShow
             src={comment.user.img}
@@ -94,15 +94,15 @@ const CommentItem = ({
             }
           >
             <ThumbsUp className={isLiked ? "text-blue-800" : "text-gray-500"} />
-            {comment.like}
+            <span className="dark:text-gray-400">{comment.like}</span>
           </Button>
           <Button
             type="text"
-            className="text-sm text-gray-500"
-            icon={<MessageCircle />}
+            className="text-sm text-gray-500 "
+            icon={<MessageCircle color="blue" />}
             onClick={() => setIsReply(true)}
           >
-            {t("reply")}
+            <span className="dark:text-gray-400">{t("reply")}</span>
           </Button>
         </div>
       )}
@@ -115,7 +115,7 @@ const CommentItem = ({
           >
             <textarea
               placeholder="Write a comment..."
-              className="w-full p-4 rounded-xl bg-white"
+              className="w-full p-4 rounded-xl bg-white dark:text-black"
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               name="desc"

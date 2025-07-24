@@ -24,7 +24,7 @@ export default function NotFound() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h1 className="text-6xl font-bold text-gray-800 dark:text-white">
+        <h1 className="text-6xl font-bold text-gray-800 dark:text-gray-400">
           404
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-300">
@@ -46,7 +46,7 @@ export default function NotFound() {
             placeholder="Tìm bài viết..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full max-w-md px-4 py-2 rounded-l-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-white"
+            className="w-full max-w-md px-4 py-2 rounded-l-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-gray-400"
           />
           <button
             type="submit"
@@ -59,7 +59,7 @@ export default function NotFound() {
         <div className="space-x-4 mt-6">
           <Link
             href="/"
-            className="inline-block px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl hover:opacity-90 transition"
+            className="inline-block px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400 rounded-xl hover:opacity-90 transition"
           >
             ⬅️ Trang chủ
           </Link>

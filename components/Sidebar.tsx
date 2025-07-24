@@ -59,7 +59,7 @@ export default function Sidebar({ admin }: { admin: boolean }) {
   ];
 
   return (
-    <aside className="fixed left-0 top-16 h-[calc(100vh-64px)] w-56 bg-gray-100 shadow-md p-4 hidden md:block z-20">
+    <aside className="fixed left-0 top-16 h-[calc(100vh-64px)] w-56 bg-gray-100 shadow-md p-4 hidden md:block z-20 dark:bg-black">
       <div className="text-xl font-bold text-blue-700 mb-6 text-center pt-4">
         CMS Blog
       </div>
@@ -71,11 +71,11 @@ export default function Sidebar({ admin }: { admin: boolean }) {
             className={`flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-colors ${
               pathname === href
                 ? "bg-blue-600 text-white"
-                : "text-gray-700 hover:bg-blue-100"
+                : "text-gray-700 hover:bg-blue-100 dark:hover:bg-gray-800"
             }`}
           >
-            {icon}
-            {label}
+            <span className="dark:text-gray-200">{icon}</span>
+            <span className="dark:text-gray-200">{label}</span>
           </Link>
         ))}
       </nav>
