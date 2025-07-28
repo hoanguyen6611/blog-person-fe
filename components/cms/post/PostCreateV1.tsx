@@ -14,7 +14,7 @@ import { fetcherUseSWR } from "@/api/useswr";
 import UploadV1 from "@/components/UploadV1";
 import { PlusOutlined } from "@ant-design/icons";
 import SelectOption from "@/components/SelectOption";
-import Editor from "@/components/Editor/Editor";
+import Editor from "@/components/editor/Editor";
 import ImageShow from "@/components/Image";
 import { useTableStore } from "@/store/useTableStore";
 import PostDetail from "@/components/PostDetail";

@@ -10,7 +10,7 @@ import SelectOption from "@/components/SelectOption";
 import { Category } from "@/interface/Category";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Editor, { EditorHandle } from "@/components/Editor/Editor";
+import Editor, { EditorHandle } from "@/components/editor/Editor";
 import { useTableStore } from "@/store/useTableStore";
 import BackToTopButton from "@/components/BackToTopButton";
 const PostUpdate = () => {

@@ -4,10 +4,12 @@ import Link from "next/link";
 
 export default function LanguageSwitcher() {
   const pathname = usePathname();
+  const isEnglish = pathname.startsWith("/en");
+  const isVietnamese = pathname.startsWith("/vi");
 
   return (
     <div className="flex gap-4">
-      {pathname === "/en" && (
+      {isEnglish && (
         <Link
           href={`/vi${pathname.replace(/^\/(en|vi)/, "")}`}
           className="border border-gray-300 rounded-2xl px-2 py-1 bg-gray-200"
@@ -15,7 +17,7 @@ export default function LanguageSwitcher() {
           🇺🇸 EN → 🇻🇳 VN
         </Link>
       )}
-      {pathname === "/vi" && (
+      {isVietnamese && (
         <Link
           href={`/en${pathname.replace(/^\/(en|vi)/, "")}`}
           className="border border-gray-300 rounded-2xl px-2 py-1 bg-gray-200"
