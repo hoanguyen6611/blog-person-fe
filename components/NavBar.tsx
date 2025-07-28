@@ -7,7 +7,7 @@ import Link from "next/link";
 const NavBar = () => {
   const [open, setOpen] = useState(false);
   return (
-    <nav className="bg-gray-100 text-black shadow-md sticky top-0 z-50 w-full dark:bg-gray-950 dark:text-gray-400">
+    <nav className="bg-gray-100 text-black shadow-md sticky top-0 z-50 w-full dark:bg-gray-900 dark:text-gray-400">
       <div className="max-w-7xl mx-auto px-5 h-16 md:h-20 flex items-center justify-between">
         {/* Logo */}
         <Link

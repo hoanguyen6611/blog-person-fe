@@ -5,7 +5,7 @@ body {
   /* background-color: #e6e6ff; */
   width: 100vw;
   overflow-x: hidden;
-  @apply text-black bg-[#e6e6ff] dark:text-gray-400 dark:bg-black;
+  @apply text-black bg-[#e6e6ff] dark:text-gray-400 dark:bg-gray-800;
 }
 .animateButton {
   animation-duration: 10000ms;

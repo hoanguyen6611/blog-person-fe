@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Home,
+  ChartArea,
   FileText,
   Users,
   Settings,
@@ -21,7 +21,11 @@ export default function Sidebar({ admin }: { admin: boolean }) {
   const links = [
     ...(admin
       ? [
-          { href: "/cms", label: t("dashboard"), icon: <Home size={20} /> },
+          {
+            href: "/cms",
+            label: t("dashboard"),
+            icon: <ChartArea size={20} />,
+          },
           { href: "/cms/user", label: t("users"), icon: <Users size={20} /> },
           {
             href: "/cms/category",

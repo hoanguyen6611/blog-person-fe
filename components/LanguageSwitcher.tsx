@@ -1,17 +1,28 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 export default function LanguageSwitcher() {
   const pathname = usePathname();
-  const router = useRouter();
 
   return (
     <div className="flex gap-4">
-      <Link href={`/en${pathname.replace(/^\/(en|vi)/, "")}`}>🇺🇸 English</Link>
-      <Link href={`/vi${pathname.replace(/^\/(en|vi)/, "")}`}>
-        🇻🇳 Tiếng Việt
-      </Link>
+      {pathname === "/en" && (
+        <Link
+          href={`/vi${pathname.replace(/^\/(en|vi)/, "")}`}
+          className="border border-gray-300 rounded-2xl px-2 py-1 bg-gray-200"
+        >
+          🇺🇸 EN → 🇻🇳 VN
+        </Link>
+      )}
+      {pathname === "/vi" && (
+        <Link
+          href={`/en${pathname.replace(/^\/(en|vi)/, "")}`}
+          className="border border-gray-300 rounded-2xl px-2 py-1 bg-gray-200"
+        >
+          🇻🇳 VN → 🇺🇸 EN
+        </Link>
+      )}
     </div>
   );
 }

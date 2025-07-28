@@ -2,7 +2,7 @@
 import {
   BarChart,
   User,
-  Folder,
+  Shapes,
   FileText,
   Users,
   UserPlus,
@@ -73,7 +73,7 @@ const DashBoard = ({
                   {categories?.totalCategories}
                 </p>
               </div>
-              <Folder className="w-6 h-6 text-yellow-600" />
+              <Shapes className="w-6 h-6 text-yellow-600" />
             </CardContent>
           </Card>
         )}

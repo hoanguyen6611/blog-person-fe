@@ -7,6 +7,7 @@ interface SelectOption {
 }
 type SelectOptionProps = {
   name: string;
+  label?: string;
   categories: SelectOption[];
   value?: any;
   onChangeCategory?: (value: string) => void;
@@ -14,6 +15,7 @@ type SelectOptionProps = {
 
 const SelectOption: React.FC<SelectOptionProps> = ({
   name,
+  label = "Choose a category",
   categories,
   value,
   onChangeCategory,
@@ -21,22 +23,20 @@ const SelectOption: React.FC<SelectOptionProps> = ({
   const onSearch = (value: string) => {};
 
   return (
-    <div className="flex gap-2">
-      <div className="flex flex-row gap-2">
-        <label htmlFor="" className="text-sm">
-          Choose a category:
-        </label>
-        <Select
-          showSearch
-          value={value}
-          placeholder={name}
-          optionFilterProp="label"
-          onChange={onChangeCategory}
-          onSearch={onSearch}
-          options={categories}
-          style={{ width: "100%" }}
-        />
-      </div>
+    <div className="flex flex-row gap-2">
+      <label htmlFor="" className="text-sm">
+        {label}
+      </label>
+      <Select
+        showSearch
+        value={value}
+        placeholder={name}
+        optionFilterProp="label"
+        onChange={onChangeCategory}
+        onSearch={onSearch}
+        options={categories}
+        style={{ width: "100%" }}
+      />
     </div>
   );
 };

@@ -92,6 +92,7 @@ export default function NotificationsPage() {
               <div className="flex-1">
                 <div className="flex justify-between items-center">
                   <Link
+                    onClick={() => markAsRead(n._id)}
                     href={n.postId ? `/posts/${n.postId}` : "/user"}
                     target="_blank"
                     rel="noopener noreferrer"
