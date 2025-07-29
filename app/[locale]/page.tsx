@@ -1,6 +1,6 @@
 "use client";
 
-import Banner from "@/components/Banner";
+import BannerV1 from "@/components/BannerV1";
 import MainCategories from "@/components/MainCategories";
 import FeaturedPostV1 from "@/components/FeaturePostV1";
 import PostList from "@/components/PostList";
@@ -16,7 +16,7 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Banner />
+        <BannerV1 />
       </motion.div>
 
       <motion.section

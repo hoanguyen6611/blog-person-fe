@@ -2,7 +2,7 @@
 
 import { useAuth } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import useSWR from "swr";
+import useSWR, { mutate as globalMutate } from "swr";
 import axios from "axios";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import { format } from "timeago.js";
@@ -37,6 +37,7 @@ export default function NotificationsPage() {
       { headers: { Authorization: `Bearer ${token}` } }
     );
     mutate();
+    globalMutate([`${process.env.NEXT_PUBLIC_API_URL}/notifications`, token]);
   };
 
   const markAllAsRead = async () => {
@@ -47,6 +48,7 @@ export default function NotificationsPage() {
       { headers: { Authorization: `Bearer ${token}` } }
     );
     mutate();
+    globalMutate([`${process.env.NEXT_PUBLIC_API_URL}/notifications`, token]);
   };
   if (!isSignedIn) return <p>You are not logged in</p>;
 
