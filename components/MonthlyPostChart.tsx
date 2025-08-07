@@ -16,7 +16,15 @@ type DataPoint = {
   count: number;
 };
 
-export default function MonthlyPostChart({ data }: { data: DataPoint[] }) {
+export default function MonthlyPostChart({
+  data,
+  label,
+  nameOfYAxis,
+}: {
+  data: DataPoint[];
+  label: string;
+  nameOfYAxis: string;
+}) {
   const t = useTranslations("Statistic");
   const [selectedYear, setSelectedYear] = useState<string>(() => {
     const yearNow = new Date().getFullYear().toString();
@@ -39,7 +47,7 @@ export default function MonthlyPostChart({ data }: { data: DataPoint[] }) {
     <div className="bg-white p-6 rounded-xl shadow dark:text-gray-400 dark:bg-gray-800">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold flex items-center gap-2">
-          📅 {t("articlesByMonth")} ({selectedYear})
+          📅 {label} ({selectedYear})
         </h2>
 
         <select
@@ -68,7 +76,7 @@ export default function MonthlyPostChart({ data }: { data: DataPoint[] }) {
             <YAxis
               allowDecimals={false}
               label={{
-                value: t("numberOfArticles"),
+                value: nameOfYAxis,
                 angle: -90,
                 position: "insideLeft",
                 offset: 10,

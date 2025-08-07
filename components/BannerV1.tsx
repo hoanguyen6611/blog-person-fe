@@ -5,7 +5,7 @@ const Banner = () => {
     <div className="flex items-center justify-between">
       {/* title */}
       <div className="">
-        <h1 className="text-gray-800 text-2xl md:text-5xl lg:text-6xl font-bold">
+        <h1 className="text-gray-800 text-2xl md:text-3xl lg:text-4xl font-bold">
           Technology synthesizes knowledge, creates progress and changes our
           lives.
         </h1>

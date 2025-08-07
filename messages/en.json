@@ -99,7 +99,9 @@
     "author": "Author",
     "total": "Total",
     "month": "Month",
-    "year": "Year"
+    "year": "Year",
+    "monthlyVisit": "Monthly visit",
+    "numberOfVisit": "Number of visit"
   },
   "PostTable": {
     "image": "Image",

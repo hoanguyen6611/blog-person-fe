@@ -103,7 +103,16 @@ export default function Statistic() {
           ))}
         </div>
       </div>
-      <MonthlyPostChart data={stats?.postsByMonth} />
+      <MonthlyPostChart
+        data={stats?.postsByMonth}
+        label={t("articlesByMonth")}
+        nameOfYAxis={t("numberOfArticles")}
+      />
+      <MonthlyPostChart
+        data={stats?.monthlyVisit}
+        label={t("monthlyVisit")}
+        nameOfYAxis={t("numberOfVisit")}
+      />
       {/* <MultiYearPostChart data={stats.postsByMonth} /> */}
       <CategoryPieChart data={postsByCategory} />
       <AuthorStatsTable data={postsByAuthor} />
