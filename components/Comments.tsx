@@ -128,7 +128,9 @@ const Comments = ({ postId }: { postId: string }) => {
   if (error) return <p>Failed to load</p>;
   return (
     <div className="flex flex-col gap-8 lg:w-3/5">
-      <h1 className="text-xl text-black font-bold">{t("title")}</h1>
+      <h1 className="text-xl text-black font-bold dark:text-gray-400">
+        {t("title")}
+      </h1>
       <form
         action=""
         className="flex items-center justify-between gap-8 w-full"

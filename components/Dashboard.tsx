@@ -89,7 +89,7 @@ const DashBoard = ({
             </CardContent>
           </Card>
         )}
-        {followers && (
+        {(followers || followers === 0) && (
           <Card>
             <CardContent className="p-4 flex items-center justify-between">
               <div>
@@ -100,7 +100,7 @@ const DashBoard = ({
             </CardContent>
           </Card>
         )}
-        {following && (
+        {(following || following === 0) && (
           <Card>
             <CardContent className="p-4 flex items-center justify-between">
               <div>
