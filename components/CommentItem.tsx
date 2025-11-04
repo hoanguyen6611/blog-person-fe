@@ -3,11 +3,12 @@ import ImageShow from "@/components/Image";
 import { Comment } from "@/interface/Comment";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useUser } from "@clerk/nextjs";
-import { Button } from "antd";
+import { Button, Tooltip } from "antd";
 import { MessageCircle, ThumbsUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { format } from "timeago.js";
+import { format as formatDate } from "date-fns";
 
 type Props = {
   comment: Comment;
@@ -66,9 +67,14 @@ const CommentItem = ({
             alt="userImg"
           />
           <span className="font-medium">{comment.user.username}</span>
-          <span className="text-sm text-gray-500">
-            {format(comment.createdAt)}
-          </span>
+
+          <Tooltip
+            title={formatDate(new Date(comment?.createdAt), "dd/MM/yyyy hh:mm")}
+          >
+            <span className="text-sm text-gray-500">
+              {format(comment?.createdAt)}
+            </span>
+          </Tooltip>
           {(comment.user.username === user?.username || isAdmin) && (
             <button
               className="text-sm text-gray-500"
@@ -151,9 +157,16 @@ const CommentItem = ({
                     alt="userImg"
                   />
                   <span className="font-medium">{reply.user.username}</span>
-                  <span className="text-sm text-gray-500">
-                    {format(reply.createdAt)}
-                  </span>
+                  <Tooltip
+                    title={formatDate(
+                      new Date(comment?.createdAt),
+                      "dd/MM/yyyy hh:mm"
+                    )}
+                  >
+                    <span className="text-sm text-gray-500">
+                      {format(comment?.createdAt)}
+                    </span>
+                  </Tooltip>
                   {(reply.user.username === user?.username || isAdmin) && (
                     <button
                       className="text-sm text-gray-500"

@@ -134,5 +134,12 @@
     "createdAt": "Created At",
     "action": "Action",
     "newTag": "New Tag"
+  },
+  "Footer": {
+    "description": "A place to share knowledge, code and stories.",
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "rights": "All rights reserved."
   }
 }

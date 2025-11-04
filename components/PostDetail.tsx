@@ -5,6 +5,7 @@ import Link from "next/link";
 import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
 import { format } from "timeago.js";
+import { format as formatDate } from "date-fns";
 import { InstagramOutlined } from "@ant-design/icons";
 import { createFromIconfontCN } from "@ant-design/icons";
 
@@ -17,7 +18,7 @@ import Categories from "@/components/Categories";
 import { fetcherUseSWR } from "@/api/useswr";
 import { Post } from "@/interface/Post";
 import { Category } from "@/interface/Category";
-import { Flex, Tag } from "antd";
+import { Flex, Tag, Tooltip } from "antd";
 import ShareButtons from "./ShareButtons";
 import RelatedPosts from "./RelatedPosts";
 import { Tag as TagInterface } from "@/interface/Tag";
@@ -76,7 +77,14 @@ export default function PostDetail({ post }: { post: Post }) {
               >
                 {categoryTitle}
               </Link>
-              <span>{format(post?.createdAt)}</span>
+              <Tooltip
+                title={formatDate(
+                  new Date(post?.createdAt),
+                  "dd/MM/yyyy hh:mm"
+                )}
+              >
+                <span>{format(post?.createdAt)}</span>
+              </Tooltip>
             </div>
             <div className="flex flex-wrap items-center gap-2 text-sm mb-4">
               {tagNames?.map((tag: string) => (

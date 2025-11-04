@@ -132,5 +132,12 @@
     "createdAt": "Ngày tạo",
     "action": "Tác vụ",
     "newTag": "Thêm thẻ"
+  },
+  "Footer": {
+    "description": "Nơi chia sẻ kiến thức, công nghệ và những câu chuyện cá nhân.",
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "privacy": "Chính sách bảo mật",
+    "rights": "Mọi quyền được bảo lưu."
   }
 }

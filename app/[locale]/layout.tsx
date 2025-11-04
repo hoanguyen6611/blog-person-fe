@@ -9,6 +9,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { ThemeProvider } from "next-themes";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Blog Personal",
@@ -44,6 +45,7 @@ export default async function LocaleLayout({
                   <ToastContainer position="top-right" />
                 </main>
               </div>
+              <Footer />
             </NextIntlClientProvider>
           </ThemeProvider>
         </body>
