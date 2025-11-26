@@ -21,7 +21,7 @@ const NavBar = () => {
             alt="Logo"
             className="w-8 h-8 object-contain"
           />
-          <span>hoadev</span>
+          <span>nononara</span>
         </Link>
 
         {/* Desktop Menu */}
