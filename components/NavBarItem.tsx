@@ -165,6 +165,9 @@ const NavBarItem = () => {
       <Link href={cmsHref} className={linkStyle}>
         {t("cms")}
       </Link>
+      <Link href="/info" className={linkStyle}>
+        {t("info")}
+      </Link>
 
       <Button
         type="primary"
