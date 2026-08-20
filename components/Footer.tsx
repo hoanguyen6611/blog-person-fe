@@ -20,7 +20,7 @@ export default function Footer() {
         {/* Logo + Description */}
         <div className="text-center md:text-left">
           <Link href="/" className="text-xl font-bold text-white">
-            Blog<span className="text-blue-500"> Person</span>
+            Blog<span className="text-slate-500"> Person</span>
           </Link>
           <p className="text-sm mt-1 text-gray-400 max-w-xs">
             {t("description") ||
@@ -30,13 +30,13 @@ export default function Footer() {
 
         {/* Navigation */}
         <div className="flex flex-wrap justify-center gap-4 text-sm">
-          <Link href="/about" className="hover:text-blue-400 transition">
+          <Link href="/about" className="hover:text-slate-400 transition">
             {t("about") || "About"}
           </Link>
-          <Link href="/contact" className="hover:text-blue-400 transition">
+          <Link href="/contact" className="hover:text-slate-400 transition">
             {t("contact") || "Contact"}
           </Link>
-          <Link href="/privacy" className="hover:text-blue-400 transition">
+          <Link href="/privacy" className="hover:text-slate-400 transition">
             {t("privacy") || "Privacy Policy"}
           </Link>
         </div>
@@ -49,7 +49,7 @@ export default function Footer() {
               href={s.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 bg-neutral-800 rounded-full hover:bg-blue-500 hover:text-white transition"
+              className="p-2 bg-neutral-800 rounded-full hover:bg-slate-500 hover:text-white transition"
             >
               {s.icon}
             </a>

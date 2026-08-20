@@ -104,7 +104,7 @@ const PostPage = () => {
       render: (_, record) => (
         <Space size="middle">
           <button
-            className="text-blue-500"
+            className="text-slate-500"
             onClick={() => {
               router.push(`/cms/edit/post/${record._id}`);
             }}

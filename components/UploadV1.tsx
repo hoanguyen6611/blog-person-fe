@@ -101,7 +101,7 @@ const Upload = ({
         <button
           disabled={disabledBtnUpload}
           onClick={handleUpload}
-          className="w-max p-3 px-5 rounded-lg bg-blue-500 text-white hover:bg-blue-600 text-sm"
+          className="w-max p-3 px-5 rounded-lg bg-slate-500 text-white hover:bg-slate-600 text-sm"
           type="button"
         >
           {buttonText}
@@ -116,7 +116,7 @@ const Upload = ({
         />
         <button
           onClick={handleUpload}
-          className="w-max p-3 px-5 rounded-lg bg-blue-500 text-white hover:bg-blue-600 text-sm"
+          className="w-max p-3 px-5 rounded-lg bg-slate-500 text-white hover:bg-slate-600 text-sm"
           type="button"
         >
           {buttonText}

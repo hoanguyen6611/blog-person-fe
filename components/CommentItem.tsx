@@ -47,12 +47,6 @@ const CommentItem = ({
     setIsReply(false);
     setDesc("");
   };
-  const isLikeComment = likeComments?.some(
-    (likeComment: string) => likeComment === comment._id
-  );
-  const handleLikeOrDisLike = async (id: string) => {
-    onLike(id);
-  };
   const isLiked = likeComments?.includes(comment._id);
 
   return (
@@ -99,13 +93,13 @@ const CommentItem = ({
               isLiked ? onDisLike(comment._id) : onLike(comment._id)
             }
           >
-            <ThumbsUp className={isLiked ? "text-blue-800" : "text-gray-500"} />
+            <ThumbsUp className={isLiked ? "text-slate-800" : "text-gray-500"} />
             <span className="dark:text-gray-400">{comment.like}</span>
           </Button>
           <Button
             type="text"
             className="text-sm text-gray-500 "
-            icon={<MessageCircle color="blue" />}
+            icon={<MessageCircle color="#1e293b" />}
             onClick={() => setIsReply(true)}
           >
             <span className="dark:text-gray-400">{t("reply")}</span>
@@ -129,7 +123,7 @@ const CommentItem = ({
             <div className="flex items-center gap-4">
               <button
                 disabled={desc.length === 0}
-                className="bg-blue-500 text-white px-4 py-3 font-medium rounded-xl disabled:opacity-50"
+                className="bg-slate-500 text-white px-4 py-3 font-medium rounded-xl disabled:opacity-50"
               >
                 {t("send")}
               </button>
@@ -194,7 +188,7 @@ const CommentItem = ({
                 <ThumbsUp
                   className={
                     likeComments?.includes(reply._id)
-                      ? "text-blue-800"
+                      ? "text-slate-800"
                       : "text-gray-500"
                   }
                 />

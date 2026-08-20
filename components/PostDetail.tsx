@@ -66,14 +66,14 @@ export default function PostDetail({ post }: { post: Post }) {
               <span>Written by</span>
               <Link
                 href={`/posts?author=${post?.user?.username}`}
-                className="text-blue-600 hover:underline"
+                className="text-slate-600 hover:underline"
               >
                 {post.user?.username}
               </Link>
               <span>on</span>
               <Link
                 href={`/posts?cat=${post?.category}`}
-                className="text-blue-600 hover:underline"
+                className="text-slate-600 hover:underline"
               >
                 {categoryTitle}
               </Link>
@@ -110,7 +110,7 @@ export default function PostDetail({ post }: { post: Post }) {
 
           {/* Post content */}
           <div
-            className="prose max-w-none prose-lg prose-blue"
+            className="prose max-w-none prose-lg prose-slate"
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(post.content),
             }}
@@ -134,7 +134,7 @@ export default function PostDetail({ post }: { post: Post }) {
               />
               <Link
                 href={`/user/${post?.user?._id}`}
-                className="text-blue-600 font-medium"
+                className="text-slate-600 font-medium"
               >
                 {post?.user?.username}
               </Link>
@@ -146,7 +146,7 @@ export default function PostDetail({ post }: { post: Post }) {
               <Link href="#">
                 {/* <IconFont
                   type="icon-facebook"
-                  className="text-blue-600 text-xl"
+                  className="text-slate-600 text-xl"
                 /> */}
                 <IconFont
                   type="icon-facebook"

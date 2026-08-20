@@ -4,9 +4,32 @@ import useSWR from "swr";
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { Comment } from "@/interface/Comment";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../api/useswr";
 import { useTranslations } from "next-intl";
+
+const bumpCommentLike = (
+  list: Comment[],
+  id: string,
+  delta: number
+): Comment[] =>
+  list.map((c) => {
+    if (c._id === id) return { ...c, like: c.like + delta };
+    if (c.replies?.length) {
+      return { ...c, replies: bumpCommentLike(c.replies, id, delta) };
+    }
+    return c;
+  });
+
+const bumpLikeInData = (data: unknown, id: string, delta: number) => {
+  if (Array.isArray(data)) return bumpCommentLike(data, id, delta);
+  if (data && typeof data === "object" && "comments" in data) {
+    const typed = data as { comments: Comment[] };
+    return { ...typed, comments: bumpCommentLike(typed.comments, id, delta) };
+  }
+  return data;
+};
 
 const Comments = ({ postId }: { postId: string }) => {
   const [desc, setDesc] = useState("");
@@ -91,36 +114,53 @@ const Comments = ({ postId }: { postId: string }) => {
     }
   };
   const handleLike = async (id: string) => {
-    const token = await getToken();
-    const res = await axios.patch(
-      `${process.env.NEXT_PUBLIC_API_URL}/comments/like`,
-      { id },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (res.status === 200) {
+    const previousComments = data;
+    const previousLikeComments = likeComments;
+
+    mutate(bumpLikeInData(data, id, 1), { revalidate: false });
+    mutateLikeComments([...(likeComments || []), id], { revalidate: false });
+
+    try {
+      const token = await getToken();
+      const res = await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/comments/like`,
+        { id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (res.status !== 200) throw new Error("Failed to like comment");
       await mutate();
       await mutateLikeComments();
+    } catch {
+      mutate(previousComments, { revalidate: false });
+      mutateLikeComments(previousLikeComments, { revalidate: false });
+      toast.error("Không thể thích bình luận, vui lòng thử lại.");
     }
   };
 
   const handleDisLike = async (id: string) => {
-    const token = await getToken();
-    const res = await axios.patch(
-      `${process.env.NEXT_PUBLIC_API_URL}/comments/disLike`,
-      { id },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+    const previousComments = data;
+    const previousLikeComments = likeComments;
+
+    mutate(bumpLikeInData(data, id, -1), { revalidate: false });
+    mutateLikeComments(
+      (likeComments || []).filter((likedId: string) => likedId !== id),
+      { revalidate: false }
     );
-    if (res.status === 200) {
+
+    try {
+      const token = await getToken();
+      const res = await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/comments/disLike`,
+        { id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (res.status !== 200) throw new Error("Failed to unlike comment");
       await mutate();
       await mutateLikeComments();
+    } catch {
+      mutate(previousComments, { revalidate: false });
+      mutateLikeComments(previousLikeComments, { revalidate: false });
+      toast.error("Không thể bỏ thích bình luận, vui lòng thử lại.");
     }
   };
   const comments = Array.isArray(data) ? data : data?.comments || [];
@@ -143,7 +183,7 @@ const Comments = ({ postId }: { postId: string }) => {
           onChange={(e) => setDesc(e.target.value)}
           name="desc"
         />
-        <button className="bg-blue-500 text-white px-4 py-3 font-medium rounded-xl">
+        <button className="bg-slate-500 text-white px-4 py-3 font-medium rounded-xl">
           {t("comment")}
         </button>
       </form>

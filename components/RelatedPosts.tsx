@@ -29,7 +29,7 @@ export default function RelatedPosts({ posts }: { posts: RelatedPost[] }) {
               </div>
             )}
             <div className="p-3">
-              <h4 className="text-sm font-medium line-clamp-2 group-hover:text-blue-600">
+              <h4 className="text-sm font-medium line-clamp-2 group-hover:text-slate-600">
                 {post.title}
               </h4>
               {/* <p className="text-xs text-gray-500 mt-1">

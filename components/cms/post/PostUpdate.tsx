@@ -150,7 +150,7 @@ const PostUpdate = () => {
           <div>
             <input
               name="title"
-              className="w-full text-2xl font-semibold p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full text-2xl font-semibold p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500 outline-none"
               placeholder="New Post title here..."
               defaultValue={data?.title}
             />
@@ -169,7 +169,7 @@ const PostUpdate = () => {
             <textarea
               name="desc"
               placeholder="Short description..."
-              className="w-full min-h-[100px] p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full min-h-[100px] p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500 outline-none"
               defaultValue={data?.desc}
               id="content"
             />
@@ -205,7 +205,7 @@ const PostUpdate = () => {
             <button
               type="submit"
               disabled={isDisabledBtnSend}
-              className="px-6 py-3 text-white bg-blue-700 hover:bg-blue-800 rounded-lg font-medium disabled:opacity-50"
+              className="px-6 py-3 text-white bg-slate-700 hover:bg-slate-800 rounded-lg font-medium disabled:opacity-50"
             >
               {isDisabledBtnSend ? "Updating..." : "Update Post"}
             </button>

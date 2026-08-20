@@ -14,7 +14,7 @@ import { CalendarDays, Search, SearchIcon } from "lucide-react";
 const fieldLabel =
   "text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 block";
 const fieldInput =
-  "w-full h-11 rounded-xl border border-gray-300 bg-white pl-10 pr-3 text-sm text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100";
+  "w-full h-11 rounded-xl border border-gray-300 bg-white pl-10 pr-3 text-sm text-gray-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-500/30 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100";
 const fieldIcon =
   "pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400";
 
@@ -77,7 +77,7 @@ export default function AdvancedSearchBar() {
     <div className="mx-auto mt-6 max-w-5xl">
       <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-8">
         <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700 dark:bg-slate-900/40 dark:text-slate-300">
             <SearchIcon size={20} />
           </div>
           <div>
@@ -152,7 +152,7 @@ export default function AdvancedSearchBar() {
 
         <button
           onClick={handleSearch}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 active:scale-[0.99]"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-slate-600 py-3 font-semibold text-white transition hover:bg-slate-700 active:scale-[0.99]"
         >
           <Search size={18} />
           {t("search")}

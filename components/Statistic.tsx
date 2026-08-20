@@ -91,7 +91,7 @@ export default function Statistic() {
               <div className="flex-1">
                 <a
                   href={`/posts/${post._id}`}
-                  className="text-sm font-medium text-blue-400 hover:underline line-clamp-2"
+                  className="text-sm font-medium text-slate-400 hover:underline line-clamp-2"
                 >
                   {post.title}
                 </a>

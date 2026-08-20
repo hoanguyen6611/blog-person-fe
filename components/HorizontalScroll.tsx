@@ -40,7 +40,7 @@ export default function HorizontalScroll({
           <button
             aria-label="Scroll left"
             onClick={() => scroll(-150)}
-            className="absolute left-0 z-20 hidden -translate-x-1/2 rounded-full bg-white p-1.5 text-gray-600 shadow-md transition hover:scale-110 hover:text-blue-700 dark:bg-gray-700 dark:text-gray-200 sm:flex"
+            className="absolute left-0 z-20 hidden -translate-x-1/2 rounded-full bg-white p-1.5 text-gray-600 shadow-md transition hover:scale-110 hover:text-slate-700 dark:bg-gray-700 dark:text-gray-200 sm:flex"
           >
             <ChevronLeft size={16} />
           </button>
@@ -61,7 +61,7 @@ export default function HorizontalScroll({
           <button
             aria-label="Scroll right"
             onClick={() => scroll(150)}
-            className="absolute right-0 z-20 hidden translate-x-1/2 rounded-full bg-white p-1.5 text-gray-600 shadow-md transition hover:scale-110 hover:text-blue-700 dark:bg-gray-700 dark:text-gray-200 sm:flex"
+            className="absolute right-0 z-20 hidden translate-x-1/2 rounded-full bg-white p-1.5 text-gray-600 shadow-md transition hover:scale-110 hover:text-slate-700 dark:bg-gray-700 dark:text-gray-200 sm:flex"
           >
             <ChevronRight size={16} />
           </button>

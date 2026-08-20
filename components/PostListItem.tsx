@@ -30,7 +30,7 @@ const PostListItem = ({ post }: { post: Post }) => {
         </Link>
         <div className="flex items-center gap-2 text-gray-400 text-sm">
           <span>Written by</span>
-          <Link href={`/user/${post?.user?._id}`} className="text-blue-800">
+          <Link href={`/user/${post?.user?._id}`} className="text-slate-800">
             {post.user.username}
           </Link>
           <span>on</span>
@@ -40,7 +40,7 @@ const PostListItem = ({ post }: { post: Post }) => {
                 (category: Category) => category._id === post.category
               )?._id
             }`}
-            className="text-blue-800"
+            className="text-slate-800"
           >
             {
               categories?.categories.find(
@@ -51,7 +51,7 @@ const PostListItem = ({ post }: { post: Post }) => {
           <span>{format(post.createdAt)}</span>
         </div>
         <p className="">{post.desc}</p>
-        <Link href={`/posts/${post._id}`} className="underline text-blue-800">
+        <Link href={`/posts/${post._id}`} className="underline text-slate-800">
           Read More
         </Link>
       </div> */}

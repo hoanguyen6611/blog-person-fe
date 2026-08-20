@@ -21,7 +21,7 @@ import { useTranslations } from "next-intl";
 import ThemeToggle from "./ThemeToggle";
 
 const linkStyle =
-  "shrink-0 whitespace-nowrap hover:text-blue-600 transition-colors duration-200 underline-offset-4";
+  "shrink-0 whitespace-nowrap hover:text-slate-600 transition-colors duration-200 underline-offset-4";
 
 export const NavLinks = () => {
   const { user } = useUser();
@@ -45,9 +45,6 @@ export const NavLinks = () => {
       </Link>
       <Link href={cmsHref} className={linkStyle}>
         {t("cms")}
-      </Link>
-      <Link href="/info" className={linkStyle}>
-        {t("info")}
       </Link>
     </>
   );
@@ -179,7 +176,7 @@ export const NavActions = () => {
       <Button
         type="primary"
         onClick={() => router.push("/write")}
-        className="shrink-0 whitespace-nowrap bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl"
+        className="shrink-0 whitespace-nowrap bg-slate-600 hover:bg-slate-700 text-white font-medium rounded-xl"
       >
         ✍️ {t("newPost")}
       </Button>
@@ -215,7 +212,7 @@ export const NavActions = () => {
 
       <SignedOut>
         <Link href="/login">
-          <button className="py-2 px-4 rounded-3xl bg-blue-800 text-white hover:bg-blue-900 transition">
+          <button className="py-2 px-4 rounded-3xl bg-slate-800 text-white hover:bg-slate-900 transition">
             {t("login")} ✋
           </button>
         </Link>
@@ -226,7 +223,7 @@ export const NavActions = () => {
           afterSignOutUrl="/"
           appearance={{
             elements: {
-              userButtonAvatarBox: "ring-2 ring-blue-500", // custom border
+              userButtonAvatarBox: "ring-2 ring-slate-500", // custom border
               userButtonPopoverCard: "rounded-xl shadow-lg bg-white",
               userButtonPopoverActionButton:
                 "hover:bg-gray-100 text-sm text-gray-700",

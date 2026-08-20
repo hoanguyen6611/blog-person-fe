@@ -59,7 +59,7 @@ const FeaturedPost = () => {
                 (category: Category) => category._id === posts[0].category
               )?._id
             }`}
-            className="text-blue-800"
+            className="text-slate-800"
           >
             {
               categories?.categories.find(
@@ -107,7 +107,7 @@ const FeaturedPost = () => {
                       (category: Category) => category._id === posts[1].category
                     )?._id
                   }`}
-                  className="text-blue-800"
+                  className="text-slate-800"
                 >
                   {
                     categories?.categories.find(
@@ -157,7 +157,7 @@ const FeaturedPost = () => {
                       (category: Category) => category._id === posts[2].category
                     )?._id
                   }`}
-                  className="text-blue-800"
+                  className="text-slate-800"
                 >
                   {
                     categories?.categories.find(
@@ -207,7 +207,7 @@ const FeaturedPost = () => {
                       (category: Category) => category._id === posts[3].category
                     )?._id
                   }`}
-                  className="text-blue-800"
+                  className="text-slate-800"
                 >
                   {
                     categories?.categories.find(

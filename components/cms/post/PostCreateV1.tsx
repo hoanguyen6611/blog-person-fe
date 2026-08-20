@@ -232,7 +232,7 @@ const PostCreate = () => {
           <div>
             <button
               onClick={showModalFormCategory}
-              className="flex items-center gap-2 w-max p-3 px-5 rounded-lg bg-blue-500 text-white hover:bg-blue-600 text-sm"
+              className="flex items-center gap-2 w-max p-3 px-5 rounded-lg bg-slate-500 text-white hover:bg-slate-600 text-sm"
               type="button"
             >
               <PlusOutlined
@@ -287,7 +287,7 @@ const PostCreate = () => {
         </div>
         <button
           disabled={isDisabledBtnSend}
-          className="bg-blue-800 text-white font-medium rounded-xl mt-4 p-2 w-36 disabled:bg-blue-200 mb-4"
+          className="bg-slate-800 text-white font-medium rounded-xl mt-4 p-2 w-36 disabled:bg-slate-200 mb-4"
         >
           Create
         </button>

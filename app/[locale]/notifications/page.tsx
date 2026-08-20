@@ -71,13 +71,13 @@ export default function NotificationsPage() {
               className={`p-4 rounded-lg flex gap-4 items-start ${
                 n.isRead
                   ? "bg-white text-gray-500 dark:text-gray-400 dark:bg-gray-800"
-                  : "bg-blue-50 font-semibold"
+                  : "bg-slate-50 font-semibold"
               }`}
             >
               {/* ICON theo loại */}
               <div className="mt-1">
                 {n.type === "comment" && (
-                  <MessageCircle className="text-blue-500" size={20} />
+                  <MessageCircle className="text-slate-500" size={20} />
                 )}
                 {n.type === "like" && (
                   <Heart className="text-pink-500" size={20} />

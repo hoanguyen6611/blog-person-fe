@@ -10,7 +10,7 @@ export default function InfoPage() {
             width={300}
             height={300}
           />
-        <h1 className="text-3xl font-bold text-blue-600">
+        <h1 className="text-3xl font-bold text-slate-600">
           Nguyen Huy Hoa
         </h1>
   
@@ -98,7 +98,7 @@ export default function InfoPage() {
   function Section({ title, children }: any) {
     return (
       <section className="mt-8">
-        <h2 className="text-xl font-semibold text-blue-600 border-b pb-1">
+        <h2 className="text-xl font-semibold text-slate-600 border-b pb-1">
           {title}
         </h2>
         <div className="mt-3">{children}</div>

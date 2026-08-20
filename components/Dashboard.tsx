@@ -48,7 +48,7 @@ const DashBoard = ({
               <p className="text-sm text-gray-500">{t("totalPosts")}</p>
               <p className="text-xl font-semibold">{posts?.totalPosts}</p>
             </div>
-            <FileText className="w-6 h-6 text-blue-600" />
+            <FileText className="w-6 h-6 text-slate-600" />
           </CardContent>
         </Card>
 

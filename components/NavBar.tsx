@@ -12,7 +12,7 @@ const NavBar = () => {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-2xl font-bold text-blue-800"
+          className="flex items-center gap-2 text-2xl font-bold text-slate-800"
         >
           <ImageShow
             src="/logo-new.png"

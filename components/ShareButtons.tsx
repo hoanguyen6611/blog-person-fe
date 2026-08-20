@@ -18,7 +18,7 @@ export default function ShareButtons({ title }: { title: string }) {
         href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-blue-600 underline"
+        className="text-slate-600 underline"
       >
         <IconFont type="icon-facebook" style={{ color: "#1877F2" }} />
       </a>
@@ -34,7 +34,7 @@ export default function ShareButtons({ title }: { title: string }) {
         href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-blue-700 underline"
+        className="text-slate-700 underline"
       >
         <Linkedin size={20} />
       </a>

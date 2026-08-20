@@ -349,7 +349,7 @@ const PostCreate = () => {
               ref={inputRef}
               name="title"
               onChange={changeTitle}
-              className="w-full text-2xl font-semibold p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full text-2xl font-semibold p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500 outline-none"
               placeholder="New Post title here..."
             />
           </div>
@@ -366,7 +366,7 @@ const PostCreate = () => {
             <button
               type="button"
               onClick={showModalFormCategory}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+              className="flex items-center gap-2 px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg"
             >
               <PlusOutlined />
               New Category
@@ -403,7 +403,7 @@ const PostCreate = () => {
             <button
               type="button"
               onClick={showModalFormTag}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+              className="flex items-center gap-2 px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg"
             >
               <PlusOutlined />
               New Tag
@@ -434,7 +434,7 @@ const PostCreate = () => {
             <textarea
               name="desc"
               placeholder="Short description..."
-              className="w-full min-h-[100px] p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full min-h-[100px] p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500 outline-none"
               onChange={(e) => {
                 setFormData((prev) => ({ ...prev, desc: e.target.value }));
                 setDesc(e.target.value);
@@ -472,7 +472,7 @@ const PostCreate = () => {
               type="submit"
               onClick={handleSubmit}
               disabled={isDisabledBtnSend}
-              className="w-full md:w-auto px-6 py-3 text-white bg-blue-700 hover:bg-blue-800 rounded-xl font-semibold disabled:opacity-50 transition-all"
+              className="w-full md:w-auto px-6 py-3 text-white bg-slate-700 hover:bg-slate-800 rounded-xl font-semibold disabled:opacity-50 transition-all"
             >
               {isDisabledBtnSend ? "Creating..." : "Create Post"}
             </button>

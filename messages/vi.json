@@ -152,5 +152,34 @@
     "contact": "Liên hệ",
     "privacy": "Chính sách bảo mật",
     "rights": "Mọi quyền được bảo lưu."
+  },
+  "AboutPage": {
+    "tagline": "Frontend Developer & Người viết blog công nghệ",
+    "intro": "Mình viết về những gì mình xây dựng, gặp lỗi và học được trên đường đi — từ những dòng code đời thường đến các công cụ, xu hướng đang định hình web hiện đại.",
+    "ctaPosts": "Đọc bài viết",
+    "ctaInfo": "Xem hồ sơ đầy đủ",
+    "sectionTitle": "Bạn sẽ tìm thấy gì ở đây",
+    "features": [
+      {
+        "icon": "news",
+        "title": "Tin công nghệ",
+        "desc": "Cập nhật những công cụ, framework và xu hướng đáng chú ý."
+      },
+      {
+        "icon": "tutorials",
+        "title": "Hướng dẫn thực hành",
+        "desc": "Các bài hướng dẫn code thực tế, dễ làm theo."
+      },
+      {
+        "icon": "notes",
+        "title": "Ghi chú làm việc",
+        "desc": "Những bài học từ dự án thực tế — lỗi, cách sửa và quyết định kỹ thuật."
+      },
+      {
+        "icon": "reviews",
+        "title": "Đánh giá",
+        "desc": "Nhận xét thật về các sản phẩm, thư viện và dịch vụ đã từng dùng."
+      }
+    ]
   }
 }

@@ -49,7 +49,7 @@ export default function NotFound() {
           />
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition"
+            className="px-4 py-2 bg-slate-600 text-white rounded-r-lg hover:bg-slate-700 transition"
           >
             🔍
           </button>
@@ -64,7 +64,7 @@ export default function NotFound() {
           </Link>
           <Link
             href="/posts"
-            className="inline-block px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
+            className="inline-block px-6 py-3 bg-slate-600 text-white rounded-xl hover:bg-slate-700 transition"
           >
             📚 Xem bài viết
           </Link>

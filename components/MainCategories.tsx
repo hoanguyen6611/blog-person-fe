@@ -14,8 +14,8 @@ import { cn } from "@/lib/utils";
 const pillBase =
   "px-4 py-2 rounded-full font-medium whitespace-nowrap transition-all";
 const pillInactive =
-  "bg-gray-100 text-gray-800 hover:bg-blue-100 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-blue-900/40";
-const pillActive = "bg-blue-800 text-white hover:bg-blue-700";
+  "bg-gray-100 text-gray-800 hover:bg-slate-100 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-slate-900/40";
+const pillActive = "bg-slate-800 text-white hover:bg-slate-700";
 
 const AllPostsPill = () => {
   const t = useTranslations("MainCategories");

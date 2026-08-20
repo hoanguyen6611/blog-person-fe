@@ -135,7 +135,7 @@ const Pagination = ({
             className={cn(
               "flex h-9 min-w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors",
               entry === currentPage
-                ? "bg-blue-600 text-white"
+                ? "bg-slate-600 text-white"
                 : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
             )}
           >

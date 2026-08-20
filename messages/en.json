@@ -154,5 +154,34 @@
     "contact": "Contact",
     "privacy": "Privacy Policy",
     "rights": "All rights reserved."
+  },
+  "AboutPage": {
+    "tagline": "Frontend Developer & Tech Blogger",
+    "intro": "I write about the things I build, break, and learn along the way — from everyday code to the tools and trends shaping modern web development.",
+    "ctaPosts": "Read the blog",
+    "ctaInfo": "View full profile",
+    "sectionTitle": "What you'll find here",
+    "features": [
+      {
+        "icon": "news",
+        "title": "Tech News",
+        "desc": "Curated updates on the tools, frameworks and trends worth paying attention to."
+      },
+      {
+        "icon": "tutorials",
+        "title": "Tutorials & Guides",
+        "desc": "Practical, code-first walkthroughs you can follow along with."
+      },
+      {
+        "icon": "notes",
+        "title": "Dev Notes",
+        "desc": "Lessons learned from real projects — bugs, fixes and decisions."
+      },
+      {
+        "icon": "reviews",
+        "title": "Reviews",
+        "desc": "Honest takes on products, libraries and services I've actually used."
+      }
+    ]
   }
 }
