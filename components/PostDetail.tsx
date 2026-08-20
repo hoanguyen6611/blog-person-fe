@@ -140,7 +140,7 @@ export default function PostDetail({ post }: { post: Post }) {
               </Link>
             </div>
             <p className="text-sm text-gray-500">
-              Lorem ipsum dolor sit amet consectetur.
+              Life & Tech.
             </p>
             <div className="flex gap-3 mt-3">
               <Link href="#">

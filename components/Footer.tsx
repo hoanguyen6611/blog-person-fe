@@ -9,9 +9,9 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   const socials = [
-    { icon: <FaFacebookF />, href: "https://facebook.com/huyhoa.dev" },
-    { icon: <FaLinkedinIn />, href: "https://linkedin.com/in/huyhoa" },
-    { icon: <FaGithub />, href: "https://github.com/nguyenhuyhoa" },
+    { icon: <FaFacebookF />, href: "https://www.facebook.com/hoahuy2606" },
+    { icon: <FaLinkedinIn />, href: "https://www.linkedin.com/in/hoanguyen6611/" },
+    { icon: <FaGithub />, href: "https://github.com/hoanguyen6611" },
   ];
 
   return (
