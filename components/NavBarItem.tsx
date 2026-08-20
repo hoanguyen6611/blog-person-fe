@@ -21,17 +21,44 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslations } from "next-intl";
 import ThemeToggle from "./ThemeToggle";
 
-const NavBarItem = () => {
+const linkStyle =
+  "shrink-0 whitespace-nowrap hover:text-blue-600 transition-colors duration-200 underline-offset-4";
+
+export const NavLinks = () => {
   const { user } = useUser();
+  const t = useTranslations("NavBar");
+  const isAdmin = user?.publicMetadata?.role === "admin";
+  const cmsHref = isAdmin ? "/cms" : "/cms/personal";
+
+  return (
+    <>
+      <Link href="/" className={linkStyle}>
+        {t("home")}
+      </Link>
+      <Link href="/posts?sort=trending" className={linkStyle}>
+        {t("trending")}
+      </Link>
+      <Link href="/posts?sort=popular" className={linkStyle}>
+        {t("mostPopular")}
+      </Link>
+      <Link href="/about" className={linkStyle}>
+        {t("about")}
+      </Link>
+      <Link href={cmsHref} className={linkStyle}>
+        {t("cms")}
+      </Link>
+      <Link href="/info" className={linkStyle}>
+        {t("info")}
+      </Link>
+    </>
+  );
+};
+
+export const NavActions = () => {
   const { getToken, isSignedIn } = useAuth();
   const t = useTranslations("NavBar");
   const [token, setToken] = useState<string | null>(null);
-  const isAdmin = user?.publicMetadata?.role === "admin";
-  const cmsHref = isAdmin ? "/cms" : "/cms/personal";
   const router = useRouter();
-
-  const linkStyle =
-    "hover:text-blue-600 transition-colors duration-200 underline-offset-4";
 
   useEffect(() => {
     (async () => {
@@ -150,29 +177,10 @@ const NavBarItem = () => {
 
   return (
     <>
-      <Link href="/" className={linkStyle}>
-        {t("home")}
-      </Link>
-      <Link href="/posts?sort=trending" className={linkStyle}>
-        {t("trending")}
-      </Link>
-      <Link href="/posts?sort=popular" className={linkStyle}>
-        {t("mostPopular")}
-      </Link>
-      <Link href="/about" className={linkStyle}>
-        {t("about")}
-      </Link>
-      <Link href={cmsHref} className={linkStyle}>
-        {t("cms")}
-      </Link>
-      <Link href="/info" className={linkStyle}>
-        {t("info")}
-      </Link>
-
       <Button
         type="primary"
         onClick={() => router.push("/write")}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl"
+        className="shrink-0 whitespace-nowrap bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl"
       >
         ✍️ {t("newPost")}
       </Button>
@@ -230,5 +238,12 @@ const NavBarItem = () => {
     </>
   );
 };
+
+const NavBarItem = () => (
+  <>
+    <NavLinks />
+    <NavActions />
+  </>
+);
 
 export default NavBarItem;

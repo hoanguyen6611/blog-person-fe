@@ -45,6 +45,18 @@
     "cancel": "Cancel",
     "send": "Send"
   },
+  "AdvancedSearch": {
+    "title": "Advanced Search",
+    "subtitle": "Narrow down posts by keyword, category, author or date range.",
+    "keywordPlaceholder": "Search by keyword...",
+    "categoryLabel": "Category",
+    "categoryPlaceholder": "Select a category",
+    "authorLabel": "Author",
+    "authorPlaceholder": "Select an author",
+    "fromDate": "From date",
+    "toDate": "To date",
+    "search": "Search"
+  },
   "PostDetail": {
     "author": "Author",
     "categories": "Categories",

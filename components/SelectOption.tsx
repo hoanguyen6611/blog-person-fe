@@ -1,5 +1,6 @@
 "use client";
 import { Select } from "antd";
+import { cn } from "@/lib/utils";
 
 interface SelectOption {
   label: string;
@@ -9,8 +10,10 @@ type SelectOptionProps = {
   name: string;
   label?: string;
   categories: SelectOption[];
-  value?: any;
+  value?: string;
   onChangeCategory?: (value: string) => void;
+  direction?: "row" | "col";
+  className?: string;
 };
 
 const SelectOption: React.FC<SelectOptionProps> = ({
@@ -19,12 +22,25 @@ const SelectOption: React.FC<SelectOptionProps> = ({
   categories,
   value,
   onChangeCategory,
+  direction = "row",
+  className,
 }) => {
-  const onSearch = (value: string) => {};
-
   return (
-    <div className="flex flex-row gap-2">
-      <label htmlFor="" className="text-sm">
+    <div
+      className={cn(
+        "flex gap-2",
+        direction === "col" ? "flex-col" : "flex-row items-center",
+        className
+      )}
+    >
+      <label
+        htmlFor=""
+        className={cn(
+          "text-sm",
+          direction === "col" &&
+            "font-medium text-gray-700 dark:text-gray-300"
+        )}
+      >
         {label}
       </label>
       <Select
@@ -33,8 +49,13 @@ const SelectOption: React.FC<SelectOptionProps> = ({
         placeholder={name}
         optionFilterProp="label"
         onChange={onChangeCategory}
-        onSearch={onSearch}
         options={categories}
+        allowClear
+        className={
+          direction === "col"
+            ? "[&_.ant-select-selector]:!h-11 [&_.ant-select-selector]:!items-center [&_.ant-select-selector]:!rounded-xl"
+            : undefined
+        }
         style={{ width: "100%" }}
       />
     </div>

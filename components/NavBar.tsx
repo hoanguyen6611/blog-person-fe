@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import ImageShow from "./Image";
-import NavBarItem from "./NavBarItem";
+import NavBarItem, { NavActions, NavLinks } from "./NavBarItem";
 import Link from "next/link";
 
 const NavBar = () => {
@@ -15,23 +15,30 @@ const NavBar = () => {
           className="flex items-center gap-2 text-2xl font-bold text-blue-800"
         >
           <ImageShow
-            src="/logo.png"
-            width={100}
-            height={100}
+            src="/logo-new.png"
+            width={400}
+            height={400}
             alt="Logo"
-            className="w-8 h-8 object-contain"
+            className="w-14 h-14 object-contain"
           />
-          <span>huyhoa</span>
+          <span>Tech News</span>
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-6 font-medium">
-          <NavBarItem />
+        <div className="hidden min-w-0 flex-1 items-center justify-end gap-3 font-medium lg:flex lg:gap-4 xl:gap-6">
+          <div className="min-w-0 overflow-x-auto scrollbar-hide">
+            <div className="flex items-center gap-4 py-3 xl:gap-6">
+              <NavLinks />
+            </div>
+          </div>
+          <div className="flex shrink-0 items-center gap-3 xl:gap-4">
+            <NavActions />
+          </div>
         </div>
 
         {/* Mobile Button */}
         <div
-          className="md:hidden text-3xl cursor-pointer"
+          className="lg:hidden text-3xl cursor-pointer"
           onClick={() => setOpen(!open)}
         >
           {open ? "✖" : "☰"}
