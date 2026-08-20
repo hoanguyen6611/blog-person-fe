@@ -1,5 +1,5 @@
 import { Category } from "@/interface/Category";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import useSWR from "swr";
 import { fetcherUseSWR } from "../api/useswr";
 import { useTranslations } from "next-intl";

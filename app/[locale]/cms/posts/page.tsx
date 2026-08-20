@@ -4,7 +4,7 @@ import ImageShow from "@/components/Image";
 import TableCMS from "@/components/Table";
 import { useAuth } from "@clerk/nextjs";
 import { Space, TableColumnsType } from "antd";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import useSWR from "swr";
 import { format } from "date-fns";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";

@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Replace } from "lucide-react";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import DOMPurify from "dompurify";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
 import { format } from "timeago.js";

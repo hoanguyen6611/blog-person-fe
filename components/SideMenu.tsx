@@ -1,5 +1,5 @@
 import SearchInput from "@/components/Search";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import Categories from "./Categories";
 import { Checkbox, CheckboxProps } from "antd";
 import { useState } from "react";

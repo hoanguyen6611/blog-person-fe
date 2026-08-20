@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import ImageShow from "./Image";
 import { fetcherUseSWR } from "../api/useswr";
 import useSWR from "swr";

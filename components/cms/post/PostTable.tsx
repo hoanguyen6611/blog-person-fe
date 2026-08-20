@@ -4,7 +4,7 @@ import { Post } from "@/interface/Post";
 import { format } from "date-fns";
 import ImageShow from "@/components/Image";
 import { useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Button, Flex, Modal, Space, Table } from "antd";

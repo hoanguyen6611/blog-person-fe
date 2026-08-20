@@ -2,7 +2,7 @@
 import { useState } from "react";
 import ImageShow from "./Image";
 import NavBarItem, { NavActions, NavLinks } from "./NavBarItem";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 const NavBar = () => {
   const [open, setOpen] = useState(false);

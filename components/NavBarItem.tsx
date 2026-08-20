@@ -8,8 +8,7 @@ import {
 } from "@clerk/nextjs";
 import { Badge, Button, Dropdown, MenuProps, Space } from "antd";
 import { Bell } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
@@ -93,23 +92,23 @@ export const NavActions = () => {
       ? notifications.map((n: Notification) => ({
           label:
             n.type === "comment" || n.type === "like" || n.type === "post" ? (
-              <a
+              <Link
                 href={`/posts/${n.postId}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={n.isRead ? "text-gray-400" : "font-semibold"}
               >
                 {n.message}
-              </a>
+              </Link>
             ) : (
-              <a
+              <Link
                 href={`/user`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={n.isRead ? "text-gray-400" : "font-semibold"}
               >
                 {n.message}
-              </a>
+              </Link>
             ),
           key: n._id,
         }))

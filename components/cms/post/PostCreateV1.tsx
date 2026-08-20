@@ -3,7 +3,7 @@ import { useUser } from "@clerk/nextjs";
 import "react-quill-new/dist/quill.snow.css";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useEffect, useState, forwardRef } from "react";
 import dynamic from "next/dynamic";
 import { toast } from "react-toastify";

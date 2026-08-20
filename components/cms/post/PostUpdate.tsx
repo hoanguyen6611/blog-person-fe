@@ -2,7 +2,8 @@
 import ImageShow from "@/components/Image";
 import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
 import { useEffect, useRef, useState } from "react";
 import UploadV1 from "@/components/UploadV1";

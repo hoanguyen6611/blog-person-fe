@@ -3,7 +3,7 @@ import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import TableCMS from "@/components/Table";
 import { useAuth } from "@clerk/nextjs";
 import { Space, TableColumnsType } from "antd";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import useSWR from "swr";
 import { format } from "date-fns";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";

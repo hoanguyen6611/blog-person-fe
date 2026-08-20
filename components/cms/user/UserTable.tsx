@@ -2,7 +2,7 @@
 import useSWR from "swr";
 import { format } from "date-fns";
 import { useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Table } from "antd";

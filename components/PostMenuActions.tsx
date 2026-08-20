@@ -1,6 +1,6 @@
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useSWR from "swr";

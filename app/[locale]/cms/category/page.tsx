@@ -11,7 +11,7 @@ import { Replace } from "lucide-react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useTableStore } from "@/store/useTableStore";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
 interface DataType {

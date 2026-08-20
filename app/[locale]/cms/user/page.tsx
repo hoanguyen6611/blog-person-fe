@@ -7,7 +7,7 @@ import { useAuth } from "@clerk/nextjs";
 import { TableColumnsType } from "antd";
 import axios from "axios";
 import { format } from "date-fns";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useSWR from "swr";

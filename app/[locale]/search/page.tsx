@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import useSWR from "swr";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
 import { Category } from "@/interface/Category";

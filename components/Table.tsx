@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Button, Flex, Modal, Table } from "antd";
 import { useState } from "react";
 import { TableRowSelection } from "antd/es/table/interface";

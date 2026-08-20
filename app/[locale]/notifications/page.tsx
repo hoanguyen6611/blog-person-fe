@@ -6,7 +6,7 @@ import useSWR, { mutate as globalMutate } from "swr";
 import axios from "axios";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import { format } from "timeago.js";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Notification } from "@/interface/Notification";
 import { Button, Empty } from "antd";
 import { Heart, MessageCircle, UserPlus, Newspaper } from "lucide-react";

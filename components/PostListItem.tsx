@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import ImageShow from "./Image";
 import { Post } from "@/interface/Post";
 import { format } from "timeago.js";
