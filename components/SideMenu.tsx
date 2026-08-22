@@ -23,6 +23,7 @@ const SideMenu = () => {
           name="sort"
           onChange={() => handleChange("newest")}
           checked={selectedSort === "newest"}
+          data-testid="sort-newest-checkbox"
         >
           <span className="dark:text-gray-400">Newest</span>
         </Checkbox>
@@ -30,6 +31,7 @@ const SideMenu = () => {
           name="sort"
           onChange={() => handleChange("popular")}
           checked={selectedSort === "popular"}
+          data-testid="sort-popular-checkbox"
         >
           <span className="dark:text-gray-400">Most Popular</span>
         </Checkbox>
@@ -37,6 +39,7 @@ const SideMenu = () => {
           name="sort"
           onChange={() => handleChange("trending")}
           checked={selectedSort === "trending"}
+          data-testid="sort-trending-checkbox"
         >
           <span className="dark:text-gray-400">Trending</span>
         </Checkbox>
@@ -44,6 +47,7 @@ const SideMenu = () => {
           name="sort"
           onChange={() => handleChange("oldest")}
           checked={selectedSort === "oldest"}
+          data-testid="sort-oldest-checkbox"
         >
           <span className="dark:text-gray-400">Oldest</span>
         </Checkbox>

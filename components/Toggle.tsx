@@ -32,14 +32,16 @@ function Toggle({
   className,
   variant,
   size,
+  "data-testid": dataTestId,
   ...props
 }: React.ComponentProps<typeof TogglePrimitive.Root> &
-  VariantProps<typeof toggleVariants>) {
+  VariantProps<typeof toggleVariants> & { "data-testid"?: string }) {
   return (
     <TogglePrimitive.Root
       data-slot="toggle"
       className={cn(toggleVariants({ variant, size, className }))}
       {...props}
+      data-testid={dataTestId ?? "toggle-switch"}
     />
   );
 }

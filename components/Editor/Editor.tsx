@@ -79,7 +79,7 @@ const Editor = forwardRef<EditorHandle, EditorProps>(
     }, [content, editor]);
 
     return (
-      <div>
+      <div data-testid="editor-content">
         <MenuBar editor={editor} />
         <EditorContent editor={editor} />
       </div>

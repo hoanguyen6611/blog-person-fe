@@ -51,7 +51,11 @@ const TableCMS = ({
       {buttonCreate && (
         <>
           <Flex gap="small" wrap>
-            <Button type="primary" onClick={() => router.push("/write")}>
+            <Button
+              type="primary"
+              onClick={() => router.push("/write")}
+              data-testid="cms-table-create-button"
+            >
               <PlusOutlined
                 className="cursor-pointer"
                 style={{ fontSize: "16px" }}
@@ -62,6 +66,7 @@ const TableCMS = ({
         </>
       )}
       <Table
+        data-testid="cms-table"
         className="mt-4 w-full h-full dark:text-gray-400 dark:bg-gray-800"
         columns={columns}
         dataSource={dataSource}
@@ -81,6 +86,8 @@ const TableCMS = ({
         open={isShowFormDelete}
         onOk={handleOkFormDelete}
         onCancel={handleCancelFormDelete}
+        okButtonProps={{ "data-testid": "cms-table-delete-confirm-button" }}
+        cancelButtonProps={{ "data-testid": "cms-table-delete-cancel-button" }}
       >
         <p>Are you sure you want to {`Delete ${nameModalDelete}`}?</p>
       </Modal>

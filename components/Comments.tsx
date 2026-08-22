@@ -178,12 +178,16 @@ const Comments = ({ postId }: { postId: string }) => {
       >
         <textarea
           placeholder={t("writeComment")}
-          className="w-full p-4 rounded-xl bg-white dark:text-black"
+          className="w-full p-4 rounded-xl bg-white dark:bg-gray-800 dark:text-gray-100"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
           name="desc"
+          data-testid="comment-textarea"
         />
-        <button className="bg-slate-500 text-white px-4 py-3 font-medium rounded-xl">
+        <button
+          className="bg-slate-500 text-white px-4 py-3 font-medium rounded-xl"
+          data-testid="comment-submit-button"
+        >
           {t("comment")}
         </button>
       </form>

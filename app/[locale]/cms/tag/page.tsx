@@ -13,6 +13,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Tag } from "@/interface/Tag";
 import { useTranslations } from "next-intl";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 interface DataType {
   _id: string;
   name: string;
@@ -20,6 +21,7 @@ interface DataType {
   slug: string;
 }
 const TagPage = () => {
+  useRequireAuth();
   const t = useTranslations("TagTable");
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
@@ -50,6 +52,7 @@ const TagPage = () => {
         <Space size="middle">
           <button
             className="text-slate-500"
+            data-testid={`cms-tag-edit-button-${record._id}`}
             onClick={() => {
               router.push(`/cms/edit/post/${record._id}`);
             }}
@@ -61,6 +64,7 @@ const TagPage = () => {
           </button>
           <button
             className="text-red-500"
+            data-testid={`cms-tag-delete-button-${record._id}`}
             onClick={() => showFormDelete(record._id)}
           >
             <DeleteOutlined
@@ -110,17 +114,20 @@ const TagPage = () => {
     setIsShowFormDelete(true);
     setIdDelete(id);
   };
-  if (!isSignedIn) return <p>You are not logged in</p>;
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Failed to load</p>;
+  if (!isSignedIn)
+    return <p data-testid="cms-tag-page">You are not logged in</p>;
+  if (isLoading) return <p data-testid="cms-tag-page">Loading...</p>;
+  if (error) return <p data-testid="cms-tag-page">Failed to load</p>;
   return (
-    <TableCMS
-      columns={columns}
-      dataSource={dataSource}
-      nameButtonCreate={t("newTag")}
-      onDelete={handleDeletePost}
-      nameModalDelete="tag"
-    />
+    <div data-testid="cms-tag-page">
+      <TableCMS
+        columns={columns}
+        dataSource={dataSource}
+        nameButtonCreate={t("newTag")}
+        onDelete={handleDeletePost}
+        nameModalDelete="tag"
+      />
+    </div>
   );
 };
 

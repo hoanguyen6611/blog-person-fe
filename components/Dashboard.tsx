@@ -42,7 +42,7 @@ const DashBoard = ({
 
       {/* Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
+        <Card data-testid="cms-dashboard-total-posts">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500">{t("totalPosts")}</p>
@@ -53,7 +53,7 @@ const DashBoard = ({
         </Card>
 
         {users && (
-          <Card>
+          <Card data-testid="cms-dashboard-total-users">
             <CardContent className="p-4 flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">{t("totalUsers")}</p>
@@ -65,7 +65,7 @@ const DashBoard = ({
         )}
 
         {categories && (
-          <Card>
+          <Card data-testid="cms-dashboard-total-categories">
             <CardContent className="p-4 flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">{t("totalCategories")}</p>
@@ -79,7 +79,7 @@ const DashBoard = ({
         )}
 
         {views && (
-          <Card>
+          <Card data-testid="cms-dashboard-total-views">
             <CardContent className="p-4 flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">{t("totalViews")}</p>
@@ -90,7 +90,7 @@ const DashBoard = ({
           </Card>
         )}
         {(followers || followers === 0) && (
-          <Card>
+          <Card data-testid="cms-dashboard-total-followers">
             <CardContent className="p-4 flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">{t("totalFollowers")}</p>
@@ -101,7 +101,7 @@ const DashBoard = ({
           </Card>
         )}
         {(following || following === 0) && (
-          <Card>
+          <Card data-testid="cms-dashboard-total-following">
             <CardContent className="p-4 flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-500">{t("totalFollowing")}</p>

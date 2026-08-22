@@ -11,15 +11,20 @@ const Categories = () => {
     fetcherUseSWR
   );
   return (
-    <div className="flex flex-col gap-2 text-sm ">
-      <Link href="/posts" className="hover:text-slate-600 font-bold">
+    <div className="flex flex-col gap-2 text-sm text-muted">
+      <Link
+        href="/posts"
+        className="font-semibold text-ink hover:text-accent-ink"
+        data-testid="categories-link-all"
+      >
         {t("all")}
       </Link>
       {(data?.categories || []).map((category: Category) => (
         <Link
           href={`/posts?cat=${category._id}`}
           key={category._id}
-          className="hover:text-slate-600"
+          className="hover:text-accent-ink"
+          data-testid={`categories-link-${category._id}`}
         >
           {category.title}
         </Link>

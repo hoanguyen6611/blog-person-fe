@@ -1,6 +1,6 @@
 const CategoryPage = () => {
   return (
-    <div>
+    <div data-testid="cms-edit-category-page">
       <h1>Category Page</h1>
     </div>
   );

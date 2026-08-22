@@ -44,15 +44,18 @@ const FollowList = ({ id }: { id: string }) => {
 
   const renderUserList = (users: UserItem[], title: string) => (
     <div>
-      <h2 className="text-lg font-semibold mb-2">{title}</h2>
+      <h2 className="text-lg font-semibold mb-2 dark:text-gray-200">
+        {title}
+      </h2>
       <div className="space-y-4">
         {users.length === 0 ? (
-          <p className="text-gray-500">No users.</p>
+          <p className="text-gray-500 dark:text-gray-400">No users.</p>
         ) : (
           users.map((user) => (
             <div
               key={user._id}
-              className="flex items-center gap-4 p-3 rounded-xl bg-white shadow-sm"
+              className="flex items-center gap-4 p-3 rounded-xl bg-white dark:bg-gray-800 shadow-sm"
+              data-testid={`follow-list-item-${user._id}`}
             >
               <ImageShow
                 src={user.img || "/default-avatar.png"}
@@ -62,8 +65,12 @@ const FollowList = ({ id }: { id: string }) => {
                 className="rounded-full object-cover"
               />
               <div>
-                <p className="font-medium">{user.username}</p>
-                <p className="text-gray-500 text-sm">{user.fullname}</p>
+                <p className="font-medium dark:text-gray-100">
+                  {user.username}
+                </p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                  {user.fullname}
+                </p>
               </div>
             </div>
           ))

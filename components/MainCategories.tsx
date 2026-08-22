@@ -12,10 +12,9 @@ import HorizontalScroll from "./HorizontalScroll";
 import { cn } from "@/lib/utils";
 
 const pillBase =
-  "px-4 py-2 rounded-full font-medium whitespace-nowrap transition-all";
-const pillInactive =
-  "bg-gray-100 text-gray-800 hover:bg-slate-100 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-slate-900/40";
-const pillActive = "bg-slate-800 text-white hover:bg-slate-700";
+  "px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all";
+const pillInactive = "bg-surface-2 text-ink hover:bg-line";
+const pillActive = "bg-ink text-bg hover:opacity-90";
 
 const AllPostsPill = () => {
   const t = useTranslations("MainCategories");
@@ -31,6 +30,7 @@ const AllPostsPill = () => {
         "shrink-0",
         !activeCat ? pillActive : pillInactive
       )}
+      data-testid="category-pill-all"
     >
       {t("allPosts")}
     </Link>
@@ -51,7 +51,7 @@ const CategoryPills = () => {
         Array.from({ length: 4 }).map((_, i) => (
           <span
             key={i}
-            className="h-9 w-20 shrink-0 animate-pulse rounded-full bg-gray-100 dark:bg-gray-700"
+            className="h-9 w-20 shrink-0 animate-pulse rounded-full bg-surface-2"
           />
         ))}
 
@@ -63,6 +63,7 @@ const CategoryPills = () => {
             pillBase,
             activeCat === cat._id ? pillActive : pillInactive
           )}
+          data-testid={`category-pill-${cat._id}`}
         >
           {cat.title}
         </Link>
@@ -72,8 +73,9 @@ const CategoryPills = () => {
 };
 
 const MainCategories = () => {
+  const tSearch = useTranslations("AdvancedSearch");
   return (
-    <div className="flex items-center justify-between gap-3 rounded-3xl bg-white p-3 shadow-md dark:bg-gray-800 dark:text-gray-400">
+    <div className="flex items-center justify-between gap-3 rounded-3xl border border-line bg-surface p-3 shadow-sm text-ink">
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <Suspense fallback={null}>
           <AllPostsPill />
@@ -87,9 +89,10 @@ const MainCategories = () => {
       <div className="hidden shrink-0 items-center gap-3 md:flex">
         <SearchInput />
         <Link
-          title="Tìm kiếm nâng cao"
+          title={tSearch("title")}
           href="/search"
-          className={cn(pillBase, pillInactive)}
+          className={cn(pillBase, pillInactive, "px-3")}
+          data-testid="main-categories-advanced-search-link"
         >
           <FilterOutlined />
         </Link>

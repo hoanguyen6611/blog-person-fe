@@ -16,7 +16,10 @@ export default function NotFound() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-16 bg-white dark:bg-black">
+    <div
+      className="min-h-screen flex items-center justify-center px-4 py-16 bg-white dark:bg-black"
+      data-testid="not-found-page"
+    >
       <motion.div
         className="text-center space-y-6 max-w-xl"
         initial={{ opacity: 0, y: 50 }}
@@ -46,10 +49,12 @@ export default function NotFound() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full max-w-md px-4 py-2 rounded-l-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-gray-400"
+            data-testid="not-found-search-input"
           />
           <button
             type="submit"
             className="px-4 py-2 bg-slate-600 text-white rounded-r-lg hover:bg-slate-700 transition"
+            data-testid="not-found-search-button"
           >
             🔍
           </button>
@@ -59,12 +64,14 @@ export default function NotFound() {
           <Link
             href="/"
             className="inline-block px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400 rounded-xl hover:opacity-90 transition"
+            data-testid="not-found-home-link"
           >
             ⬅️ Trang chủ
           </Link>
           <Link
             href="/posts"
             className="inline-block px-6 py-3 bg-slate-600 text-white rounded-xl hover:bg-slate-700 transition"
+            data-testid="not-found-posts-link"
           >
             📚 Xem bài viết
           </Link>

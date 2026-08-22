@@ -1,7 +1,7 @@
 "use client";
 const CategoryUpdate = () => {
   return (
-    <div>
+    <div data-testid="cms-category-update-page">
       <h1>Category Update</h1>
     </div>
   );

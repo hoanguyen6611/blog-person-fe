@@ -29,6 +29,7 @@ import { Tag } from "@/interface/Tag";
 import dayjs from "dayjs";
 import { UploadResponse } from "@imagekit/next";
 import BackToTopButton from "@/components/BackToTopButton";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 interface FormPost {
   title: string;
   category: string;
@@ -40,6 +41,7 @@ interface FormPost {
 }
 
 const PostCreate = () => {
+  useRequireAuth();
   const { isLoaded, isSignedIn } = useUser();
   const [isDisabledBtnSend, setIsDisabledBtnSend] = useState(false);
   const router = useRouter();
@@ -315,7 +317,10 @@ const PostCreate = () => {
   };
 
   return (
-    <div className="h-full min-h-screen bg-gray-50 py-8 px-4 md:px-10 dark:bg-gray-800 dark:text-gray-400">
+    <div
+      data-testid="post-create-page"
+      className="h-full min-h-screen bg-gray-50 py-8 px-4 md:px-10 dark:bg-gray-800 dark:text-gray-400"
+    >
       <div className="max-w-6xl mx-auto bg-white p-6 md:p-10 rounded-xl shadow-lg space-y-8 dark:bg-gray-800">
         <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-gray-400">
           📝 Create a New Post
@@ -329,6 +334,7 @@ const PostCreate = () => {
               type="image"
               buttonText={cover ? "Change cover image" : "Upload cover image"}
               onSuccess={changeUploadImage}
+              testId="post-create-cover-image"
             />
             {cover && (
               <div className="mt-2">
@@ -351,6 +357,7 @@ const PostCreate = () => {
               onChange={changeTitle}
               className="w-full text-2xl font-semibold p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500 outline-none"
               placeholder="New Post title here..."
+              data-testid="post-create-title-input"
             />
           </div>
 
@@ -367,6 +374,7 @@ const PostCreate = () => {
               type="button"
               onClick={showModalFormCategory}
               className="flex items-center gap-2 px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg"
+              data-testid="post-create-new-category-button"
             >
               <PlusOutlined />
               New Category
@@ -379,6 +387,7 @@ const PostCreate = () => {
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancelFormCategory}
+            okButtonProps={{ "data-testid": "post-create-category-modal-confirm-button" }}
           >
             <input
               type="text"
@@ -386,6 +395,7 @@ const PostCreate = () => {
               placeholder="Awesome Category"
               className="w-full p-3 text-xl rounded-lg border border-gray-300 outline-none"
               onChange={(e) => setNameCategory(e.target.value)}
+              data-testid="post-create-category-modal-input"
             />
           </Modal>
 
@@ -398,12 +408,14 @@ const PostCreate = () => {
                 placeholder="Select name tag"
                 onChange={handleChange}
                 options={tagsOptions}
+                data-testid="post-create-tags-select"
               />
             </div>
             <button
               type="button"
               onClick={showModalFormTag}
               className="flex items-center gap-2 px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg"
+              data-testid="post-create-new-tag-button"
             >
               <PlusOutlined />
               New Tag
@@ -414,6 +426,7 @@ const PostCreate = () => {
             open={isModalOpenTag}
             onOk={handleOkTag}
             onCancel={handleCancelFormTag}
+            okButtonProps={{ "data-testid": "post-create-tag-modal-confirm-button" }}
           >
             <input
               type="text"
@@ -422,10 +435,14 @@ const PostCreate = () => {
               placeholder="Awesome Tag"
               className="w-full p-3 text-xl rounded-lg border border-gray-300 outline-none"
               onChange={(e) => setNameTag(e.target.value)}
+              data-testid="post-create-tag-modal-input"
             />
           </Modal>
           <div className="flex gap-3 items-end">
-            <Checkbox onChange={onChangeCheckBox}>
+            <Checkbox
+              onChange={onChangeCheckBox}
+              data-testid="post-create-send-email-checkbox"
+            >
               Send Email to All Users
             </Checkbox>
           </div>
@@ -439,6 +456,7 @@ const PostCreate = () => {
                 setFormData((prev) => ({ ...prev, desc: e.target.value }));
                 setDesc(e.target.value);
               }}
+              data-testid="post-create-description-input"
             />
           </div>
 
@@ -449,14 +467,16 @@ const PostCreate = () => {
                 type="image"
                 buttonText="Upload image"
                 onSuccess={(res) => setCoverImage(res.filePath || "")}
+                testId="post-create-content-image"
               />
               <UploadV1
                 type="video"
                 buttonText="Upload video"
                 onSuccess={(res) => setCoverVideo(res.filePath || "")}
+                testId="post-create-content-video"
               />
             </div>
-            <div className="md:col-span-3">
+            <div className="md:col-span-3" data-testid="post-create-editor-container">
               <Editor
                 ref={editorRef}
                 content={contentCreatePost}
@@ -473,6 +493,7 @@ const PostCreate = () => {
               onClick={handleSubmit}
               disabled={isDisabledBtnSend}
               className="w-full md:w-auto px-6 py-3 text-white bg-slate-700 hover:bg-slate-800 rounded-xl font-semibold disabled:opacity-50 transition-all"
+              data-testid="post-create-submit-button"
             >
               {isDisabledBtnSend ? "Creating..." : "Create Post"}
             </button>
@@ -485,10 +506,12 @@ const PostCreate = () => {
                 defaultValue={dayjs()}
                 onChange={(date) => setPublishedAt(date?.toDate() || null)}
                 placeholder="Select publish time"
+                data-testid="post-create-publish-date-picker"
               />
               <button
                 onClick={handleSubmitSchedule}
                 className="w-full md:w-auto px-6 py-3 text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl font-semibold transition-all"
+                data-testid="post-create-schedule-button"
               >
                 Schedule
               </button>

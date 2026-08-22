@@ -65,7 +65,10 @@ export default function Statistic() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="bg-white p-6 rounded-xl shadow dark:text-gray-400 dark:bg-gray-800">
+      <div
+        className="bg-white p-6 rounded-xl shadow dark:text-gray-400 dark:bg-gray-800"
+        data-testid="cms-statistic-top-articles"
+      >
         <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
           🔥 {t("top5FeaturedArticles")}
         </h2>
@@ -103,19 +106,27 @@ export default function Statistic() {
           ))}
         </div>
       </div>
-      <MonthlyPostChart
-        data={stats?.postsByMonth}
-        label={t("articlesByMonth")}
-        nameOfYAxis={t("numberOfArticles")}
-      />
-      <MonthlyPostChart
-        data={stats?.monthlyVisit}
-        label={t("monthlyVisit")}
-        nameOfYAxis={t("numberOfVisit")}
-      />
+      <div data-testid="cms-statistic-articles-by-month">
+        <MonthlyPostChart
+          data={stats?.postsByMonth}
+          label={t("articlesByMonth")}
+          nameOfYAxis={t("numberOfArticles")}
+        />
+      </div>
+      <div data-testid="cms-statistic-monthly-visit">
+        <MonthlyPostChart
+          data={stats?.monthlyVisit}
+          label={t("monthlyVisit")}
+          nameOfYAxis={t("numberOfVisit")}
+        />
+      </div>
       {/* <MultiYearPostChart data={stats.postsByMonth} /> */}
-      <CategoryPieChart data={postsByCategory} />
-      <AuthorStatsTable data={postsByAuthor} />
+      <div data-testid="cms-statistic-articles-by-category">
+        <CategoryPieChart data={postsByCategory} />
+      </div>
+      <div data-testid="cms-statistic-articles-by-author">
+        <AuthorStatsTable data={postsByAuthor} />
+      </div>
     </div>
   );
 }

@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { TableRowSelection } from "antd/es/table/interface";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 interface DataType {
   _id: string;
@@ -25,6 +26,7 @@ interface DataType {
   visit: number;
 }
 const CmsPostPage = () => {
+  useRequireAuth();
   const router = useRouter();
   const [isShowFormDelete, setIsShowFormDelete] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);

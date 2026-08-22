@@ -56,11 +56,24 @@ const PostListContent = ({
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Failed to load</p>;
+  if (isLoading)
+    return (
+      <p className="text-muted" data-testid="post-list-loading">
+        Loading...
+      </p>
+    );
+  if (error)
+    return (
+      <p className="text-muted" data-testid="post-list-error">
+        Failed to load
+      </p>
+    );
 
   return (
-    <div className="flex flex-col gap-12 mb-8">
+    <div
+      className="grid grid-cols-1 gap-5 mb-8 md:grid-cols-2 lg:grid-cols-3"
+      data-testid="post-list-container"
+    >
       {(data?.posts || []).map((post: Post) => (
         <PostListItem key={post._id} post={post} />
       ))}
@@ -90,7 +103,7 @@ const getPageEntries = (current: number, total: number): PageEntry[] => {
 };
 
 const navButtonClass =
-  "flex h-9 min-w-9 items-center justify-center rounded-lg text-sm font-medium text-gray-500 transition-colors hover:bg-gray-100 disabled:pointer-events-none disabled:opacity-40 dark:text-gray-400 dark:hover:bg-gray-800";
+  "flex h-9 min-w-9 items-center justify-center rounded-full font-mono text-sm font-medium text-muted transition-colors hover:bg-surface-2 disabled:pointer-events-none disabled:opacity-40";
 
 const Pagination = ({
   currentPage,
@@ -114,6 +127,7 @@ const Pagination = ({
         onClick={() => onChange(currentPage - 1)}
         disabled={currentPage === 1}
         className={cn(navButtonClass, "px-2")}
+        data-testid="pagination-prev-button"
       >
         <ChevronLeft size={18} />
       </button>
@@ -122,7 +136,7 @@ const Pagination = ({
         entry === "ellipsis" ? (
           <span
             key={`ellipsis-${i}`}
-            className="flex h-9 min-w-9 items-center justify-center text-sm text-gray-400 dark:text-gray-500"
+            className="flex h-9 min-w-9 items-center justify-center font-mono text-sm text-muted"
           >
             …
           </span>
@@ -133,11 +147,12 @@ const Pagination = ({
             aria-current={entry === currentPage ? "page" : undefined}
             onClick={() => onChange(entry)}
             className={cn(
-              "flex h-9 min-w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors",
+              "flex h-9 min-w-9 items-center justify-center rounded-full font-mono text-sm font-medium transition-colors",
               entry === currentPage
-                ? "bg-slate-600 text-white"
-                : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                ? "bg-ink text-bg"
+                : "text-muted hover:bg-surface-2"
             )}
+            data-testid={`pagination-page-${entry}`}
           >
             {entry}
           </button>
@@ -150,6 +165,7 @@ const Pagination = ({
         onClick={() => onChange(currentPage + 1)}
         disabled={currentPage === totalPages}
         className={cn(navButtonClass, "px-2")}
+        data-testid="pagination-next-button"
       >
         <ChevronRight size={18} />
       </button>

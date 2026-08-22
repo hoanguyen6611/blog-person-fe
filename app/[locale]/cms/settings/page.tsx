@@ -1,5 +1,5 @@
 const SettingPage = () => {
-  return <div>SettingPage</div>;
+  return <div data-testid="cms-settings-page">SettingPage</div>;
 };
 
 export default SettingPage;

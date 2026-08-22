@@ -83,7 +83,7 @@ const Upload = ({
   };
 
   return (
-    <>
+    <div data-testid="upload-legacy-container">
       <input accept={`${type}/*`} type="file" ref={fileInputRef} />
       <button
         className="w-max p-4 shadow-md rounded-xl text-sm text-gray-500 bg-white"
@@ -95,7 +95,7 @@ const Upload = ({
       {children}
       <br />
       Upload progress: <progress value={progress} max={100}></progress>
-    </>
+    </div>
   );
 };
 

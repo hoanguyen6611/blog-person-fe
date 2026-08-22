@@ -7,6 +7,7 @@ export function Card({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
+      data-testid="card"
       className={cn(
         "rounded-2xl border border-gray-200 bg-white text-black shadow-sm dark:text-gray-400 dark:bg-gray-800 dark:border-gray-700",
         className

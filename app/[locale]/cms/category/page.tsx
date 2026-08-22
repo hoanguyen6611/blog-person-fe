@@ -59,6 +59,7 @@ const CategoryPage = () => {
         <Space size="middle">
           <button
             className="text-slate-500"
+            data-testid={`cms-category-edit-button-${record._id}`}
             // onClick={() => {
             //   router.push(`/cms/edit/post/${record._id}`);
             // }}
@@ -71,6 +72,7 @@ const CategoryPage = () => {
           {isAdmin && (
             <button
               className="text-red-500"
+              data-testid={`cms-category-delete-button-${record._id}`}
               onClick={() => showFormDeleteCategory(record._id)}
             >
               <DeleteOutlined
@@ -82,6 +84,7 @@ const CategoryPage = () => {
           {isAdmin && (
             <button
               className="text-green-300"
+              data-testid={`cms-category-toggle-status-button-${record._id}`}
               onClick={() => changeStatusCategory(record._id)}
             >
               <Replace
@@ -140,13 +143,15 @@ const CategoryPage = () => {
     }
   };
   return (
-    <TableCMS
-      columns={columns}
-      dataSource={dataSource}
-      nameButtonCreate={t("newCategory")}
-      onDelete={handleOkFormDelete}
-      nameModalDelete="category"
-    />
+    <div data-testid="cms-category-page">
+      <TableCMS
+        columns={columns}
+        dataSource={dataSource}
+        nameButtonCreate={t("newCategory")}
+        onDelete={handleOkFormDelete}
+        nameModalDelete="category"
+      />
+    </div>
   );
 };
 

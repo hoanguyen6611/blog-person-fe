@@ -61,7 +61,15 @@
     "author": "Tác giả",
     "categories": "Danh mục",
     "search": "Tìm kiếm",
-    "all": "Tất cả"
+    "all": "Tất cả",
+    "writtenBy": "Viết bởi",
+    "relatedPosts": "Bài viết liên quan",
+    "gateTitle": "Đăng nhập để đọc toàn bộ bài viết",
+    "gateSubtitle": "Phần còn lại của bài viết, bình luận và bài viết liên quan đang chờ bạn.",
+    "gateLogin": "Đăng nhập",
+    "gateBrowseOther": "Xem bài viết khác",
+    "gateNoAccount": "Chưa có tài khoản?",
+    "gateSignUp": "Đăng ký miễn phí"
   },
   "PostMenuActions": {
     "save": "Lưu bài viết này",

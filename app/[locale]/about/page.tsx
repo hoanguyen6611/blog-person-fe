@@ -15,12 +15,13 @@ const FEATURE_ICONS: Record<string, LucideIcon> = {
 };
 
 const socials = [
-  { icon: <FaFacebookF />, href: "https://www.facebook.com/hoahuy2606" },
+  { icon: <FaFacebookF />, href: "https://www.facebook.com/hoahuy2606", name: "facebook" },
   {
     icon: <FaLinkedinIn />,
     href: "https://www.linkedin.com/in/hoanguyen6611/",
+    name: "linkedin",
   },
-  { icon: <FaGithub />, href: "https://github.com/hoanguyen6611" },
+  { icon: <FaGithub />, href: "https://github.com/hoanguyen6611", name: "github" },
 ];
 
 interface AboutFeature {
@@ -70,6 +71,7 @@ export default function AboutPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-700 transition hover:bg-slate-600 hover:text-white dark:bg-gray-800 dark:text-gray-300"
+              data-testid={`about-social-${s.name}-link`}
             >
               {s.icon}
             </a>
@@ -80,12 +82,14 @@ export default function AboutPage() {
           <Link
             href="/posts"
             className="rounded-full bg-slate-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
+            data-testid="about-view-posts-cta-link"
           >
             {t("ctaPosts")}
           </Link>
           <Link
-            href="/info"
+            href="https://www.hoane.site/"
             className="rounded-full border border-gray-300 px-6 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-slate-600 hover:text-slate-600 dark:border-gray-700 dark:text-gray-300"
+            data-testid="about-view-profile-cta-link"
           >
             {t("ctaInfo")}
           </Link>
@@ -110,6 +114,7 @@ export default function AboutPage() {
               <div
                 key={i}
                 className="flex gap-4 rounded-2xl bg-white p-6 shadow-sm dark:bg-gray-800"
+                data-testid={`about-feature-card-${i}`}
               >
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700 dark:bg-slate-900/40 dark:text-slate-300">
                   <Icon size={22} />

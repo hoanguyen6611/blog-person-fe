@@ -28,7 +28,10 @@ const FeaturedPost = () => {
   return (
     <div className="flex flex-col gap-4 lg:flex-row">
       {/* Big post */}
-      <div className="w-full lg:w-1/2 space-y-4">
+      <div
+        className="w-full lg:w-1/2 space-y-4"
+        data-testid={`featured-post-${first._id}`}
+      >
         <ImageShow
           src={first.img}
           className="rounded-3xl"
@@ -48,6 +51,7 @@ const FeaturedPost = () => {
         {rest.map((post: Post, idx: number) => (
           <FeaturedItem
             key={post._id}
+            postId={post._id}
             index={idx + 2}
             title={post.title}
             img={post.img}
@@ -68,6 +72,7 @@ const FeaturedItem = ({
   date,
   category,
   href,
+  postId,
 }: {
   index: number;
   title: string;
@@ -75,6 +80,7 @@ const FeaturedItem = ({
   date: string;
   category: string;
   href: string;
+  postId: string;
 }) => {
   return (
     <div className="flex gap-4">
@@ -91,6 +97,7 @@ const FeaturedItem = ({
           <Link
             href={href}
             className="hover:underline text-base sm:text-lg font-medium"
+            data-testid={`featured-post-${postId}`}
           >
             {title}
           </Link>

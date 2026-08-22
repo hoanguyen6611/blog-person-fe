@@ -10,8 +10,10 @@ import { Link } from "@/i18n/navigation";
 import { Notification } from "@/interface/Notification";
 import { Button, Empty } from "antd";
 import { Heart, MessageCircle, UserPlus, Newspaper } from "lucide-react";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 export default function NotificationsPage() {
+  useRequireAuth();
   const { getToken, isSignedIn } = useAuth();
   const [token, setToken] = useState<string | null>(null);
 
@@ -50,13 +52,18 @@ export default function NotificationsPage() {
     mutate();
     globalMutate([`${process.env.NEXT_PUBLIC_API_URL}/notifications`, token]);
   };
-  if (!isSignedIn) return <p>You are not logged in</p>;
+  if (!isSignedIn)
+    return <p data-testid="notification-not-logged-in">You are not logged in</p>;
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10 space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">🔔 Thông báo của bạn</h1>
-        <Button type="default" onClick={markAllAsRead}>
+        <Button
+          type="default"
+          onClick={markAllAsRead}
+          data-testid="notification-mark-all-read-button"
+        >
           Đánh dấu tất cả đã đọc
         </Button>
       </div>
@@ -99,6 +106,7 @@ export default function NotificationsPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:underline"
+                    data-testid={`notification-item-${n._id}`}
                   >
                     {n.message}
                   </Link>
@@ -107,6 +115,7 @@ export default function NotificationsPage() {
                       size="small"
                       type="link"
                       onClick={() => markAsRead(n._id)}
+                      data-testid={`notification-mark-read-button-${n._id}`}
                     >
                       Đánh dấu đã đọc
                     </Button>

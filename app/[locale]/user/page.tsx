@@ -7,8 +7,10 @@ import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import { useEffect, useState } from "react";
 import FollowStats from "@/components/FollowStats";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const UserPersonalPage = () => {
+  useRequireAuth();
   const { user } = useUser();
   const { getToken } = useAuth();
   const [token, setToken] = useState<string | null>(null);
@@ -29,7 +31,12 @@ const UserPersonalPage = () => {
     ([url, token]) => fetcherWithTokenUseSWR(url, token)
   );
 
-  if (!user) return <p className="text-center">You are not signed in.</p>;
+  if (!user)
+    return (
+      <p className="text-center" data-testid="user-not-signed-in">
+        You are not signed in.
+      </p>
+    );
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">

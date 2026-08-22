@@ -17,6 +17,18 @@ export default function Sidebar({ admin }: { admin: boolean }) {
   const pathname = usePathname();
   const t = useTranslations("Sidebar");
 
+  const testIdByHref: Record<string, string> = {
+    "/cms": "cms-sidebar-dashboard-link",
+    "/cms/user": "cms-sidebar-users-link",
+    "/cms/category": "cms-sidebar-categories-link",
+    "/cms/tag": "cms-sidebar-tags-link",
+    "/cms/personal": "cms-sidebar-personal-dashboard-link",
+    "/cms/posts": "cms-sidebar-my-posts-link",
+    "/cms/post-schedule": "cms-sidebar-schedule-link",
+    "/cms/settings": "cms-sidebar-settings-link",
+    "/cms/save-post": "cms-sidebar-save-post-link",
+  };
+
   const links = [
     ...(admin
       ? [
@@ -63,7 +75,7 @@ export default function Sidebar({ admin }: { admin: boolean }) {
 
   return (
     <aside className="fixed left-0 top-16 h-[calc(100vh-64px)] w-56 bg-gray-100 shadow-md p-4 hidden md:block z-20 dark:bg-black">
-      <div className="text-xl font-bold text-slate-700 mb-6 text-center pt-4">
+      <div className="text-xl font-bold text-slate-700 dark:text-slate-200 mb-6 text-center pt-4">
         CMS Blog
       </div>
       <nav className="flex flex-col gap-2">
@@ -71,6 +83,7 @@ export default function Sidebar({ admin }: { admin: boolean }) {
           <Link
             key={href}
             href={href}
+            data-testid={testIdByHref[href]}
             className={`flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-colors ${
               pathname === href
                 ? "bg-slate-600 text-white"

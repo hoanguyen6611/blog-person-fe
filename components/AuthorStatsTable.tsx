@@ -13,7 +13,10 @@ export default function AuthorStatsTable({ data }: { data: AuthorStats[] }) {
         👤 {t("articleByAuthor")}
       </h2>
 
-      <table className="w-full text-sm text-left">
+      <table
+        className="w-full text-sm text-left"
+        data-testid="cms-author-stats-table"
+      >
         <thead>
           <tr className="text-gray-600 border-b">
             <th className="py-1 pr-4">#</th>

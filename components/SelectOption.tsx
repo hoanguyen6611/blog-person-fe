@@ -51,6 +51,7 @@ const SelectOption: React.FC<SelectOptionProps> = ({
         onChange={onChangeCategory}
         options={categories}
         allowClear
+        data-testid={`select-${name}`}
         className={
           direction === "col"
             ? "[&_.ant-select-selector]:!h-11 [&_.ant-select-selector]:!items-center [&_.ant-select-selector]:!rounded-xl"

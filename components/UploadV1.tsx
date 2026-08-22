@@ -24,6 +24,7 @@ interface UploadProps {
       | ImageKitServerError
   ) => void;
   children?: React.ReactNode;
+  testId?: string;
 }
 
 const Upload = ({
@@ -33,6 +34,7 @@ const Upload = ({
   onProgress,
   onError,
   children,
+  testId,
 }: UploadProps) => {
   const [progress, setProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -95,14 +97,23 @@ const Upload = ({
   };
 
   return (
-    <div className="space-y-2 flex flex-col items-center gap-2">
-      <input accept={`${type}/*`} type="file" ref={fileInputRef} />
+    <div
+      className="space-y-2 flex flex-col items-center gap-2"
+      data-testid={testId ? `${testId}-container` : "upload-container"}
+    >
+      <input
+        accept={`${type}/*`}
+        type="file"
+        ref={fileInputRef}
+        data-testid={testId ? `${testId}-input` : "upload-file-input"}
+      />
       <div className="flex flex-row items-center gap-2">
         <button
           disabled={disabledBtnUpload}
           onClick={handleUpload}
           className="w-max p-3 px-5 rounded-lg bg-slate-500 text-white hover:bg-slate-600 text-sm"
           type="button"
+          data-testid={testId ? `${testId}-button` : "upload-button"}
         >
           {buttonText}
         </button>

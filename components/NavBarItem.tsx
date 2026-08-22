@@ -21,7 +21,7 @@ import { useTranslations } from "next-intl";
 import ThemeToggle from "./ThemeToggle";
 
 const linkStyle =
-  "shrink-0 whitespace-nowrap hover:text-slate-600 transition-colors duration-200 underline-offset-4";
+  "shrink-0 whitespace-nowrap text-sm font-medium text-muted hover:text-ink transition-colors duration-200 underline-offset-4";
 
 export const NavLinks = () => {
   const { user } = useUser();
@@ -31,19 +31,27 @@ export const NavLinks = () => {
 
   return (
     <>
-      <Link href="/" className={linkStyle}>
+      <Link href="/" className={linkStyle} data-testid="navbar-home-link">
         {t("home")}
       </Link>
-      <Link href="/posts?sort=trending" className={linkStyle}>
+      <Link
+        href="/posts?sort=trending"
+        className={linkStyle}
+        data-testid="navbar-trending-link"
+      >
         {t("trending")}
       </Link>
-      <Link href="/posts?sort=popular" className={linkStyle}>
+      <Link
+        href="/posts?sort=popular"
+        className={linkStyle}
+        data-testid="navbar-popular-link"
+      >
         {t("mostPopular")}
       </Link>
-      <Link href="/about" className={linkStyle}>
+      <Link href="/about" className={linkStyle} data-testid="navbar-about-link">
         {t("about")}
       </Link>
-      <Link href={cmsHref} className={linkStyle}>
+      <Link href={cmsHref} className={linkStyle} data-testid="navbar-cms-link">
         {t("cms")}
       </Link>
     </>
@@ -82,7 +90,12 @@ export const NavActions = () => {
   };
   const notificationItems: MenuProps["items"] = [
     {
-      label: <Button type="primary"> 🔔 {t("markAllAsRead")}</Button>,
+      label: (
+        <Button type="primary" data-testid="navbar-notifications-mark-all-read-button">
+          {" "}
+          🔔 {t("markAllAsRead")}
+        </Button>
+      ),
       key: "mark_all",
     },
     ...(notifications?.length
@@ -94,6 +107,7 @@ export const NavActions = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={n.isRead ? "text-gray-400" : "font-semibold"}
+                data-testid={`navbar-notification-item-${n._id}`}
               >
                 {n.message}
               </Link>
@@ -103,6 +117,7 @@ export const NavActions = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={n.isRead ? "text-gray-400" : "font-semibold"}
+                data-testid={`navbar-notification-item-${n._id}`}
               >
                 {n.message}
               </Link>
@@ -111,7 +126,12 @@ export const NavActions = () => {
         }))
       : [{ label: t("noNotification"), key: "0", disabled: true }]),
     {
-      label: <Button type="primary"> 📄 {t("viewAll")}</Button>,
+      label: (
+        <Button type="primary" data-testid="navbar-notifications-view-all-button">
+          {" "}
+          📄 {t("viewAll")}
+        </Button>
+      ),
       key: "view_all",
     },
   ];
@@ -175,10 +195,17 @@ export const NavActions = () => {
     <>
       <Button
         type="primary"
+        icon={
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 20h9" />
+            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+          </svg>
+        }
         onClick={() => router.push("/write")}
-        className="shrink-0 whitespace-nowrap bg-slate-600 hover:bg-slate-700 text-white font-medium rounded-xl"
+        className="shrink-0 whitespace-nowrap rounded-full font-medium"
+        data-testid="navbar-write-button"
       >
-        ✍️ {t("newPost")}
+        {t("newPost")}
       </Button>
       {isSignedIn && (
         <Dropdown
@@ -197,7 +224,10 @@ export const NavActions = () => {
           trigger={["click"]}
           className="dark:text-gray-400 dark:bg-gray-800"
         >
-          <a onClick={(e) => e.preventDefault()}>
+          <a
+            onClick={(e) => e.preventDefault()}
+            data-testid="navbar-notifications-bell"
+          >
             <Space>
               <Badge count={unreadCount}>
                 <Bell className="cursor-pointer dark:text-gray-400" />
@@ -212,24 +242,30 @@ export const NavActions = () => {
 
       <SignedOut>
         <Link href="/login">
-          <button className="py-2 px-4 rounded-3xl bg-slate-800 text-white hover:bg-slate-900 transition">
-            {t("login")} ✋
+          <button
+            className="rounded-full bg-surface-2 border border-line px-4 py-2 text-sm font-semibold text-ink transition hover:bg-line"
+            data-testid="navbar-login-button"
+          >
+            {t("login")}
           </button>
         </Link>
       </SignedOut>
 
       <SignedIn>
-        <UserButton
-          afterSignOutUrl="/"
-          appearance={{
-            elements: {
-              userButtonAvatarBox: "ring-2 ring-slate-500", // custom border
-              userButtonPopoverCard: "rounded-xl shadow-lg bg-white",
-              userButtonPopoverActionButton:
-                "hover:bg-gray-100 text-sm text-gray-700",
-            },
-          }}
-        />
+        <div data-testid="navbar-user-menu">
+          <UserButton
+            afterSignOutUrl="/"
+            appearance={{
+              elements: {
+                userButtonAvatarBox: "ring-2 ring-accent",
+                userButtonPopoverCard:
+                  "rounded-xl shadow-lg bg-white dark:bg-gray-800",
+                userButtonPopoverActionButton:
+                  "hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-gray-700 dark:text-gray-200",
+              },
+            }}
+          />
+        </div>
       </SignedIn>
     </>
   );

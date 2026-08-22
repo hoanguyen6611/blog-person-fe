@@ -1,7 +1,9 @@
+"use client";
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useRouter } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 import { toast } from "react-toastify";
 import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "../api/useswr";
@@ -16,6 +18,10 @@ const PostMenuActions = ({ post }: { post: Post }) => {
   const [token, setToken] = useState<string | null>(null);
   const [isFeatured, setIsFeatured] = useState(post.isFeature);
   const t = useTranslations("PostMenuActions");
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const activeColor = mounted && resolvedTheme === "dark" ? "#cbd5e1" : "#1e293b";
   useEffect(() => {
     (async () => {
       const t = await getToken();
@@ -109,9 +115,10 @@ const PostMenuActions = ({ post }: { post: Post }) => {
       <div
         className="flex items-center gap-2 py-2 text-sm cursor-pointer"
         onClick={handleSave}
+        data-testid="post-action-save-button"
       >
         <SaveOutlined
-          style={{ color: isSavedPost ? "#1e293b" : "gray", fontSize: 32 }}
+          style={{ color: isSavedPost ? activeColor : "gray", fontSize: 32 }}
         />
         <span>{t("save")}</span>
       </div>
@@ -119,9 +126,10 @@ const PostMenuActions = ({ post }: { post: Post }) => {
         <div
           className="flex items-center gap-2 py-2 text-sm cursor-pointer"
           onClick={featurePost}
+          data-testid="post-action-feature-button"
         >
           <StarOutlined
-            style={{ color: isFeatured ? "#1e293b" : "gray", fontSize: 32 }}
+            style={{ color: isFeatured ? activeColor : "gray", fontSize: 32 }}
           />
           <span>{t("feature")}</span>
         </div>
@@ -130,6 +138,7 @@ const PostMenuActions = ({ post }: { post: Post }) => {
         <div
           className="flex items-center gap-2 py-2 text-sm cursor-pointer text-red-500"
           onClick={handleDeletePost}
+          data-testid="post-action-delete-button"
         >
           <DeleteOutlined
             className="cursor-pointer"

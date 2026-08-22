@@ -33,7 +33,10 @@ export default function CategoryPieChart({ data }: { data: Category[] }) {
   }));
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow mt-8 dark:text-gray-400 dark:bg-gray-800">
+    <div
+      className="bg-white p-6 rounded-xl shadow mt-8 dark:text-gray-400 dark:bg-gray-800"
+      data-testid="cms-category-pie-chart"
+    >
       <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
         🏷️ {t("articleByCategory")}
       </h2>

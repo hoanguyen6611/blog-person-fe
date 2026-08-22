@@ -5,8 +5,10 @@ import { useAuth } from "@clerk/nextjs";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
 import FollowList from "@/components/FollowList";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const PersonalPage = () => {
+  useRequireAuth();
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -49,16 +51,19 @@ const PersonalPage = () => {
       token ? [`${process.env.NEXT_PUBLIC_API_URL}/users/follow`, token] : null,
     ([url, token]) => fetcherWithTokenUseSWR(url, token)
   );
-  if (!isSignedIn) return <p>You are not logged in</p>;
+  if (!isSignedIn)
+    return <p data-testid="cms-personal-not-logged-in">You are not logged in</p>;
   return (
-    <div>
-      <DashBoard
-        name="Personal Statistics"
-        posts={posts}
-        views={views}
-        followers={data?.followers?.length}
-        following={data?.following?.length}
-      />
+    <div data-testid="cms-personal-page">
+      <div data-testid="cms-personal-dashboard-container">
+        <DashBoard
+          name="Personal Statistics"
+          posts={posts}
+          views={views}
+          followers={data?.followers?.length}
+          following={data?.following?.length}
+        />
+      </div>
       <FollowList data={data} loading={isLoading} />
     </div>
   );

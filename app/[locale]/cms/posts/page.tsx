@@ -16,6 +16,7 @@ import { User } from "@/interface/User";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 interface DataType {
   _id: string;
@@ -28,6 +29,7 @@ interface DataType {
   user: User;
 }
 const PostPage = () => {
+  useRequireAuth();
   const pathname = usePathname();
   const t = useTranslations("PostTable");
   const router = useRouter();
@@ -105,6 +107,7 @@ const PostPage = () => {
         <Space size="middle">
           <button
             className="text-slate-500"
+            data-testid={`cms-posts-edit-button-${record._id}`}
             onClick={() => {
               router.push(`/cms/edit/post/${record._id}`);
             }}
@@ -116,6 +119,7 @@ const PostPage = () => {
           </button>
           <button
             className="text-red-500"
+            data-testid={`cms-posts-delete-button-${record._id}`}
             onClick={() => showFormDelete(record._id)}
           >
             <DeleteOutlined
@@ -171,18 +175,25 @@ const PostPage = () => {
     setIsShowFormDelete(true);
     setIdDelete(id);
   };
-  if (!isSignedIn) return <p>You are not logged in</p>;
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Failed to load</p>;
+  if (!isSignedIn)
+    return (
+      <p data-testid="cms-posts-page">You are not logged in</p>
+    );
+  if (isLoading)
+    return <p data-testid="cms-posts-page">Loading...</p>;
+  if (error)
+    return <p data-testid="cms-posts-page">Failed to load</p>;
   return (
-    <TableCMS
-      columns={columns}
-      dataSource={dataSource}
-      buttonCreate={true}
-      nameButtonCreate={t("newPost")}
-      onDelete={handleDeletePost}
-      nameModalDelete="post"
-    />
+    <div data-testid="cms-posts-page">
+      <TableCMS
+        columns={columns}
+        dataSource={dataSource}
+        buttonCreate={true}
+        nameButtonCreate={t("newPost")}
+        onDelete={handleDeletePost}
+        nameModalDelete="post"
+      />
+    </div>
   );
 };
 

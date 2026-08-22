@@ -2,7 +2,10 @@ import ImageShow from "@/components/Image";
 
 export default function InfoPage() {
     return (
-      <main className="max-w-4xl mx-auto px-6 py-10 font-sans text-gray-800 leading-relaxed">
+      <main
+        className="max-w-4xl mx-auto px-6 py-10 font-sans text-gray-800 leading-relaxed"
+        data-testid="info-page"
+      >
         <ImageShow
             src="https://ik.imagekit.io/cjx1zgaos/IMG_58375.jpeg"
             alt="Avatar"

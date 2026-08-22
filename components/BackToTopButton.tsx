@@ -23,6 +23,7 @@ const BackToTopButton = () => {
     <AnimatePresence>
       {visible && (
         <motion.button
+          data-testid="back-to-top-button"
           onClick={scrollToTop}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}

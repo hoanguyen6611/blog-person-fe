@@ -18,6 +18,7 @@ import Editor from "@/components/Editor/Editor";
 import ImageShow from "@/components/Image";
 import { useTableStore } from "@/store/useTableStore";
 import PostDetail from "@/components/PostDetail";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 const QuillWrapper = forwardRef((props: any, ref: any) => {
@@ -34,6 +35,7 @@ interface FormPost {
 }
 
 const PostCreate = () => {
+  useRequireAuth();
   const { isLoaded, isSignedIn } = useUser();
   const [isDisabledBtnSend, setIsDisabledBtnSend] = useState(false);
   const router = useRouter();

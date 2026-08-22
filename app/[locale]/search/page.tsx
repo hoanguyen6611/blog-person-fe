@@ -101,27 +101,32 @@ export default function AdvancedSearchBar() {
                 className={fieldInput}
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
+                data-testid="advanced-search-keyword-input"
               />
             </div>
           </div>
 
-          <SelectOption
-            direction="col"
-            name={t("categoryPlaceholder")}
-            label={t("categoryLabel")}
-            categories={categoryOptions ?? []}
-            value={category || undefined}
-            onChangeCategory={changeCategory}
-          />
+          <div data-testid="advanced-search-category-select">
+            <SelectOption
+              direction="col"
+              name={t("categoryPlaceholder")}
+              label={t("categoryLabel")}
+              categories={categoryOptions ?? []}
+              value={category || undefined}
+              onChangeCategory={changeCategory}
+            />
+          </div>
 
-          <SelectOption
-            direction="col"
-            name={t("authorPlaceholder")}
-            label={t("authorLabel")}
-            categories={authorOptions ?? []}
-            value={author || undefined}
-            onChangeCategory={changeAuthor}
-          />
+          <div data-testid="advanced-search-author-select">
+            <SelectOption
+              direction="col"
+              name={t("authorPlaceholder")}
+              label={t("authorLabel")}
+              categories={authorOptions ?? []}
+              value={author || undefined}
+              onChangeCategory={changeAuthor}
+            />
+          </div>
 
           <div>
             <label className={fieldLabel}>{t("fromDate")}</label>
@@ -132,6 +137,7 @@ export default function AdvancedSearchBar() {
                 className={fieldInput}
                 value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
+                data-testid="advanced-search-from-date-input"
               />
             </div>
           </div>
@@ -145,6 +151,7 @@ export default function AdvancedSearchBar() {
                 className={fieldInput}
                 value={toDate}
                 onChange={(e) => setToDate(e.target.value)}
+                data-testid="advanced-search-to-date-input"
               />
             </div>
           </div>
@@ -153,6 +160,7 @@ export default function AdvancedSearchBar() {
         <button
           onClick={handleSearch}
           className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-slate-600 py-3 font-semibold text-white transition hover:bg-slate-700 active:scale-[0.99]"
+          data-testid="advanced-search-button"
         >
           <Search size={18} />
           {t("search")}

@@ -40,7 +40,10 @@ export default function MultiYearPostChart({ data }: { data: RawPoint[] }) {
   const colors = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"];
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow mt-8">
+    <div
+      className="bg-white p-6 rounded-xl shadow mt-8"
+      data-testid="cms-multi-year-post-chart"
+    >
       <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
         📊 So sánh bài viết theo tháng giữa các năm
       </h2>

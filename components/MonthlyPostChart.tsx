@@ -44,7 +44,10 @@ export default function MonthlyPostChart({
     }));
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow dark:text-gray-400 dark:bg-gray-800">
+    <div
+      className="bg-white p-6 rounded-xl shadow dark:text-gray-400 dark:bg-gray-800"
+      data-testid="cms-monthly-post-chart"
+    >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold flex items-center gap-2">
           📅 {label} ({selectedYear})

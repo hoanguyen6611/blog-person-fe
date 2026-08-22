@@ -61,7 +61,15 @@
     "author": "Author",
     "categories": "Categories",
     "search": "Search",
-    "all": "All"
+    "all": "All",
+    "writtenBy": "Written by",
+    "relatedPosts": "Related posts",
+    "gateTitle": "Log in to read the full article",
+    "gateSubtitle": "The rest of the article, comments and related posts are waiting for you.",
+    "gateLogin": "Log in",
+    "gateBrowseOther": "Browse other posts",
+    "gateNoAccount": "Don't have an account?",
+    "gateSignUp": "Sign up for free"
   },
   "PostMenuActions": {
     "save": "Save this Post",

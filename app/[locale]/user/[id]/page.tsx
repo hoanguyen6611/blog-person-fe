@@ -10,8 +10,10 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import FollowStats from "@/components/FollowStats";
 import FollowList from "@/components/FollowList";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 const UserPage = () => {
+  useRequireAuth();
   const params = useParams();
   const { user } = useUser();
   const { getToken, isSignedIn } = useAuth();
@@ -99,7 +101,12 @@ const UserPage = () => {
     }
   };
 
-  if (!user) return <p className="text-center">You are not signed in.</p>;
+  if (!user)
+    return (
+      <p className="text-center" data-testid="user-not-signed-in">
+        You are not signed in.
+      </p>
+    );
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
@@ -122,6 +129,7 @@ const UserPage = () => {
             type={isFollow ? "default" : "primary"}
             onClick={handleFollow}
             loading={loadingFollow}
+            data-testid="user-follow-button"
           >
             {isFollow ? "Following" : "Follow"}
           </Button>

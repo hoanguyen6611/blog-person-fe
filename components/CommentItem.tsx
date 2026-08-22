@@ -50,7 +50,7 @@ const CommentItem = ({
   const isLiked = likeComments?.includes(comment._id);
 
   return (
-    <div>
+    <div data-testid={`comment-${comment._id}`}>
       <div className="p-4 bg-slate-50 rounded-xl dark:bg-gray-800">
         <div className="flex items-center gap-4">
           <ImageShow
@@ -73,6 +73,7 @@ const CommentItem = ({
             <button
               className="text-sm text-gray-500"
               onClick={() => onDelete(comment._id)}
+              data-testid={`comment-delete-button-${comment._id}`}
             >
               <DeleteOutlined
                 className="cursor-pointer"
@@ -92,15 +93,28 @@ const CommentItem = ({
             onClick={() =>
               isLiked ? onDisLike(comment._id) : onLike(comment._id)
             }
+            data-testid={`comment-like-button-${comment._id}`}
           >
-            <ThumbsUp className={isLiked ? "text-slate-800" : "text-gray-500"} />
-            <span className="dark:text-gray-400">{comment.like}</span>
+            <ThumbsUp
+              className={
+                isLiked
+                  ? "text-slate-800 dark:text-slate-300"
+                  : "text-gray-500"
+              }
+            />
+            <span
+              className="dark:text-gray-400"
+              data-testid={`comment-like-count-${comment._id}`}
+            >
+              {comment.like}
+            </span>
           </Button>
           <Button
             type="text"
             className="text-sm text-gray-500 "
-            icon={<MessageCircle color="#1e293b" />}
+            icon={<MessageCircle color="currentColor" />}
             onClick={() => setIsReply(true)}
+            data-testid={`comment-reply-button-${comment._id}`}
           >
             <span className="dark:text-gray-400">{t("reply")}</span>
           </Button>
@@ -115,21 +129,24 @@ const CommentItem = ({
           >
             <textarea
               placeholder="Write a comment..."
-              className="w-full p-4 rounded-xl bg-white dark:text-black"
+              className="w-full p-4 rounded-xl bg-white dark:bg-gray-800 dark:text-gray-100"
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               name="desc"
+              data-testid="comment-reply-textarea"
             />
             <div className="flex items-center gap-4">
               <button
                 disabled={desc.length === 0}
                 className="bg-slate-500 text-white px-4 py-3 font-medium rounded-xl disabled:opacity-50"
+                data-testid={`comment-reply-send-button-${comment._id}`}
               >
                 {t("send")}
               </button>
               <button
                 onClick={() => setIsReply(false)}
                 className="bg-red-500 text-white px-4 py-3 font-medium rounded-xl"
+                data-testid={`comment-reply-cancel-button-${comment._id}`}
               >
                 {t("cancel")}
               </button>
@@ -165,6 +182,7 @@ const CommentItem = ({
                     <button
                       className="text-sm text-gray-500"
                       onClick={() => onDelete(reply._id)}
+                      data-testid={`comment-delete-button-${reply._id}`}
                     >
                       <DeleteOutlined
                         className="cursor-pointer"
@@ -184,15 +202,18 @@ const CommentItem = ({
                     ? onDisLike(reply._id)
                     : onLike(reply._id)
                 }
+                data-testid={`comment-like-button-${reply._id}`}
               >
                 <ThumbsUp
                   className={
                     likeComments?.includes(reply._id)
-                      ? "text-slate-800"
+                      ? "text-slate-800 dark:text-slate-300"
                       : "text-gray-500"
                   }
                 />
-                {reply.like}
+                <span data-testid={`comment-like-count-${reply._id}`}>
+                  {reply.like}
+                </span>
               </Button>
             </div>
           ))}

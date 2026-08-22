@@ -40,18 +40,22 @@ const CMSPage = () => {
     }
   );
   if (!isAdmin) {
-    return <div>You are not admin</div>;
+    return <div data-testid="cms-not-admin">You are not admin</div>;
   }
   return (
-    <div>
-      <DashBoard
-        name="CMS Statistics"
-        posts={posts}
-        categories={categories}
-        views={views}
-        users={users}
-      />
-      <Statistic />
+    <div data-testid="cms-page">
+      <div data-testid="cms-dashboard-container">
+        <DashBoard
+          name="CMS Statistics"
+          posts={posts}
+          categories={categories}
+          views={views}
+          users={users}
+        />
+      </div>
+      <div data-testid="cms-statistic-container">
+        <Statistic />
+      </div>
     </div>
   );
 };

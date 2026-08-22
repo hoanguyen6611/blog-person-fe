@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 interface DataType {
   _id: string;
   img: string;
@@ -20,6 +21,7 @@ interface DataType {
   createdAt: string;
 }
 const UserCms = () => {
+  useRequireAuth();
   const t = useTranslations("UserTable");
   const router = useRouter();
   const [pagination, setPagination] = useState({
@@ -105,17 +107,20 @@ const UserCms = () => {
       router.push(`/cms/user`);
     }
   };
-  if (!isSignedIn) return <p>You are not logged in</p>;
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Failed to load</p>;
+  if (!isSignedIn)
+    return <p data-testid="cms-user-page">You are not logged in</p>;
+  if (isLoading) return <p data-testid="cms-user-page">Loading...</p>;
+  if (error) return <p data-testid="cms-user-page">Failed to load</p>;
   return (
-    <TableCMS
-      columns={columns}
-      dataSource={dataSource}
-      nameButtonCreate={t("newUser")}
-      onDelete={handleOkFormDelete}
-      nameModalDelete="user"
-    />
+    <div data-testid="cms-user-page">
+      <TableCMS
+        columns={columns}
+        dataSource={dataSource}
+        nameButtonCreate={t("newUser")}
+        onDelete={handleOkFormDelete}
+        nameModalDelete="user"
+      />
+    </div>
   );
 };
 

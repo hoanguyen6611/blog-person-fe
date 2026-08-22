@@ -12,6 +12,7 @@ import { TableRowSelection } from "antd/es/table/interface";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import ImageShow from "@/components/Image";
 import { User } from "@/interface/User";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 interface DataType {
   _id: string;
@@ -21,6 +22,7 @@ interface DataType {
   createdAt: string;
 }
 const UserTable = () => {
+  useRequireAuth();
   const router = useRouter();
   const [isShowFormDelete, setIsShowFormDelete] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);

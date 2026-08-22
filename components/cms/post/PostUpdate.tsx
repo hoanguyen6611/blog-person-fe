@@ -14,7 +14,9 @@ import { toast } from "react-toastify";
 import Editor, { EditorHandle } from "@/components/Editor/Editor";
 import { useTableStore } from "@/store/useTableStore";
 import BackToTopButton from "@/components/BackToTopButton";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
 const PostUpdate = () => {
+  useRequireAuth();
   const params = useParams();
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
@@ -123,9 +125,12 @@ const PostUpdate = () => {
   if (!data) return <p>Post not found</p>;
 
   return (
-    <div className="h-full min-h-screen bg-gray-50 py-8 px-4 md:px-10">
-      <div className="max-w-6xl mx-auto bg-white p-6 md:p-10 rounded-xl shadow-lg space-y-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800">
+    <div
+      data-testid="post-update-page"
+      className="h-full min-h-screen bg-gray-50 py-8 px-4 md:px-10 dark:bg-gray-800 dark:text-gray-400"
+    >
+      <div className="max-w-6xl mx-auto bg-white p-6 md:p-10 rounded-xl shadow-lg space-y-8 dark:bg-gray-800">
+        <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-gray-400">
           📝 Update Post
         </h1>
         <form action="" className="space-y-6" onSubmit={handleSubmit}>
@@ -136,6 +141,7 @@ const PostUpdate = () => {
               type="image"
               buttonText="Change cover"
               onSuccess={(res) => setCover(res.filePath || "")}
+              testId="post-update-cover-image"
             />
             <div className="mt-2">
               <ImageShow
@@ -153,6 +159,7 @@ const PostUpdate = () => {
               className="w-full text-2xl font-semibold p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500 outline-none"
               placeholder="New Post title here..."
               defaultValue={data?.title}
+              data-testid="post-update-title-input"
             />
           </div>
           <div className="flex gap-3 items-end">
@@ -172,6 +179,7 @@ const PostUpdate = () => {
               className="w-full min-h-[100px] p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-500 outline-none"
               defaultValue={data?.desc}
               id="content"
+              data-testid="post-update-description-input"
             />
           </div>
 
@@ -182,6 +190,7 @@ const PostUpdate = () => {
                 type="image"
                 buttonText="Upload image"
                 onSuccess={(res) => setCoverImage(res.filePath || "")}
+                testId="post-update-content-image"
               />
               <UploadV1
                 type="video"
@@ -190,9 +199,10 @@ const PostUpdate = () => {
                 onProgress={(p) =>
                   console.log("Uploading...:", p.toFixed(0), "%")
                 }
+                testId="post-update-content-video"
               />
             </div>
-            <div className="md:col-span-3">
+            <div className="md:col-span-3" data-testid="post-update-editor-container">
               <Editor
                 ref={editorRef}
                 content={editorInitialContent}
@@ -206,6 +216,7 @@ const PostUpdate = () => {
               type="submit"
               disabled={isDisabledBtnSend}
               className="px-6 py-3 text-white bg-slate-700 hover:bg-slate-800 rounded-lg font-medium disabled:opacity-50"
+              data-testid="post-update-submit-button"
             >
               {isDisabledBtnSend ? "Updating..." : "Update Post"}
             </button>
