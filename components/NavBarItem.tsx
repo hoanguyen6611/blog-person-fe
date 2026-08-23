@@ -137,7 +137,9 @@ export const NotificationBell = ({
     ([url, token]) => fetcherWithTokenUseSWR(url, token)
   );
 
-  const list: Notification[] = notifications ?? [];
+  const list: Notification[] = Array.isArray(notifications)
+    ? notifications
+    : notifications?.notifications ?? [];
   const unreadCount = list.filter((n) => !n.isRead).length;
 
   const filtered = list.filter((n) => {

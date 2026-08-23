@@ -39,11 +39,17 @@ export default function NotificationsPage() {
     })();
   }, [getToken]);
 
-  const { data: notifications = [], mutate } = useSWR<Notification[]>(
+  const { data, mutate } = useSWR<
+    Notification[] | { notifications: Notification[] }
+  >(
     token
       ? ([`${process.env.NEXT_PUBLIC_API_URL}/notifications/all`, token] as const)
       : null,
     ([url, token]: readonly [string, string]) => fetcherWithTokenUseSWR(url, token)
+  );
+  const notifications: Notification[] = useMemo(
+    () => (Array.isArray(data) ? data : data?.notifications ?? []),
+    [data]
   );
 
   const markAsRead = async (id: string) => {
