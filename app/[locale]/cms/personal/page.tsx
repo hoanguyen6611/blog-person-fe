@@ -6,9 +6,12 @@ import useSWR from "swr";
 import { useEffect, useState } from "react";
 import FollowList from "@/components/FollowList";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { useTranslations } from "next-intl";
 
 const PersonalPage = () => {
   useRequireAuth();
+  const tCms = useTranslations("Cms");
+  const tSidebar = useTranslations("Sidebar");
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -52,12 +55,14 @@ const PersonalPage = () => {
     ([url, token]) => fetcherWithTokenUseSWR(url, token)
   );
   if (!isSignedIn)
-    return <p data-testid="cms-personal-not-logged-in">You are not logged in</p>;
+    return (
+      <p data-testid="cms-personal-not-logged-in">{tCms("notLoggedIn")}</p>
+    );
   return (
-    <div data-testid="cms-personal-page">
+    <div className="flex flex-col gap-5" data-testid="cms-personal-page">
       <div data-testid="cms-personal-dashboard-container">
         <DashBoard
-          name="Personal Statistics"
+          name={tSidebar("dashboardPersonal")}
           posts={posts}
           views={views}
           followers={data?.followers?.length}

@@ -21,7 +21,20 @@ export default function AntdThemeProvider({
   return (
     <ConfigProvider
       theme={{
-        token: { colorPrimary: isDark ? "#85a2ff" : "#2f5fe0" },
+        token: isDark
+          ? {
+              colorPrimary: "#3b6bff",
+              colorBgContainer: "#16181c",
+              colorBgElevated: "#1d2026",
+              colorBgLayout: "#0e1013",
+              colorBorder: "#32373e",
+              colorBorderSecondary: "#262a30",
+              colorText: "#edeef0",
+              colorTextSecondary: "#9da1aa",
+              colorTextTertiary: "#8a8e97",
+              colorTextPlaceholder: "#6e727a",
+            }
+          : { colorPrimary: "#003cff" },
         algorithm: isDark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
       }}
     >

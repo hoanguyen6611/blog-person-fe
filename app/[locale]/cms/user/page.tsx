@@ -23,6 +23,7 @@ interface DataType {
 const UserCms = () => {
   useRequireAuth();
   const t = useTranslations("UserTable");
+  const tCms = useTranslations("Cms");
   const router = useRouter();
   const [pagination, setPagination] = useState({
     current: 1,
@@ -108,7 +109,7 @@ const UserCms = () => {
     }
   };
   if (!isSignedIn)
-    return <p data-testid="cms-user-page">You are not logged in</p>;
+    return <p data-testid="cms-user-page">{tCms("notLoggedIn")}</p>;
   if (isLoading) return <p data-testid="cms-user-page">Loading...</p>;
   if (error) return <p data-testid="cms-user-page">Failed to load</p>;
   return (

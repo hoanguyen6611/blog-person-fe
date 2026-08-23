@@ -12,11 +12,11 @@ export default function CMSLayout({
   const isAdmin = user?.publicMetadata?.role === "admin" || false;
   return (
     <div
-      className="px-4 md:px-8 lg:px-16 lx:px-32 2xl:px-64"
+      className="mx-auto flex max-w-[1440px] items-start gap-6 px-4 md:px-6"
       data-testid="cms-layout"
     >
       <Siderbar admin={isAdmin} />
-      <div className="mt-4 flex flex-col gap-4 ml-[100px] w-full">
+      <div className="flex min-w-0 flex-1 flex-col gap-4 py-6">
         {children}
       </div>
     </div>

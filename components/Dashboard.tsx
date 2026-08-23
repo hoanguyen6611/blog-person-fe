@@ -6,11 +6,41 @@ import {
   FileText,
   Users,
   UserPlus,
+  CalendarClock,
 } from "lucide-react";
-import { Card, CardContent } from "./Card";
 import { useTranslations } from "next-intl";
+
+const StatCard = ({
+  label,
+  value,
+  icon,
+  testId,
+}: {
+  label: string;
+  value: React.ReactNode;
+  icon: React.ReactNode;
+  testId?: string;
+}) => (
+  <div
+    className="flex items-center justify-between rounded-2xl border border-line-soft bg-surface p-4 shadow-sm"
+    data-testid={testId}
+  >
+    <div className="flex flex-col gap-1">
+      <span className="font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
+        {label}
+      </span>
+      <span className="font-display text-2xl font-bold tracking-tight text-ink">
+        {value}
+      </span>
+    </div>
+    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-2 text-muted">
+      {icon}
+    </div>
+  </div>
+);
 type DashBoardProps = {
   name: string;
+  subtitle?: string;
   posts: {
     totalPosts: number;
   };
@@ -25,91 +55,93 @@ type DashBoardProps = {
   };
   followers?: number;
   following?: number;
+  scheduled?: number;
 };
 const DashBoard = ({
   name,
+  subtitle,
   posts,
   categories,
   views,
   users,
   followers,
   following,
+  scheduled,
 }: DashBoardProps) => {
   const t = useTranslations("Dashboard");
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl font-bold">📊 {name}</h1>
+    <div className="space-y-5">
+      <div>
+        <h1 className="font-display text-2xl font-bold tracking-tight text-ink">
+          {name}
+        </h1>
+        {subtitle && (
+          <p
+            className="font-meta text-sm text-faint"
+            data-testid="cms-dashboard-subtitle"
+          >
+            {subtitle}
+          </p>
+        )}
+      </div>
 
-      {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card data-testid="cms-dashboard-total-posts">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">{t("totalPosts")}</p>
-              <p className="text-xl font-semibold">{posts?.totalPosts}</p>
-            </div>
-            <FileText className="w-6 h-6 text-slate-600" />
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          testId="cms-dashboard-total-posts"
+          label={t("totalPosts")}
+          value={posts?.totalPosts}
+          icon={<FileText size={18} />}
+        />
 
         {users && (
-          <Card data-testid="cms-dashboard-total-users">
-            <CardContent className="p-4 flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500">{t("totalUsers")}</p>
-                <p className="text-xl font-semibold">{users?.totalUsers}</p>
-              </div>
-              <User className="w-6 h-6 text-green-600" />
-            </CardContent>
-          </Card>
+          <StatCard
+            testId="cms-dashboard-total-users"
+            label={t("totalUsers")}
+            value={users?.totalUsers}
+            icon={<User size={18} />}
+          />
         )}
 
         {categories && (
-          <Card data-testid="cms-dashboard-total-categories">
-            <CardContent className="p-4 flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500">{t("totalCategories")}</p>
-                <p className="text-xl font-semibold">
-                  {categories?.totalCategories}
-                </p>
-              </div>
-              <Shapes className="w-6 h-6 text-yellow-600" />
-            </CardContent>
-          </Card>
+          <StatCard
+            testId="cms-dashboard-total-categories"
+            label={t("totalCategories")}
+            value={categories?.totalCategories}
+            icon={<Shapes size={18} />}
+          />
         )}
 
         {views && (
-          <Card data-testid="cms-dashboard-total-views">
-            <CardContent className="p-4 flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500">{t("totalViews")}</p>
-                <p className="text-xl font-semibold">{views?.totalVisits}</p>
-              </div>
-              <BarChart className="w-6 h-6 text-red-600" />
-            </CardContent>
-          </Card>
+          <StatCard
+            testId="cms-dashboard-total-views"
+            label={t("totalViews")}
+            value={views?.totalVisits}
+            icon={<BarChart size={18} />}
+          />
         )}
         {(followers || followers === 0) && (
-          <Card data-testid="cms-dashboard-total-followers">
-            <CardContent className="p-4 flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500">{t("totalFollowers")}</p>
-                <p className="text-xl font-semibold">{followers}</p>
-              </div>
-              <Users className="w-6 h-6 " />
-            </CardContent>
-          </Card>
+          <StatCard
+            testId="cms-dashboard-total-followers"
+            label={t("totalFollowers")}
+            value={followers}
+            icon={<Users size={18} />}
+          />
         )}
         {(following || following === 0) && (
-          <Card data-testid="cms-dashboard-total-following">
-            <CardContent className="p-4 flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500">{t("totalFollowing")}</p>
-                <p className="text-xl font-semibold">{following}</p>
-              </div>
-              <UserPlus className="w-6 h-6" />
-            </CardContent>
-          </Card>
+          <StatCard
+            testId="cms-dashboard-total-following"
+            label={t("totalFollowing")}
+            value={following}
+            icon={<UserPlus size={18} />}
+          />
+        )}
+        {(scheduled || scheduled === 0) && (
+          <StatCard
+            testId="cms-dashboard-total-scheduled"
+            label={t("totalScheduled")}
+            value={scheduled}
+            icon={<CalendarClock size={18} />}
+          />
         )}
       </div>
     </div>

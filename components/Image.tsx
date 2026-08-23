@@ -1,5 +1,6 @@
 "use client";
 import { Image } from "@imagekit/next";
+import { cn } from "@/lib/utils";
 
 type ImageShowProps = {
   src: string;
@@ -18,7 +19,7 @@ const ImageShow = ({ src, width, height, alt, className }: ImageShowProps) => {
       width={width}
       height={height}
       alt={alt || altImage}
-      className={className}
+      className={cn(className, "dark-dim-image")}
       loading="lazy"
       transformation={[
         {

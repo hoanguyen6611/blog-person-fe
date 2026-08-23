@@ -8,15 +8,20 @@
     "greeting": "Hello {{name}}!",
     "exploreCategories": "Explore Categories",
     "featuredPosts": "Featured Posts",
-    "recentPosts": "Recent Posts"
+    "recentPosts": "Recent Posts",
+    "viewAll": "View all",
+    "trendingThisWeek": "Trending this week"
   },
   "MainCategories": {
-    "allPosts": "All Posts"
+    "allPosts": "All Posts",
+    "categoriesLabel": "Categories"
   },
   "Banner": {
     "title": "Transform ideas into impact.",
     "description": "Share your insights, inspire others, and stay ahead with technology.",
-    "startWriting": "Start Writing →"
+    "startWriting": "Start writing",
+    "explorePosts": "Explore posts",
+    "featuredBadge": "Featured"
   },
   "NavBar": {
     "home": "Home",
@@ -32,7 +37,15 @@
     "cms": "CMS",
     "info": "Information",
     "personal": "Personal",
-    "newPost": "New Post"
+    "newPost": "New Post",
+    "notificationSettings": "Settings",
+    "notificationsTitle": "Notifications",
+    "tabAll": "All",
+    "tabUnread": "Unread",
+    "tabComments": "Comments",
+    "groupToday": "Today",
+    "groupThisWeek": "This week",
+    "groupEarlier": "Earlier"
   },
   "Comments": {
     "title": "All comments",
@@ -44,6 +57,80 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "send": "Send"
+  },
+  "Cms": {
+    "notLoggedIn": "You are not logged in.",
+    "notAdmin": "You are not an admin.",
+    "searchPlaceholder": "Search...",
+    "tabAll": "All",
+    "postsSubtitle": "{count} posts · updated {time}",
+    "statusPublished": "Published",
+    "statusScheduled": "Scheduled",
+    "statusDraft": "Draft",
+    "statusActive": "Active",
+    "statusInactive": "Inactive",
+    "totalPublished": "Published",
+    "totalScheduled": "Scheduled",
+    "totalViews": "Views",
+    "selectedCount": "{count} selected",
+    "bulkDelete": "Delete",
+    "clearSelection": "Clear selection",
+    "bulkDeleteConfirmTitle": "Delete {count} items?",
+    "bulkDeleteConfirmBody": "This will permanently delete the selected {nameModalDelete} entries."
+  },
+  "NotificationsPage": {
+    "notSignedIn": "You are not logged in.",
+    "byType": "Notification type",
+    "allTypes": "All",
+    "type": {
+      "comment": "Comments",
+      "like": "Likes",
+      "follow": "Followers",
+      "post": "New posts"
+    },
+    "status": "Status",
+    "groupToday": "Today",
+    "groupThisWeek": "This week",
+    "groupEarlier": "Earlier",
+    "summary": "{unread} unread of {total} notifications",
+    "markRead": "Mark read"
+  },
+  "PostsPage": {
+    "title": "Development Blog",
+    "search": "Search",
+    "category": "Category",
+    "popularTags": "Popular tags",
+    "clearFilters": "Clear filters",
+    "filter": "Filter",
+    "close": "Close",
+    "sort": {
+      "trending": "Trending",
+      "popular": "Popular",
+      "newest": "Newest",
+      "oldest": "Oldest"
+    }
+  },
+  "Search": {
+    "placeholder": "Search posts, tags, authors…",
+    "tabPosts": "Posts",
+    "tabAuthors": "Authors",
+    "tabTags": "Tags",
+    "resultsCount": "{count} results · {time}s",
+    "recentSearches": "Recent searches",
+    "noResults": "No results for \"{query}\"",
+    "advancedSearch": "Advanced search",
+    "esc": "ESC"
+  },
+  "TabBar": {
+    "home": "Home",
+    "trending": "Trending",
+    "saved": "Saved",
+    "me": "Me"
+  },
+  "SavedPage": {
+    "title": "Saved posts",
+    "empty": "You haven't saved any posts yet.",
+    "browse": "Browse posts"
   },
   "AdvancedSearch": {
     "title": "Advanced Search",
@@ -69,7 +156,13 @@
     "gateLogin": "Log in",
     "gateBrowseOther": "Browse other posts",
     "gateNoAccount": "Don't have an account?",
-    "gateSignUp": "Sign up for free"
+    "gateSignUp": "Sign up for free",
+    "onThisPage": "On this page",
+    "continueReading": "Continue reading",
+    "wasHelpful": "Was this article helpful?",
+    "feedbackYes": "👍 Yes",
+    "feedbackUnsure": "Not sure",
+    "feedbackThanks": "Thanks for the feedback!"
   },
   "PostMenuActions": {
     "save": "Save this Post",
@@ -89,7 +182,8 @@
     "totalComments": "Total comments",
     "totalViews": "Total views",
     "totalFollowers": "Total followers",
-    "totalFollowing": "Total following"
+    "totalFollowing": "Total following",
+    "totalScheduled": "Scheduled"
   },
   "Sidebar": {
     "dashboard": "Dashboard",
@@ -102,7 +196,9 @@
     "myPosts": "My Posts",
     "myPostsSchedule": "My Posts Schedule",
     "savePost": "Save Post",
-    "tags": "Tags"
+    "tags": "Tags",
+    "writingStreak": "Writing streak",
+    "writingStreakBody": "{count, plural, =1 {1 week} other {# weeks}} in a row with a post."
   },
   "Statistic": {
     "title": "Statistic",
@@ -132,6 +228,7 @@
     "visit": "Visit",
     "category": "Category",
     "createdAt": "Created At",
+    "status": "Status",
     "action": "Action",
     "newPost": "New Post"
   },
@@ -166,6 +263,10 @@
   "AboutPage": {
     "tagline": "Frontend Developer & Tech Blogger",
     "intro": "I write about the things I build, break, and learn along the way — from everyday code to the tools and trends shaping modern web development.",
+    "statPosts": "posts",
+    "statCategories": "categories",
+    "statActiveSince": "active since",
+    "topicsLabel": "Topics on this blog",
     "ctaPosts": "Read the blog",
     "ctaInfo": "View full profile",
     "sectionTitle": "What you'll find here",

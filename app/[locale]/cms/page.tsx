@@ -2,12 +2,16 @@
 import useSWR from "swr";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../../../api/useswr";
 import DashBoard from "@/components/Dashboard";
+import TrafficStats from "@/components/TrafficStats";
 import { useUser, useAuth } from "@clerk/nextjs";
 import { useState } from "react";
 import Statistic from "@/components/Statistic";
+import { useTranslations } from "next-intl";
 
 const CMSPage = () => {
   const { user } = useUser();
+  const tCms = useTranslations("Cms");
+  const tSidebar = useTranslations("Sidebar");
   const isAdmin = user?.publicMetadata?.role === "admin" || false;
   const { data: posts } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/posts`,
@@ -40,19 +44,20 @@ const CMSPage = () => {
     }
   );
   if (!isAdmin) {
-    return <div data-testid="cms-not-admin">You are not admin</div>;
+    return <div data-testid="cms-not-admin">{tCms("notAdmin")}</div>;
   }
   return (
-    <div data-testid="cms-page">
+    <div className="flex flex-col gap-5" data-testid="cms-page">
       <div data-testid="cms-dashboard-container">
         <DashBoard
-          name="CMS Statistics"
+          name={tSidebar("dashboard")}
           posts={posts}
           categories={categories}
           views={views}
           users={users}
         />
       </div>
+      <TrafficStats days={30} />
       <div data-testid="cms-statistic-container">
         <Statistic />
       </div>

@@ -1,7 +1,9 @@
 "use client";
 import PostListItem from "./PostListItem";
+import PostCard from "./PostCard";
 import useSWR from "swr";
 import { Post } from "@/interface/Post";
+import { Category } from "@/interface/Category";
 import { PostListResponse } from "@/interface/APIResponse";
 import { Suspense } from "react";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../api/useswr";
@@ -17,6 +19,7 @@ interface PostListProps {
   apiUrl: string;
   showPagination?: boolean;
   useAuthToken?: boolean;
+  variant?: "row" | "grid";
 }
 
 type FetchKey = string | readonly ["authPosts", string];
@@ -25,11 +28,16 @@ const PostListContent = ({
   apiUrl,
   showPagination,
   useAuthToken,
+  variant = "row",
 }: PostListProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
   const { getToken } = useAuth();
+  const { data: categoriesData } = useSWR(
+    variant === "grid" ? `${process.env.NEXT_PUBLIC_API_URL}/category` : null,
+    fetcherUseSWR
+  );
 
   const pageIndex = Math.max(1, Number(searchParams.get(PAGE_PARAM)) || 1);
 
@@ -69,14 +77,28 @@ const PostListContent = ({
       </p>
     );
 
+  const categoryTitle = (post: Post) =>
+    categoriesData?.categories?.find((c: Category) => c._id === post.category)
+      ?.title;
+
   return (
-    <div
-      className="grid grid-cols-1 gap-5 mb-8 md:grid-cols-2 lg:grid-cols-3"
-      data-testid="post-list-container"
-    >
-      {(data?.posts || []).map((post: Post) => (
-        <PostListItem key={post._id} post={post} />
-      ))}
+    <div className="mb-8 flex flex-col gap-5">
+      <div
+        className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+        data-testid="post-list-container"
+      >
+        {(data?.posts || []).map((post: Post) =>
+          variant === "grid" ? (
+            <PostCard
+              key={post._id}
+              post={post}
+              categoryTitle={categoryTitle(post)}
+            />
+          ) : (
+            <PostListItem key={post._id} post={post} />
+          )
+        )}
+      </div>
       {showPagination && !!data && data.totalPages > 1 && (
         <Pagination
           currentPage={pageIndex}

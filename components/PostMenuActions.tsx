@@ -3,55 +3,30 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useRouter } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
 import { toast } from "react-toastify";
-import useSWR from "swr";
-import { fetcherWithTokenUseSWR } from "../api/useswr";
-import { DeleteOutlined, SaveOutlined, StarOutlined } from "@ant-design/icons";
+import { Star, Trash2 } from "lucide-react";
 import { Post } from "@/interface/Post";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
+
 const PostMenuActions = ({ post }: { post: Post }) => {
   const { getToken } = useAuth();
   const { user } = useUser();
   const router = useRouter();
-  const [isSaved, setIsSaved] = useState(true);
-  const [token, setToken] = useState<string | null>(null);
   const [isFeatured, setIsFeatured] = useState(post.isFeature);
   const t = useTranslations("PostMenuActions");
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  const activeColor = mounted && resolvedTheme === "dark" ? "#cbd5e1" : "#1e293b";
-  useEffect(() => {
-    (async () => {
-      const t = await getToken();
-      setToken(t);
-    })();
-  }, [getToken]);
+
   useEffect(() => {
     setIsFeatured(post.isFeature);
   }, [post]);
 
-  const { data: savedPosts, mutate } = useSWR(
-    () =>
-      token ? [`${process.env.NEXT_PUBLIC_API_URL}/users/saved`, token] : null,
-    ([url, token]) => fetcherWithTokenUseSWR(url, token)
-  );
-
-  const isSavedPost = savedPosts?.some(
-    (savedPost: string) => savedPost === post._id
-  );
   const isAdmin = user?.publicMetadata?.role === "admin" || false;
 
   const handleDeletePost = async () => {
     const token = await getToken();
     const res = await axios.delete(
       `${process.env.NEXT_PUBLIC_API_URL}/posts/${post._id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     if (res.status === 200) {
       toast.success("Delete post successfully");
@@ -59,29 +34,6 @@ const PostMenuActions = ({ post }: { post: Post }) => {
     }
   };
 
-  const handleSave = async () => {
-    setIsSaved(!isSaved);
-    if (!user) {
-      router.push("/login");
-      return;
-    }
-    const token = await getToken();
-    const res = await axios.patch(
-      `${process.env.NEXT_PUBLIC_API_URL}/users/save`,
-      {
-        postId: post._id,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    if (res.status === 200) {
-      await mutate();
-      toast.success(res.data || "Saved successfully");
-    }
-  };
   const featurePost = async () => {
     if (!user) {
       router.push("/login");
@@ -91,17 +43,10 @@ const PostMenuActions = ({ post }: { post: Post }) => {
     const token = await getToken();
     const res = await axios.patch(
       `${process.env.NEXT_PUBLIC_API_URL}/posts/feature`,
-      {
-        postId: post._id,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      { postId: post._id },
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     if (res.status === 200) {
-      await mutate();
       toast.success(
         res.data.isFeature
           ? "Featured post successfully"
@@ -109,43 +54,36 @@ const PostMenuActions = ({ post }: { post: Post }) => {
       );
     }
   };
+
+  if (!isAdmin && post?.user?.username !== user?.username) return null;
+
   return (
-    <div>
-      <h1 className="mt-8 mb-4 text-sm font-bold">Actions</h1>
-      <div
-        className="flex items-center gap-2 py-2 text-sm cursor-pointer"
-        onClick={handleSave}
-        data-testid="post-action-save-button"
-      >
-        <SaveOutlined
-          style={{ color: isSavedPost ? activeColor : "gray", fontSize: 32 }}
-        />
-        <span>{t("save")}</span>
-      </div>
+    <div className="flex items-center gap-2">
       {isAdmin && (
-        <div
-          className="flex items-center gap-2 py-2 text-sm cursor-pointer"
+        <button
+          type="button"
           onClick={featurePost}
+          aria-pressed={isFeatured}
           data-testid="post-action-feature-button"
+          className={cn(
+            "flex h-8 items-center gap-1.5 rounded-lg border border-line px-2.5 text-xs font-medium text-muted hover:text-ink",
+            isFeatured && "border-accent-soft bg-accent-soft text-accent"
+          )}
         >
-          <StarOutlined
-            style={{ color: isFeatured ? activeColor : "gray", fontSize: 32 }}
-          />
-          <span>{t("feature")}</span>
-        </div>
+          <Star size={13} fill={isFeatured ? "currentColor" : "none"} />
+          {t("feature")}
+        </button>
       )}
       {(post?.user?.username === user?.username || isAdmin) && (
-        <div
-          className="flex items-center gap-2 py-2 text-sm cursor-pointer text-red-500"
+        <button
+          type="button"
           onClick={handleDeletePost}
           data-testid="post-action-delete-button"
+          className="flex h-8 items-center gap-1.5 rounded-lg border border-line px-2.5 text-xs font-medium text-muted hover:border-red-200 hover:text-red-500"
         >
-          <DeleteOutlined
-            className="cursor-pointer"
-            style={{ color: "red", fontSize: "32px" }}
-          />
-          <span>{t("delete")}</span>
-        </div>
+          <Trash2 size={13} />
+          {t("delete")}
+        </button>
       )}
     </div>
   );

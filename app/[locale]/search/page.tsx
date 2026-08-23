@@ -11,12 +11,11 @@ import { User } from "@/interface/User";
 import { useTranslations } from "next-intl";
 import { CalendarDays, Search, SearchIcon } from "lucide-react";
 
-const fieldLabel =
-  "text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 block";
+const fieldLabel = "mb-1.5 block text-sm font-medium text-ink";
 const fieldInput =
-  "w-full h-11 rounded-xl border border-gray-300 bg-white pl-10 pr-3 text-sm text-gray-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-500/30 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100";
+  "w-full h-11 rounded-[10px] border border-line bg-surface pl-10 pr-3 text-sm text-ink outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20";
 const fieldIcon =
-  "pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400";
+  "pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint";
 
 export default function AdvancedSearchBar() {
   const [keyword, setKeyword] = useState("");
@@ -75,18 +74,16 @@ export default function AdvancedSearchBar() {
 
   return (
     <div className="mx-auto mt-6 max-w-5xl">
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-8">
+      <div className="rounded-2xl border border-line-soft bg-surface p-6 shadow-sm sm:p-8">
         <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700 dark:bg-slate-900/40 dark:text-slate-300">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-2 text-ink">
             <SearchIcon size={20} />
           </div>
           <div>
-            <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <h1 className="font-display text-lg font-bold tracking-tight text-ink">
               {t("title")}
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              {t("subtitle")}
-            </p>
+            <p className="text-sm text-muted">{t("subtitle")}</p>
           </div>
         </div>
 
@@ -159,7 +156,7 @@ export default function AdvancedSearchBar() {
 
         <button
           onClick={handleSearch}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-slate-600 py-3 font-semibold text-white transition hover:bg-slate-700 active:scale-[0.99]"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-[12px] bg-gradient-to-b from-accent to-accent-dark py-3 font-cta font-medium text-white transition hover:opacity-90 active:scale-[0.99]"
           data-testid="advanced-search-button"
         >
           <Search size={18} />

@@ -5,7 +5,7 @@ import { Category } from "@/interface/Category";
 import { Space, TableColumnsType } from "antd";
 import useSWR from "swr";
 import { format } from "date-fns";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { Replace } from "lucide-react";
 import { toast } from "react-toastify";
@@ -13,6 +13,7 @@ import axios from "axios";
 import { useTableStore } from "@/store/useTableStore";
 import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 interface DataType {
   _id: string;
@@ -22,6 +23,7 @@ interface DataType {
 }
 const CategoryPage = () => {
   const t = useTranslations("CategoryTable");
+  const tCms = useTranslations("Cms");
   const { user } = useUser();
   const router = useRouter();
   const { getToken } = useAuth();
@@ -41,7 +43,18 @@ const CategoryPage = () => {
       title: t("status"),
       dataIndex: "status",
       key: "status",
-      render: (text) => <>{text ? "Active" : "Inactive"}</>,
+      render: (text) => (
+        <span
+          className={cn(
+            "rounded-full px-2.5 py-0.5 text-xs font-semibold",
+            text
+              ? "bg-success-bg text-success"
+              : "bg-surface-2 text-muted"
+          )}
+        >
+          {text ? tCms("statusActive") : tCms("statusInactive")}
+        </span>
+      ),
     },
 
     {
@@ -57,18 +70,6 @@ const CategoryPage = () => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <button
-            className="text-slate-500"
-            data-testid={`cms-category-edit-button-${record._id}`}
-            // onClick={() => {
-            //   router.push(`/cms/edit/post/${record._id}`);
-            // }}
-          >
-            <EditOutlined
-              className="cursor-pointer"
-              style={{ fontSize: "16px" }}
-            />
-          </button>
           {isAdmin && (
             <button
               className="text-red-500"
@@ -83,7 +84,7 @@ const CategoryPage = () => {
           )}
           {isAdmin && (
             <button
-              className="text-green-300"
+              className="text-muted hover:text-ink"
               data-testid={`cms-category-toggle-status-button-${record._id}`}
               onClick={() => changeStatusCategory(record._id)}
             >

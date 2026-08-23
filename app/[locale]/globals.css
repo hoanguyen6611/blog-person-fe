@@ -1,33 +1,76 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Inter+Tight:wght@400;500;600&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-bg: #f5f6fa;
+  /* Blog Person Redesign tokens — see Blog Person Redesign.dc.html (Claude Design) */
+  --color-bg: #e9e9ed;
   --color-surface: #ffffff;
-  --color-surface-2: #eef1f7;
-  --color-line: #dde2ea;
-  --color-ink: #12151c;
-  --color-muted: #5b6472;
-  --color-accent: #2f5fe0;
-  --color-accent-soft: #e8edfc;
-  --color-accent-ink: #1f3fae;
+  --color-surface-2: #f3f3f3;
+  --color-page: #f9f9fb;
+  --color-line: #e2e2e4;
+  --color-line-soft: #f0f0f3;
+  --color-ink: #1c2024;
+  --color-muted: #6f6f77;
+  --color-faint: #8b8d98;
+  --color-faintest: #b9bbc6;
+  --color-accent: #003cff;
+  --color-accent-dark: #0638cd;
+  --color-accent-soft: #e5edff;
+  --color-accent-ink: #003cff;
+  --color-success: #16a34a;
+  --color-success-bg: #e8f8ee;
+  --color-warning: #b27c0a;
+  --color-warning-bg: #fef6e0;
+  --color-avatar-amber-bg: #fff8eb;
+  --color-avatar-amber-border: #f0cd86;
+  --color-avatar-amber-text: #8a6d2f;
+  --color-avatar-blue-bg: #e5edff;
+  --color-avatar-blue-text: #003cff;
+  --color-avatar-gray-bg: #f3f3f3;
+  --color-avatar-gray-text: #6f6f77;
 
-  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-meta: "Figtree", ui-sans-serif, system-ui, sans-serif;
+  --font-cta: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
+/* Dark mode — from "Dark mode + CMS chi tiết" (Blog Person Redesign.dc.html).
+   Layered by lightness, not shadow: canvas < surface < surface-2 (hover/
+   control fill). Never pure white text. Brand blue lifted to #3B6BFF for
+   4.5:1 contrast. Images should dim to 88% opacity (see .dark-dim-image). */
 .dark {
-  --color-bg: #0d0f14;
-  --color-surface: #171a21;
-  --color-surface-2: #1e222b;
-  --color-line: #2b3038;
-  --color-ink: #eef0f4;
-  --color-muted: #9aa2b1;
-  --color-accent: #85a2ff;
-  --color-accent-soft: #1e2740;
-  --color-accent-ink: #c3d0ff;
+  --color-bg: #0e1013;
+  --color-surface: #16181c;
+  --color-surface-2: #1d2026;
+  --color-page: #1a1d23;
+  --color-line: #32373e;
+  --color-line-soft: #262a30;
+  --color-ink: #edeef0;
+  --color-muted: #9da1aa;
+  --color-faint: #8a8e97;
+  --color-faintest: #6e727a;
+  --color-accent: #3b6bff;
+  --color-accent-dark: #2a55e8;
+  --color-accent-soft: #151f35;
+  --color-accent-ink: #7aa2ff;
+  --color-success: #4ade80;
+  --color-success-bg: #12291b;
+  --color-warning: #f0c55a;
+  --color-warning-bg: #2b2311;
+  --color-avatar-amber-bg: #2a2419;
+  --color-avatar-amber-border: #6b5a2e;
+  --color-avatar-amber-text: #e7c77e;
+  --color-avatar-blue-bg: #1b2438;
+  --color-avatar-blue-text: #7aa2ff;
+  --color-avatar-gray-bg: #232730;
+  --color-avatar-gray-text: #9da1aa;
+}
+
+.dark .dark-dim-image {
+  filter: brightness(0.88);
 }
 
 body {
@@ -60,6 +103,15 @@ body {
   color: var(--color-ink);
   font-size: 1.0625rem;
   line-height: 1.75;
+}
+[data-post-font-size="sm"] .post-content {
+  font-size: 0.9375rem;
+}
+[data-post-font-size="lg"] .post-content {
+  font-size: 1.1875rem;
+}
+[data-dim-images="off"] .dark-dim-image {
+  filter: none;
 }
 .post-content > * + * {
   margin-top: 1.25em;
@@ -94,14 +146,30 @@ body {
   margin-top: 0.4em;
 }
 .post-content blockquote {
-  border-left: 3px solid var(--color-line);
-  padding-left: 1em;
-  color: var(--color-muted);
-  font-style: italic;
+  border-left: 2px solid var(--color-accent);
+  padding: 0.2em 0 0.2em 1.15em;
+  font-size: 1.1em;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
 }
 .post-content img {
   border-radius: 1rem;
   max-width: 100%;
+}
+.post-content pre {
+  background: var(--color-ink);
+  border-radius: 0.75rem;
+  padding: 1.1em 1.25em;
+  overflow-x: auto;
+}
+.post-content pre code {
+  background: transparent;
+  padding: 0;
+  color: #e8e9ed;
+  font-size: 0.85em;
+  line-height: 1.7;
 }
 .post-content code {
   background: var(--color-surface-2);

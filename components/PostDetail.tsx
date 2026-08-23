@@ -1,40 +1,41 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import DOMPurify from "dompurify";
 import { Link } from "@/i18n/navigation";
 import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
 import { format } from "timeago.js";
 import { format as formatDate } from "date-fns";
-import { InstagramOutlined } from "@ant-design/icons";
-import { createFromIconfontCN } from "@ant-design/icons";
 
 import ImageShow from "@/components/Image";
 import PostMenuActions from "@/components/PostMenuActions";
-import SearchInput from "@/components/Search";
+import BookmarkButton from "@/components/BookmarkButton";
 import Comments from "@/components/Comments";
-import Categories from "@/components/Categories";
+import ArticleToc from "@/components/ArticleToc";
+import ReadingProgressBar from "@/components/ReadingProgressBar";
 
 import { fetcherUseSWR } from "@/api/useswr";
 import { Post } from "@/interface/Post";
 import { Category } from "@/interface/Category";
+import { RelatedPost } from "@/interface/RelatedPost";
 import { Tooltip } from "antd";
 import ShareButtons from "./ShareButtons";
 import RelatedPosts from "./RelatedPosts";
 import { Tag as TagInterface } from "@/interface/Tag";
 import { useTranslations } from "next-intl";
 import { getContentPreview } from "@/lib/contentPreview";
+import { addHeadingIds } from "@/lib/postContentToc";
 import { cn } from "@/lib/utils";
-
-const IconFont = createFromIconfontCN({
-  scriptUrl: "//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js",
-});
+import { useAppearanceSettings } from "@/hooks/useAppearanceSettings";
 
 export default function PostDetail({ post }: { post: Post }) {
   const { isSignedIn } = useAuth();
   const t = useTranslations("PostDetail");
   const tHome = useTranslations("HomePage");
+  const { settings } = useAppearanceSettings();
+  const showSidebars = !settings.focusMode;
+  const [feedback, setFeedback] = useState<"yes" | "unsure" | null>(null);
   const { data: categories } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
     fetcherUseSWR
@@ -55,42 +56,68 @@ export default function PostDetail({ post }: { post: Post }) {
   const preview = useMemo(() => getContentPreview(sanitized), [sanitized]);
   const canReadFull = !!isSignedIn;
 
+  const { html: contentWithIds, headings } = useMemo(
+    () => addHeadingIds(canReadFull ? sanitized : preview.html),
+    [canReadFull, sanitized, preview.html]
+  );
+
   const categoryTitle = categories?.categories.find(
     (cat: Category) => cat._id === post?.category
   )?.title;
   const tagNames = tags?.tags
     ?.filter((tag: TagInterface) => post.tags.includes(tag._id))
     .map((tag: TagInterface) => tag.name);
+  const readTeasers: RelatedPost[] = (relatedPosts?.relatedPosts ?? []).slice(0, 3);
 
   return (
     <div className="mb-10" data-testid="post-detail-page">
       <div className="container mx-auto px-4 lg:px-8">
-        <nav
-          aria-label="Breadcrumb"
-          className="flex items-center gap-2 pt-6 font-mono text-xs text-muted"
-        >
-          <Link href="/" className="hover:text-ink">
-            {tHome("home")}
-          </Link>
-          {categoryTitle && (
-            <>
-              <span>/</span>
-              <Link
-                href={`/posts?cat=${post?.category}`}
-                className="hover:text-ink"
-              >
-                {categoryTitle}
-              </Link>
-            </>
-          )}
-          <span>/</span>
-          <span className="truncate text-ink">{post.title}</span>
-        </nav>
+        <div className="flex items-center gap-3 pt-6">
+          <nav
+            aria-label="Breadcrumb"
+            className="flex min-w-0 flex-1 items-center gap-2 font-mono text-xs text-muted"
+          >
+            <Link href="/" className="hover:text-ink">
+              {tHome("home")}
+            </Link>
+            {categoryTitle && (
+              <>
+                <span>/</span>
+                <Link
+                  href={`/posts?cat=${post?.category}`}
+                  className="hover:text-ink"
+                >
+                  {categoryTitle}
+                </Link>
+              </>
+            )}
+            <span>/</span>
+            <span className="truncate text-ink">{post.title}</span>
+          </nav>
+          <div className="flex flex-none items-center gap-2">
+            <BookmarkButton postId={post._id} />
+            <ShareButtons title={post.title} />
+          </div>
+        </div>
       </div>
 
-      <div className="container mx-auto px-4 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <ReadingProgressBar />
+
+      <div
+        className={cn(
+          "container mx-auto px-4 lg:px-8 py-6 grid grid-cols-1 gap-10",
+          showSidebars ? "lg:grid-cols-[200px_1fr_260px]" : "lg:mx-auto lg:max-w-[680px]"
+        )}
+      >
+        {/* Table of contents */}
+        {showSidebars && (
+          <aside className="hidden lg:sticky lg:top-24 lg:block lg:self-start">
+            <ArticleToc headings={headings} label={t("onThisPage")} />
+          </aside>
+        )}
+
         {/* Main content */}
-        <div className="lg:col-span-8 flex flex-col gap-6">
+        <div className="flex flex-col gap-6">
           {/* Title & meta */}
           <div className="flex flex-col gap-4">
             {categoryTitle && (
@@ -105,7 +132,8 @@ export default function PostDetail({ post }: { post: Post }) {
             <h1 className="font-display text-3xl md:text-4xl font-extrabold leading-tight text-ink">
               {post.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-3">
+            <p className="text-muted">{post.desc}</p>
+            <div className="flex flex-wrap items-center gap-3 border-y border-line-soft py-3">
               <ImageShow
                 src={post?.user?.img}
                 alt={post.user?.username}
@@ -132,11 +160,11 @@ export default function PostDetail({ post }: { post: Post }) {
                   </span>
                 </Tooltip>
               </div>
+              <div className="ml-auto">
+                <PostMenuActions post={post} />
+              </div>
             </div>
-            <p className="text-muted">{post.desc}</p>
           </div>
-
-          <ShareButtons title={post.title} />
 
           {/* Cover Image */}
           {post?.img && (
@@ -157,9 +185,7 @@ export default function PostDetail({ post }: { post: Post }) {
                 preview.truncated &&
                 "[mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
             )}
-            dangerouslySetInnerHTML={{
-              __html: canReadFull ? sanitized : preview.html,
-            }}
+            dangerouslySetInnerHTML={{ __html: contentWithIds }}
           />
 
           {!canReadFull && (
@@ -218,78 +244,77 @@ export default function PostDetail({ post }: { post: Post }) {
               {tagNames.map((tag: string) => (
                 <span
                   key={tag}
-                  className="rounded-full bg-surface-2 px-3 py-1 font-mono text-xs text-muted"
+                  className="rounded-full border border-line px-3 py-1 text-xs text-muted"
                 >
-                  {tag}
+                  #{tag}
                 </span>
               ))}
+            </div>
+          )}
+
+          {canReadFull && (
+            <div className="flex items-center justify-between gap-4 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm">
+              <span className="text-sm text-muted">{t("wasHelpful")}</span>
+              {feedback ? (
+                <span className="text-sm font-medium text-accent-ink">
+                  {t("feedbackThanks")}
+                </span>
+              ) : (
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setFeedback("yes")}
+                    className="flex h-8 items-center rounded-lg border border-line px-3 text-xs font-medium text-ink"
+                    data-testid="post-detail-feedback-yes"
+                  >
+                    {t("feedbackYes")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFeedback("unsure")}
+                    className="flex h-8 items-center rounded-lg border border-line px-3 text-xs font-medium text-muted"
+                    data-testid="post-detail-feedback-unsure"
+                  >
+                    {t("feedbackUnsure")}
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
 
         {/* Sidebar */}
-        <aside className="lg:col-span-4 sticky top-24 self-start flex flex-col gap-6">
-          {/* Author box */}
-          <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
-            <h2 className="font-mono text-xs font-medium uppercase tracking-wide text-muted mb-3">
-              {t("author")}
-            </h2>
-            <div className="flex items-center gap-4 mb-3">
-              <ImageShow
-                src={post?.user?.img}
-                alt={post?.user?.username}
-                className="w-12 h-12 rounded-full object-cover"
-                width={48}
-                height={48}
-              />
-              <Link
-                href={`/user/${post?.user?._id}`}
-                className="text-ink font-semibold hover:text-accent-ink"
-              >
-                {post?.user?.username}
-              </Link>
+        {showSidebars && canReadFull && readTeasers.length > 0 && (
+          <aside className="hidden lg:sticky lg:top-24 lg:flex lg:flex-col lg:gap-3 lg:self-start">
+            <div className="rounded-2xl border border-line-soft bg-surface p-4 shadow-sm">
+              <span className="font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
+                {t("continueReading")}
+              </span>
+              <div className="mt-3 flex flex-col gap-3">
+                {readTeasers.map((rp, i) => (
+                  <div key={rp._id}>
+                    {i > 0 && <div className="mb-3 h-px bg-line-soft" />}
+                    <Link
+                      href={`/posts/${rp._id}`}
+                      className="text-sm font-semibold leading-snug tracking-tight text-ink hover:text-accent-ink"
+                    >
+                      {rp.title}
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex gap-3 mt-3">
-              <Link href="#">
-                <IconFont
-                  type="icon-facebook"
-                  className="text-xl"
-                  style={{ color: "#1877F2" }}
-                />
-              </Link>
-              <Link href="#">
-                <InstagramOutlined
-                  className="text-pink-500 text-xl"
-                  style={{ color: "#C13584" }}
-                />
-              </Link>
-            </div>
-          </div>
-
-          <PostMenuActions post={post} />
-
-          <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
-            <h2 className="font-mono text-xs font-medium uppercase tracking-wide text-muted mb-3">
-              {t("categories")}
-            </h2>
-            <Categories />
-          </div>
-
-          <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
-            <h2 className="font-mono text-xs font-medium uppercase tracking-wide text-muted mb-3">
-              {t("search")}
-            </h2>
-            <SearchInput />
-          </div>
-        </aside>
-
-        {/* Comments */}
-        {canReadFull && (
-          <div className="lg:col-span-12 mt-6">
-            <Comments postId={post?._id} />
-          </div>
+          </aside>
         )}
       </div>
+
+      {/* Comments — kept outside the sticky TOC/rail grid so the sticky
+          columns don't stay pinned past their own row and overlap it. */}
+      {canReadFull && (
+        <div className="container mx-auto px-4 py-6 lg:px-8">
+          <Comments postId={post?._id} />
+        </div>
+      )}
       {canReadFull && <RelatedPosts posts={relatedPosts?.relatedPosts} />}
     </div>
   );

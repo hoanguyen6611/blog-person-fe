@@ -8,15 +8,20 @@
     "greeting": "Xin chào {{name}}!",
     "exploreCategories": "Khám phá danh mục",
     "featuredPosts": "Bài viết nổi bật",
-    "recentPosts": "Bài viết gần đây"
+    "recentPosts": "Bài viết gần đây",
+    "viewAll": "Xem tất cả",
+    "trendingThisWeek": "Nổi bật tuần này"
   },
   "MainCategories": {
-    "allPosts": "Tất cả"
+    "allPosts": "Tất cả",
+    "categoriesLabel": "Danh mục"
   },
   "Banner": {
     "title": "Chuyển đổi ý tưởng thành tác động.",
     "description": "Chia sẻ ý tưởng của bạn, thúc đẩy người khác, và đứng đầu với công nghệ.",
-    "startWriting": "Bắt đầu viết →"
+    "startWriting": "Bắt đầu viết",
+    "explorePosts": "Khám phá bài viết",
+    "featuredBadge": "Nổi bật"
   },
   "NavBar": {
     "home": "Trang chủ",
@@ -32,7 +37,15 @@
     "cms": "Trang quản lý",
     "info": "Thông tin",
     "personal": "Trang cá nhân",
-    "newPost": "Bài viết mới"
+    "newPost": "Bài viết mới",
+    "notificationSettings": "Cài đặt",
+    "notificationsTitle": "Thông báo",
+    "tabAll": "Tất cả",
+    "tabUnread": "Chưa đọc",
+    "tabComments": "Bình luận",
+    "groupToday": "Hôm nay",
+    "groupThisWeek": "Tuần này",
+    "groupEarlier": "Trước đó"
   },
   "Comments": {
     "title": "Tất cả bình luận",
@@ -44,6 +57,80 @@
     "delete": "Xóa",
     "cancel": "Hủy",
     "send": "Gửi"
+  },
+  "Cms": {
+    "notLoggedIn": "Bạn chưa đăng nhập.",
+    "notAdmin": "Bạn không phải quản trị viên.",
+    "searchPlaceholder": "Tìm kiếm...",
+    "tabAll": "Tất cả",
+    "postsSubtitle": "{count} bài viết · cập nhật {time}",
+    "statusPublished": "Đã đăng",
+    "statusScheduled": "Hẹn giờ",
+    "statusDraft": "Nháp",
+    "statusActive": "Hoạt động",
+    "statusInactive": "Ngừng hoạt động",
+    "totalPublished": "Đã đăng",
+    "totalScheduled": "Hẹn giờ",
+    "totalViews": "Lượt xem",
+    "selectedCount": "Đã chọn {count}",
+    "bulkDelete": "Xoá",
+    "clearSelection": "Bỏ chọn",
+    "bulkDeleteConfirmTitle": "Xoá {count} mục?",
+    "bulkDeleteConfirmBody": "Hành động này sẽ xoá vĩnh viễn các {nameModalDelete} đã chọn."
+  },
+  "NotificationsPage": {
+    "notSignedIn": "Bạn chưa đăng nhập.",
+    "byType": "Loại thông báo",
+    "allTypes": "Tất cả",
+    "type": {
+      "comment": "Bình luận",
+      "like": "Lượt thích",
+      "follow": "Người theo dõi",
+      "post": "Bài viết mới"
+    },
+    "status": "Trạng thái",
+    "groupToday": "Hôm nay",
+    "groupThisWeek": "Tuần này",
+    "groupEarlier": "Trước đó",
+    "summary": "{unread} chưa đọc trong {total} thông báo",
+    "markRead": "Đánh dấu đã đọc"
+  },
+  "PostsPage": {
+    "title": "Blog kỹ thuật",
+    "search": "Tìm kiếm",
+    "category": "Danh mục",
+    "popularTags": "Thẻ phổ biến",
+    "clearFilters": "Xoá bộ lọc",
+    "filter": "Bộ lọc",
+    "close": "Đóng",
+    "sort": {
+      "trending": "Xu hướng",
+      "popular": "Phổ biến",
+      "newest": "Mới nhất",
+      "oldest": "Cũ nhất"
+    }
+  },
+  "Search": {
+    "placeholder": "Tìm bài viết, thẻ, tác giả…",
+    "tabPosts": "Bài viết",
+    "tabAuthors": "Tác giả",
+    "tabTags": "Thẻ",
+    "resultsCount": "{count} kết quả · {time}s",
+    "recentSearches": "Tìm gần đây",
+    "noResults": "Không có kết quả cho \"{query}\"",
+    "advancedSearch": "Tìm kiếm nâng cao",
+    "esc": "ESC"
+  },
+  "TabBar": {
+    "home": "Trang chủ",
+    "trending": "Xu hướng",
+    "saved": "Đã lưu",
+    "me": "Cá nhân"
+  },
+  "SavedPage": {
+    "title": "Bài viết đã lưu",
+    "empty": "Bạn chưa lưu bài viết nào.",
+    "browse": "Khám phá bài viết"
   },
   "AdvancedSearch": {
     "title": "Tìm kiếm nâng cao",
@@ -69,7 +156,13 @@
     "gateLogin": "Đăng nhập",
     "gateBrowseOther": "Xem bài viết khác",
     "gateNoAccount": "Chưa có tài khoản?",
-    "gateSignUp": "Đăng ký miễn phí"
+    "gateSignUp": "Đăng ký miễn phí",
+    "onThisPage": "Trong bài viết",
+    "continueReading": "Đọc tiếp",
+    "wasHelpful": "Bài viết này hữu ích chứ?",
+    "feedbackYes": "👍 Có",
+    "feedbackUnsure": "Chưa rõ",
+    "feedbackThanks": "Cảm ơn phản hồi của bạn!"
   },
   "PostMenuActions": {
     "save": "Lưu bài viết này",
@@ -89,7 +182,8 @@
     "totalComments": "Tổng số bình luận",
     "totalViews": "Tổng số lượt xem",
     "totalFollowers": "Tổng số người theo dõi",
-    "totalFollowing": "Tổng số người được theo dõi"
+    "totalFollowing": "Tổng số người được theo dõi",
+    "totalScheduled": "Hẹn giờ đăng"
   },
   "Sidebar": {
     "dashboard": "Bảng điều khiển",
@@ -102,7 +196,9 @@
     "myPosts": "Bài viết của tôi",
     "myPostsSchedule": "Bài viết đã lên lịch",
     "savePost": "Bài viết đã lưu",
-    "tags": "Thẻ"
+    "tags": "Thẻ",
+    "writingStreak": "Chuỗi viết bài",
+    "writingStreakBody": "{count} tuần liên tiếp có bài viết mới."
   },
   "Statistic": {
     "title": "Thống kê",
@@ -120,7 +216,9 @@
     "author": "Tác giả",
     "total": "Tổng số",
     "month": "Tháng",
-    "year": "Năm"
+    "year": "Năm",
+    "monthlyVisit": "Lượt truy cập theo tháng",
+    "numberOfVisit": "Số lượt truy cập"
   },
   "PostTable": {
     "image": "Hình ảnh",
@@ -130,6 +228,7 @@
     "visit": "Lượt xem",
     "category": "Danh mục",
     "createdAt": "Ngày tạo",
+    "status": "Trạng thái",
     "action": "Tác vụ",
     "newPost": "Thêm bài viết"
   },
@@ -164,6 +263,10 @@
   "AboutPage": {
     "tagline": "Frontend Developer & Người viết blog công nghệ",
     "intro": "Mình viết về những gì mình xây dựng, gặp lỗi và học được trên đường đi — từ những dòng code đời thường đến các công cụ, xu hướng đang định hình web hiện đại.",
+    "statPosts": "bài viết",
+    "statCategories": "danh mục",
+    "statActiveSince": "hoạt động từ",
+    "topicsLabel": "Chủ đề trên blog",
     "ctaPosts": "Đọc bài viết",
     "ctaInfo": "Xem hồ sơ đầy đủ",
     "sectionTitle": "Bạn sẽ tìm thấy gì ở đây",

@@ -9,7 +9,9 @@ import {
   UploadResponse,
 } from "@imagekit/next";
 import { Progress } from "antd";
+import { UploadCloud } from "lucide-react";
 import { useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 interface UploadProps {
   type?: string; // mime type group: image, video, etc.
@@ -37,9 +39,10 @@ const Upload = ({
   testId,
 }: UploadProps) => {
   const [progress, setProgress] = useState(0);
+  const [uploading, setUploading] = useState(false);
+  const [fileName, setFileName] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const abortController = new AbortController();
-  const [disabledBtnUpload, setDisabledBtnUpload] = useState(false);
 
   const authenticator = async () => {
     const response = await fetch(
@@ -53,13 +56,12 @@ const Upload = ({
   };
 
   const handleUpload = async () => {
-    setDisabledBtnUpload(true);
     const input = fileInputRef.current;
     if (!input?.files?.[0]) {
-      setDisabledBtnUpload(false);
-      alert("Please select a file to upload");
+      toast.error("Please select a file to upload");
       return;
     }
+    setUploading(true);
 
     const file = input.files[0];
 
@@ -93,48 +95,45 @@ const Upload = ({
             | ImageKitServerError
         );
       }
+    } finally {
+      setUploading(false);
     }
   };
 
   return (
     <div
-      className="space-y-2 flex flex-col items-center gap-2"
+      className="flex flex-col gap-2.5"
       data-testid={testId ? `${testId}-container` : "upload-container"}
     >
+      <button
+        type="button"
+        onClick={() => fileInputRef.current?.click()}
+        className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-line bg-page px-4 py-6 text-center transition-colors hover:border-accent"
+      >
+        <UploadCloud size={18} className="text-faint" />
+        <span className="text-sm text-muted">
+          {fileName || buttonText}
+        </span>
+      </button>
       <input
         accept={`${type}/*`}
         type="file"
         ref={fileInputRef}
+        onChange={(e) => setFileName(e.target.files?.[0]?.name ?? "")}
+        className="hidden"
         data-testid={testId ? `${testId}-input` : "upload-file-input"}
       />
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex items-center gap-3">
         <button
-          disabled={disabledBtnUpload}
+          disabled={uploading}
           onClick={handleUpload}
-          className="w-max p-3 px-5 rounded-lg bg-slate-500 text-white hover:bg-slate-600 text-sm"
+          className="flex h-9 items-center rounded-[10px] border border-line px-3.5 font-cta text-sm font-medium text-ink transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
           type="button"
           data-testid={testId ? `${testId}-button` : "upload-button"}
         >
-          {buttonText}
+          {uploading ? "Uploading..." : buttonText}
         </button>
-        {/* <>
-        <input
-          type="file"
-          accept={`${type}/*`}
-          ref={fileInputRef}
-          // onChange={handleFileChange}
-          style={{ display: "none" }}
-        />
-        <button
-          onClick={handleUpload}
-          className="w-max p-3 px-5 rounded-lg bg-slate-500 text-white hover:bg-slate-600 text-sm"
-          type="button"
-        >
-          {buttonText}
-        </button>
-      </> */}
-        {/* <progress className="block w-full" value={progress} max={100}></progress> */}
-        <Progress type="circle" percent={progress} size={50} />
+        {uploading && <Progress type="circle" percent={Math.round(progress)} size={28} />}
       </div>
       {children}
     </div>

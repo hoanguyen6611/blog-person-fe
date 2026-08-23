@@ -11,6 +11,7 @@ import { routing } from "@/i18n/routing";
 import { ThemeProvider } from "next-themes";
 import AntdThemeProvider from "@/components/AntdThemeProvider";
 import Footer from "@/components/Footer";
+import MobileTabBar from "@/components/MobileTabBar";
 
 export const metadata: Metadata = {
   title: "Blog Personal",
@@ -41,13 +42,14 @@ export default async function LocaleLayout({
             <NextIntlClientProvider locale={locale}>
               <AntdThemeProvider>
                 <NavBar />
-                <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+                <div className="px-4 pb-16 md:px-8 md:pb-0 lg:px-16 xl:px-32 2xl:px-64">
                   <main>
                     <Providers>{children}</Providers>
                     <ToastContainer position="top-right" />
                   </main>
                 </div>
                 <Footer />
+                <MobileTabBar />
               </AntdThemeProvider>
             </NextIntlClientProvider>
           </ThemeProvider>

@@ -6,7 +6,7 @@ import { Space, TableColumnsType } from "antd";
 import { useRouter } from "@/i18n/navigation";
 import useSWR from "swr";
 import { format } from "date-fns";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useTableStore } from "@/store/useTableStore";
 import axios from "axios";
@@ -23,6 +23,7 @@ interface DataType {
 const TagPage = () => {
   useRequireAuth();
   const t = useTranslations("TagTable");
+  const tCms = useTranslations("Cms");
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
   const { setIsShowFormDelete, setIdDelete } = useTableStore();
@@ -50,18 +51,6 @@ const TagPage = () => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <button
-            className="text-slate-500"
-            data-testid={`cms-tag-edit-button-${record._id}`}
-            onClick={() => {
-              router.push(`/cms/edit/post/${record._id}`);
-            }}
-          >
-            <EditOutlined
-              className="cursor-pointer"
-              style={{ fontSize: "16px" }}
-            />
-          </button>
           <button
             className="text-red-500"
             data-testid={`cms-tag-delete-button-${record._id}`}
@@ -115,7 +104,7 @@ const TagPage = () => {
     setIdDelete(id);
   };
   if (!isSignedIn)
-    return <p data-testid="cms-tag-page">You are not logged in</p>;
+    return <p data-testid="cms-tag-page">{tCms("notLoggedIn")}</p>;
   if (isLoading) return <p data-testid="cms-tag-page">Loading...</p>;
   if (error) return <p data-testid="cms-tag-page">Failed to load</p>;
   return (

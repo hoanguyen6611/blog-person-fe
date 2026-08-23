@@ -8,5 +8,6 @@ export interface Comment {
   createdAt: string;
   updatedAt: string;
   like: number;
+  status?: "pending" | "approved" | "hidden";
   replies?: Comment[];
 }

@@ -15,4 +15,6 @@ export interface Post {
   updatedAt: string;
   __v: number;
   img: string;
+  publishedAt?: string | null;
+  isPublished?: boolean;
 }

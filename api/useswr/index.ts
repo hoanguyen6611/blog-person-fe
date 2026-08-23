@@ -1,5 +1,6 @@
 export const fetcherWithTokenUseSWR = (url: string, token: string) =>
   fetch(url, {
+    credentials: "include",
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -8,4 +9,4 @@ export const fetcherWithTokenUseSWR = (url: string, token: string) =>
     return res.json();
   });
 export const fetcherUseSWR = (url: string) =>
-  fetch(url).then((res) => res.json());
+  fetch(url, { credentials: "include" }).then((res) => res.json());

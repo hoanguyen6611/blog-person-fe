@@ -2,12 +2,10 @@
 import { Suspense } from "react";
 import { Link } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
-import SearchInput from "./Search";
 import useSWR from "swr";
 import { fetcherUseSWR } from "@/api/useswr";
 import { Category } from "@/interface/Category";
 import { useTranslations } from "next-intl";
-import { FilterOutlined } from "@ant-design/icons";
 import HorizontalScroll from "./HorizontalScroll";
 import { cn } from "@/lib/utils";
 
@@ -73,29 +71,19 @@ const CategoryPills = () => {
 };
 
 const MainCategories = () => {
-  const tSearch = useTranslations("AdvancedSearch");
+  const t = useTranslations("MainCategories");
   return (
-    <div className="flex items-center justify-between gap-3 rounded-3xl border border-line bg-surface p-3 shadow-sm text-ink">
-      <div className="flex min-w-0 flex-1 items-center gap-2">
+    <div className="flex min-w-0 items-center gap-2">
+      <span className="shrink-0 font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
+        {t("categoriesLabel")}
+      </span>
+      <Suspense fallback={null}>
+        <AllPostsPill />
+      </Suspense>
+      <div className="min-w-0 flex-1">
         <Suspense fallback={null}>
-          <AllPostsPill />
+          <CategoryPills />
         </Suspense>
-        <div className="min-w-0 flex-1">
-          <Suspense fallback={null}>
-            <CategoryPills />
-          </Suspense>
-        </div>
-      </div>
-      <div className="hidden shrink-0 items-center gap-3 md:flex">
-        <SearchInput />
-        <Link
-          title={tSearch("title")}
-          href="/search"
-          className={cn(pillBase, pillInactive, "px-3")}
-          data-testid="main-categories-advanced-search-link"
-        >
-          <FilterOutlined />
-        </Link>
       </div>
     </div>
   );

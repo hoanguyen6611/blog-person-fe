@@ -17,6 +17,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import Dashboard from "@/components/Dashboard";
 
 interface DataType {
   _id: string;
@@ -31,6 +32,8 @@ interface DataType {
 const PostSchedulePage = () => {
   useRequireAuth();
   const t = useTranslations("PostTable");
+  const tCms = useTranslations("Cms");
+  const tSidebar = useTranslations("Sidebar");
   const pathname = usePathname();
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
@@ -101,12 +104,21 @@ const PostSchedulePage = () => {
       // sorter: (a, b) => format(new Date(a.createdAt), "dd/MM/yyyy") - b.createdAt,
     },
     {
+      title: tCms("statusScheduled"),
+      key: "status",
+      render: () => (
+        <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent-ink">
+          {tCms("statusScheduled")}
+        </span>
+      ),
+    },
+    {
       title: t("action"),
       key: "action",
       render: (_, record) => (
         <Space size="middle">
           <button
-            className="text-slate-500"
+            className="text-muted"
             data-testid={`cms-post-schedule-edit-button-${record._id}`}
             onClick={() => {
               router.push(`/cms/edit/post/${record._id}`);
@@ -176,18 +188,22 @@ const PostSchedulePage = () => {
     setIdDelete(id);
   };
   if (!isSignedIn)
-    return <p data-testid="cms-post-schedule-page">You are not logged in</p>;
+    return <p data-testid="cms-post-schedule-page">{tCms("notLoggedIn")}</p>;
   if (isLoading)
     return <p data-testid="cms-post-schedule-page">Loading...</p>;
   if (error)
     return <p data-testid="cms-post-schedule-page">Failed to load</p>;
   return (
-    <div data-testid="cms-post-schedule-page">
+    <div className="flex flex-col gap-5" data-testid="cms-post-schedule-page">
+      <Dashboard
+        name={tSidebar("myPostsSchedule")}
+        posts={{ totalPosts: data?.totalPosts ?? dataSource.length }}
+      />
       <TableCMS
         columns={columns}
         dataSource={dataSource}
         buttonCreate={true}
-        nameButtonCreate="New Post"
+        nameButtonCreate={t("newPost")}
         onDelete={handleDeletePost}
         nameModalDelete="post"
       />
