@@ -1,52 +1,65 @@
 "use client";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
-import ImageShow from "@/components/Image";
 import TableCMS, { BulkAction } from "@/components/Table";
-import { useAuth } from "@clerk/nextjs";
-import { Modal, Select, Space, TableColumnsType } from "antd";
+import { useAuth, UserButton } from "@clerk/nextjs";
+import { Dropdown, Modal, Select, TableColumnsType } from "antd";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import useSWR from "swr";
-import { format } from "date-fns";
 import { format as formatTimeAgo } from "timeago.js";
-import { DeleteOutlined, EditOutlined, SendOutlined } from "@ant-design/icons";
-import { Shapes, Tag as TagIcon, Send } from "lucide-react";
+import { MoreOutlined } from "@ant-design/icons";
+import { Plus, Search, Shapes, Tag as TagIcon, Send } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Category } from "@/interface/Category";
 import { Tag } from "@/interface/Tag";
 import { Post } from "@/interface/Post";
 import { useTableStore } from "@/store/useTableStore";
-import { User } from "@/interface/User";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
-import Dashboard from "@/components/Dashboard";
 
-interface DataType {
-  _id: string;
-  title: string;
-  description: number;
-  category: string;
-  createdAt: string;
-  updatedAt: string;
-  slug: string;
-  visit: number;
-  user: User;
+interface DataType extends Post {
+  key: string;
+  categoryName?: string;
   postStatus: "published" | "scheduled" | "draft";
 }
 
-type TabKey = "all" | "published" | "scheduled" | "draft";
+type TabKey = "all" | "published" | "draft";
+type SortOrder = "newest" | "oldest";
+
+const StatCard = ({
+  label,
+  value,
+  testId,
+}: {
+  label: string;
+  value: string | number;
+  testId: string;
+}) => (
+  <div
+    className="flex flex-col gap-1.5 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm"
+    data-testid={testId}
+  >
+    <span className="font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
+      {label}
+    </span>
+    <span className="font-display text-2xl font-bold tracking-tight text-ink">
+      {value}
+    </span>
+  </div>
+);
 
 const PostPage = () => {
   useRequireAuth();
   const pathname = usePathname();
   const t = useTranslations("PostTable");
   const tCms = useTranslations("Cms");
-  const tSidebar = useTranslations("Sidebar");
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
   const { setIsShowFormDelete, setIdDelete } = useTableStore();
   const [activeTab, setActiveTab] = useState<TabKey>("all");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
+  const [searchQuery, setSearchQuery] = useState("");
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -59,6 +72,29 @@ const PostPage = () => {
   const { data: tagsData } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/tags`,
     fetcherUseSWR
+  );
+  const { data: followData } = useSWR(
+    isSignedIn ? ["follow-stats"] : null,
+    async () => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/follow`,
+        token!
+      );
+    }
+  );
+  // Admin-only endpoint — silently unavailable for regular authors, falls
+  // back to "—" in the stat card below rather than showing a stale number.
+  const { data: trafficData } = useSWR(
+    isSignedIn ? ["traffic-stats-30d"] : null,
+    async () => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/stats/traffic?days=30`,
+        token!
+      );
+    },
+    { shouldRetryOnError: false }
   );
   const { data: scheduleData, mutate: mutateSchedule } = useSWR(
     isSignedIn ? ["schedule-list"] : null,
@@ -101,125 +137,7 @@ const PostPage = () => {
   const refreshAll = async () => {
     await Promise.all([mutate(), mutateSchedule(), mutateDraft()]);
   };
-  const columns: TableColumnsType<DataType> = [
-    {
-      title: t("image"),
-      dataIndex: "img",
-      key: "img",
-      render: (text) => (
-        <>
-          <ImageShow
-            src={text}
-            alt={text}
-            className="w-10 h-10"
-            width={100}
-            height={100}
-          />
-        </>
-      ),
-    },
-    {
-      title: t("title"),
-      dataIndex: "title",
-      key: "title",
-    },
-    {
-      title: t("description"),
-      dataIndex: "desc",
-      key: "desc",
-    },
-    {
-      title: t("author"),
-      dataIndex: "user",
-      key: "user",
-      render: (text) => <>{text.username}</>,
-    },
-    {
-      title: t("visit"),
-      dataIndex: "visit",
-      key: "visit",
-    },
-    {
-      title: t("category"),
-      dataIndex: "categoryName",
-      key: "categoryName",
-      filters: categories?.categories.map((category: Category) => ({
-        text: category.title,
-        value: category._id,
-      })),
-      onFilter: (value, record) => record.category === value,
-    },
-    {
-      title: t("createdAt"),
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (text) => <>{format(new Date(text), "dd/MM/yyyy")}</>,
-      //   defaultSortOrder: 'descend',
-      // sorter: (a, b) => format(new Date(a.createdAt), "dd/MM/yyyy") - b.createdAt,
-    },
-    {
-      title: t("status"),
-      dataIndex: "postStatus",
-      key: "status",
-      render: (postStatus: DataType["postStatus"]) =>
-        postStatus === "scheduled" ? (
-          <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent-ink">
-            {tCms("statusScheduled")}
-          </span>
-        ) : postStatus === "draft" ? (
-          <span className="rounded-full bg-surface-2 px-2.5 py-0.5 text-xs font-semibold text-muted">
-            {tCms("statusDraft")}
-          </span>
-        ) : (
-          <span className="rounded-full bg-success-bg px-2.5 py-0.5 text-xs font-semibold text-success">
-            {tCms("statusPublished")}
-          </span>
-        ),
-    },
-    {
-      title: t("action"),
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          {record.postStatus === "draft" && (
-            <button
-              className="text-accent"
-              data-testid={`cms-posts-publish-button-${record._id}`}
-              onClick={() => handlePublishDraft(record._id)}
-              title={tCms("statusPublished")}
-            >
-              <SendOutlined
-                className="cursor-pointer"
-                style={{ fontSize: "16px" }}
-              />
-            </button>
-          )}
-          <button
-            className="text-muted"
-            data-testid={`cms-posts-edit-button-${record._id}`}
-            onClick={() => {
-              router.push(`/cms/edit/post/${record._id}`);
-            }}
-          >
-            <EditOutlined
-              className="cursor-pointer"
-              style={{ fontSize: "16px" }}
-            />
-          </button>
-          <button
-            className="text-red-500"
-            data-testid={`cms-posts-delete-button-${record._id}`}
-            onClick={() => showFormDelete(record._id)}
-          >
-            <DeleteOutlined
-              className="cursor-pointer"
-              style={{ fontSize: "16px" }}
-            />
-          </button>
-        </Space>
-      ),
-    },
-  ];
+
   const { data, error, isLoading, mutate } = useSWR(
     isSignedIn
       ? [`fetch-user-posts`, pagination.current, pagination.pageSize]
@@ -236,7 +154,7 @@ const PostPage = () => {
     mutate(); // force revalidation
   }, [pathname]);
 
-  const toRow = (post: Post, postStatus: DataType["postStatus"]) => ({
+  const toRow = (post: Post, postStatus: DataType["postStatus"]): DataType => ({
     key: post._id,
     categoryName: categories?.categories.find(
       (category: Category) => category._id === post.category
@@ -257,22 +175,33 @@ const PostPage = () => {
   const totalPublished = data?.totalPosts ?? publishedRows.length;
   const totalScheduled = scheduleData?.totalPosts ?? scheduledRows.length;
   const totalDraft = draftData?.totalPosts ?? draftRows.length;
+  // "Nháp" groups true drafts with scheduled-but-not-live posts — both are
+  // "not published yet", each still shown with its own status badge.
+  const unpublishedRows = [...draftRows, ...scheduledRows];
+  const totalUnpublished = totalDraft + totalScheduled;
+  const followersCount = followData?.followers?.length;
 
-  const dataSource =
+  const tabRows =
     activeTab === "published"
       ? publishedRows
-      : activeTab === "scheduled"
-      ? scheduledRows
       : activeTab === "draft"
-      ? draftRows
-      : [...publishedRows, ...scheduledRows, ...draftRows];
+      ? unpublishedRows
+      : [...publishedRows, ...unpublishedRows];
 
-  const totalViews = (data?.posts ?? []).reduce(
-    (sum: number, post: Post) => sum + (post.visit ?? 0),
-    0
-  );
+  const searchedRows = (() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return tabRows;
+    return tabRows.filter((row: DataType) =>
+      JSON.stringify(row).toLowerCase().includes(q)
+    );
+  })();
 
-  const latestUpdatedAt = [...publishedRows, ...scheduledRows, ...draftRows].reduce(
+  const dataSource = [...searchedRows].sort((a, b) => {
+    const diff = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    return sortOrder === "newest" ? -diff : diff;
+  });
+
+  const latestUpdatedAt = [...publishedRows, ...unpublishedRows].reduce(
     (latest: string | null, row: DataType) => {
       const candidate = row.updatedAt || row.createdAt;
       if (!candidate) return latest;
@@ -428,66 +357,203 @@ const PostPage = () => {
     label: tag.name,
   }));
 
+  const columns: TableColumnsType<DataType> = [
+    {
+      title: t("title"),
+      dataIndex: "title",
+      key: "title",
+    },
+    {
+      title: t("category"),
+      dataIndex: "categoryName",
+      key: "categoryName",
+      filters: categories?.categories.map((category: Category) => ({
+        text: category.title,
+        value: category._id,
+      })),
+      onFilter: (value, record) => record.category === value,
+    },
+    {
+      title: t("status"),
+      dataIndex: "postStatus",
+      key: "status",
+      render: (postStatus: DataType["postStatus"]) =>
+        postStatus === "scheduled" ? (
+          <span className="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent-ink">
+            {tCms("statusScheduled")}
+          </span>
+        ) : postStatus === "draft" ? (
+          <span className="rounded-full bg-surface-2 px-2.5 py-0.5 text-xs font-semibold text-muted">
+            {tCms("statusDraft")}
+          </span>
+        ) : (
+          <span className="rounded-full bg-success-bg px-2.5 py-0.5 text-xs font-semibold text-success">
+            {tCms("statusPublished")}
+          </span>
+        ),
+    },
+    {
+      title: t("visit"),
+      dataIndex: "visit",
+      key: "visit",
+    },
+    {
+      title: t("action"),
+      key: "action",
+      render: (_, record) => (
+        <Dropdown
+          trigger={["click"]}
+          menu={{
+            items: [
+              {
+                key: "edit",
+                label: tCms("actionEdit"),
+                onClick: () => router.push(`/cms/edit/post/${record._id}`),
+              },
+              ...(record.postStatus !== "published"
+                ? [
+                    {
+                      key: "publish",
+                      label: tCms("actionPublish"),
+                      onClick: () => handlePublishDraft(record._id),
+                    },
+                  ]
+                : []),
+              {
+                key: "delete",
+                label: tCms("bulkDelete"),
+                danger: true,
+                onClick: () => showFormDelete(record._id),
+              },
+            ],
+          }}
+        >
+          <button
+            type="button"
+            className="flex h-7 w-7 items-center justify-center rounded-lg text-muted hover:bg-surface-2 hover:text-ink"
+            data-testid={`cms-posts-row-menu-${record._id}`}
+          >
+            <MoreOutlined style={{ fontSize: "16px" }} />
+          </button>
+        </Dropdown>
+      ),
+    },
+  ];
+
   if (!isSignedIn)
-    return (
-      <p data-testid="cms-posts-page">{tCms("notLoggedIn")}</p>
-    );
-  if (isLoading)
-    return <p data-testid="cms-posts-page">Loading...</p>;
-  if (error)
-    return <p data-testid="cms-posts-page">Failed to load</p>;
+    return <p data-testid="cms-posts-page">{tCms("notLoggedIn")}</p>;
+  if (isLoading) return <p data-testid="cms-posts-page">Loading...</p>;
+  if (error) return <p data-testid="cms-posts-page">Failed to load</p>;
+
   const tabs: { key: TabKey; label: string; count: number }[] = [
     {
       key: "all",
       label: tCms("tabAll"),
-      count: totalPublished + totalScheduled + totalDraft,
+      count: totalPublished + totalUnpublished,
     },
     { key: "published", label: tCms("statusPublished"), count: totalPublished },
-    { key: "scheduled", label: tCms("statusScheduled"), count: totalScheduled },
-    { key: "draft", label: tCms("statusDraft"), count: totalDraft },
+    { key: "draft", label: tCms("statusDraft"), count: totalUnpublished },
   ];
 
   return (
     <div className="flex flex-col gap-5" data-testid="cms-posts-page">
-      <Dashboard
-        name={tSidebar("myPosts")}
-        subtitle={
-          latestUpdatedAt
-            ? tCms("postsSubtitle", {
-                count: totalPublished + totalScheduled,
-                time: formatTimeAgo(latestUpdatedAt),
-              })
-            : undefined
-        }
-        posts={{ totalPosts: totalPublished }}
-        views={{ totalVisits: totalViews }}
-        scheduled={totalScheduled}
-      />
-      <div
-        className="flex items-center gap-1 border-b border-line-soft"
-        data-testid="cms-posts-tabs"
-      >
-        {tabs.map((tab) => (
-          <button
-            key={tab.key}
-            type="button"
-            onClick={() => setActiveTab(tab.key)}
-            className={`px-3 py-2 text-sm font-medium transition-colors ${
-              activeTab === tab.key
-                ? "border-b-2 border-accent text-ink"
-                : "text-muted hover:text-ink"
-            }`}
-            data-testid={`cms-posts-tab-${tab.key}`}
-          >
-            {tab.label} {tab.count}
-          </button>
-        ))}
+      {/* Header: search + create + avatar */}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex h-10 min-w-[260px] flex-1 items-center gap-2 rounded-[10px] bg-surface-2 px-3">
+          <Search size={15} className="text-faint" />
+          <input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={tCms("searchMyPosts")}
+            className="w-full bg-transparent text-sm text-ink outline-none placeholder:text-faint"
+            data-testid="cms-posts-search-input"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={() => router.push("/write")}
+          className="flex h-10 shrink-0 items-center gap-1.5 rounded-[10px] bg-gradient-to-b from-accent to-accent-dark px-4 font-cta text-sm font-medium text-white hover:opacity-90"
+          data-testid="cms-posts-create-button"
+        >
+          <Plus size={15} />
+          {t("newPost")}
+        </button>
+        <UserButton afterSignOutUrl="/" />
       </div>
+
+      {/* Compact stat cards */}
+      <div
+        className="grid grid-cols-2 gap-4 lg:grid-cols-4"
+        data-testid="cms-posts-stats"
+      >
+        <StatCard
+          label={tCms("totalPublished")}
+          value={totalPublished}
+          testId="cms-posts-stat-published"
+        />
+        <StatCard
+          label={tCms("statusDraft")}
+          value={totalUnpublished}
+          testId="cms-posts-stat-draft"
+        />
+        <StatCard
+          label={tCms("views30Days")}
+          value={trafficData?.totalViews?.toLocaleString("vi-VN") ?? "—"}
+          testId="cms-posts-stat-views"
+        />
+        <StatCard
+          label={tCms("followersLabel")}
+          value={followersCount?.toLocaleString("vi-VN") ?? "—"}
+          testId="cms-posts-stat-followers"
+        />
+      </div>
+      {latestUpdatedAt && (
+        <p
+          className="font-meta text-xs text-faint"
+          data-testid="cms-posts-subtitle"
+        >
+          {tCms("postsSubtitle", {
+            count: totalPublished + totalUnpublished,
+            time: formatTimeAgo(latestUpdatedAt),
+          })}
+        </p>
+      )}
+
+      {/* Tabs + sort */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line-soft">
+        <div className="flex items-center gap-1" data-testid="cms-posts-tabs">
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              type="button"
+              onClick={() => setActiveTab(tab.key)}
+              className={`px-3 py-2 text-sm font-medium transition-colors ${
+                activeTab === tab.key
+                  ? "border-b-2 border-accent text-ink"
+                  : "text-muted hover:text-ink"
+              }`}
+              data-testid={`cms-posts-tab-${tab.key}`}
+            >
+              {tab.label} {tab.count}
+            </button>
+          ))}
+        </div>
+        <Select
+          value={sortOrder}
+          onChange={(value) => setSortOrder(value)}
+          options={[
+            { value: "newest", label: tCms("sortNewest") },
+            { value: "oldest", label: tCms("sortOldest") },
+          ]}
+          className="w-36"
+          data-testid="cms-posts-sort-select"
+        />
+      </div>
+
       <TableCMS
         columns={columns}
         dataSource={dataSource}
-        buttonCreate={true}
-        nameButtonCreate={t("newPost")}
+        showToolbar={false}
         onDelete={handleDeletePost}
         onBulkDelete={handleBulkDeleteReal}
         extraBulkActions={extraBulkActions}

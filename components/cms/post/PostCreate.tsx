@@ -24,6 +24,7 @@ import BackToTopButton from "@/components/BackToTopButton";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { countWords } from "@/lib/wordCount";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface FormPost {
   title: string;
@@ -41,6 +42,7 @@ const modalInputClass =
 
 const PostCreate = () => {
   useRequireAuth();
+  const t = useTranslations("PostCreate");
   const { isLoaded, isSignedIn } = useUser();
   const [isDisabledBtnSend, setIsDisabledBtnSend] = useState(false);
   const router = useRouter();
@@ -103,21 +105,21 @@ const PostCreate = () => {
   const wordCount = useMemo(() => countWords(post), [post]);
   const checklist = useMemo(
     () => [
-      { key: "title", label: "Tiêu đề", done: !!title },
-      { key: "content", label: "Nội dung > 300 từ", done: wordCount > 300 },
-      { key: "category", label: "Danh mục", done: !!nameCategory },
-      { key: "cover", label: "Ảnh bìa", done: !!cover },
-      { key: "desc", label: "Mô tả ngắn", done: !!desc },
+      { key: "title", label: t("checklistTitle"), done: !!title },
+      { key: "content", label: t("checklistContent"), done: wordCount > 300 },
+      { key: "category", label: t("checklistCategory"), done: !!nameCategory },
+      { key: "cover", label: t("checklistCover"), done: !!cover },
+      { key: "desc", label: t("checklistDesc"), done: !!desc },
     ],
-    [title, wordCount, nameCategory, cover, desc]
+    [t, title, wordCount, nameCategory, cover, desc]
   );
   const doneCount = checklist.filter((c) => c.done).length;
 
   if (!isLoaded) {
-    return <div className="py-16 text-center text-sm text-muted">Loading</div>;
+    return <div className="py-16 text-center text-sm text-muted">{t("loading")}</div>;
   }
   if (!isLoaded || !isSignedIn) {
-    return <div className="py-16 text-center text-sm text-muted">You should login</div>;
+    return <div className="py-16 text-center text-sm text-muted">{t("loginRequired")}</div>;
   }
 
   const handleOkTag = async () => {
@@ -137,12 +139,12 @@ const PostCreate = () => {
       }
     );
     if (res.status === 201) {
-      toast.success("Name tag created successfully");
+      toast.success(t("toastTagCreated"));
       setIsModalOpenTag(false);
       await mutateTags();
       setNameTag("");
     } else {
-      toast.error("Name tag created failed");
+      toast.error(t("toastTagFailed"));
     }
   };
 
@@ -163,12 +165,12 @@ const PostCreate = () => {
       }
     );
     if (res.status === 201) {
-      toast.success("Category created successfully");
+      toast.success(t("toastCategoryCreated"));
       setIsModalOpen(false);
       await mutate();
       setNameCategory("");
     } else {
-      toast.error("Category created failed");
+      toast.error(t("toastCategoryFailed"));
     }
   };
 
@@ -198,17 +200,17 @@ const PostCreate = () => {
       });
       setContentCreatePost("");
       if (mode === "draft") {
-        toast.success("Đã lưu nháp");
+        toast.success(t("toastDraftSaved"));
         router.push(`/cms/posts`);
       } else if (mode === "schedule") {
-        toast.success("Đã tạo bài và hẹn giờ đăng");
+        toast.success(t("toastScheduled"));
         router.push(`/cms/posts/schedule`);
       } else {
-        toast.success("Đã đăng bài");
+        toast.success(t("toastPublished"));
         router.push(`/posts/${res.data._id}`);
       }
     } else {
-      toast.error("Post updated failed");
+      toast.error(t("toastUpdateFailed"));
     }
   };
 
@@ -222,15 +224,15 @@ const PostCreate = () => {
       tags: tags,
     };
     if (!dataForm.title) {
-      toast.error("The title field is required");
+      toast.error(t("errorTitleRequired"));
       return null;
     }
     if (!dataForm.category) {
-      toast.error("The category field is required");
+      toast.error(t("errorCategoryRequired"));
       return null;
     }
     if (!dataForm.content) {
-      toast.error("The content field is required");
+      toast.error(t("errorContentRequired"));
       return null;
     }
     return dataForm;
@@ -303,7 +305,7 @@ const PostCreate = () => {
     const dataForm = buildBaseForm();
     if (!dataForm) return;
     if (!publishedAt) {
-      toast.error("Vui lòng chọn thời gian đăng");
+      toast.error(t("errorScheduleTimeRequired"));
       return;
     }
     setIsDisabledBtnSend(true);
@@ -316,10 +318,10 @@ const PostCreate = () => {
         {/* Top bar */}
         <div className="mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-line-soft bg-surface px-4 py-3 shadow-sm">
           <span className="font-display text-base font-bold tracking-tight text-ink">
-            {title || "New post"}
+            {title || t("newPostTitle")}
           </span>
           <span className="ml-auto font-meta text-xs text-faint">
-            {wordCount} từ
+            {wordCount} {t("wordCountSuffix")}
           </span>
         </div>
 
@@ -331,12 +333,12 @@ const PostCreate = () => {
               name="title"
               onChange={changeTitle}
               className="w-full font-display text-2xl font-bold text-ink outline-none placeholder:text-faintest md:text-3xl"
-              placeholder="New post title here..."
+              placeholder={t("titlePlaceholder")}
               data-testid="post-create-title-input"
             />
             <textarea
               name="desc"
-              placeholder="Thêm mô tả ngắn (hiện ở trang chủ và kết quả tìm kiếm)…"
+              placeholder={t("descPlaceholder")}
               className="min-h-[56px] w-full resize-none text-lg text-muted outline-none placeholder:text-faintest"
               onChange={(e) => {
                 setFormData((prev) => ({ ...prev, desc: e.target.value }));
@@ -350,13 +352,13 @@ const PostCreate = () => {
             <div className="flex flex-wrap items-center gap-2">
               <UploadV1
                 type="image"
-                buttonText="Chèn ảnh"
+                buttonText={t("insertImage")}
                 onSuccess={(res) => setCoverImage(res.filePath || "")}
                 testId="post-create-content-image"
               />
               <UploadV1
                 type="video"
-                buttonText="Chèn video"
+                buttonText={t("insertVideo")}
                 onSuccess={(res) => setCoverVideo(res.filePath || "")}
                 testId="post-create-content-video"
               />
@@ -377,7 +379,7 @@ const PostCreate = () => {
             <div className="rounded-2xl border border-line-soft bg-surface p-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <span className="text-[13px] font-bold text-ink">
-                  Sẵn sàng xuất bản
+                  {t("readyToPublish")}
                 </span>
                 <span className="font-meta text-xs text-muted">
                   {doneCount}/{checklist.length}
@@ -416,11 +418,11 @@ const PostCreate = () => {
             {/* Cover image */}
             <div className="flex flex-col gap-2 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm">
               <span className="font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
-                Ảnh bìa
+                {t("coverImage")}
               </span>
               <UploadV1
                 type="image"
-                buttonText={cover ? "Đổi ảnh bìa" : "Chọn ảnh bìa"}
+                buttonText={cover ? t("changeCover") : t("chooseCover")}
                 onSuccess={changeUploadImage}
                 testId="post-create-cover-image"
               />
@@ -438,10 +440,12 @@ const PostCreate = () => {
             {/* Category */}
             <div className="flex flex-col gap-2 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm">
               <span className="font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
-                Danh mục
+                {t("category")}
               </span>
               <SelectOption
-                name="Select a category"
+                name={t("selectCategory")}
+                label=""
+                testId="select-category"
                 categories={categoryOptions}
                 onChangeCategory={changeCategory}
               />
@@ -452,19 +456,19 @@ const PostCreate = () => {
                 data-testid="post-create-new-category-button"
               >
                 <Plus size={13} />
-                New Category
+                {t("newCategory")}
               </button>
             </div>
 
             {/* Tags */}
             <div className="flex flex-col gap-2 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm">
               <span className="font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
-                Thẻ
+                {t("tags")}
               </span>
               <Select
                 mode="multiple"
                 style={{ width: "100%" }}
-                placeholder="Select name tag"
+                placeholder={t("selectTags")}
                 onChange={handleChange}
                 options={tagsOptions}
                 data-testid="post-create-tags-select"
@@ -476,24 +480,24 @@ const PostCreate = () => {
                 data-testid="post-create-new-tag-button"
               >
                 <Plus size={13} />
-                New Tag
+                {t("newTag")}
               </button>
             </div>
 
             {/* Google preview */}
             <div className="flex flex-col gap-1 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm">
               <span className="font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
-                Xem trước trên Google
+                {t("googlePreview")}
               </span>
               <span className="font-meta text-xs text-muted">
                 blog-person.vercel.app › posts
               </span>
               <span className="flex items-center gap-1 text-[15px] font-medium text-accent-ink">
-                {title || "Tiêu đề bài viết…"}
+                {title || t("titlePlaceholderPreview")}
                 <ExternalLink size={12} />
               </span>
               <span className="text-xs text-muted">
-                {desc || "Thiếu mô tả ngắn — Google sẽ tự cắt đoạn đầu bài."}
+                {desc || t("descMissing")}
               </span>
             </div>
 
@@ -502,7 +506,7 @@ const PostCreate = () => {
                 onChange={onChangeCheckBox}
                 data-testid="post-create-send-email-checkbox"
               >
-                <span className="text-sm text-ink">Send Email to All Users</span>
+                <span className="text-sm text-ink">{t("sendEmailToAllUsers")}</span>
               </Checkbox>
             </div>
 
@@ -515,7 +519,7 @@ const PostCreate = () => {
                 className="flex h-11 w-full items-center justify-center rounded-[10px] bg-gradient-to-b from-accent to-accent-dark font-cta text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
                 data-testid="post-create-submit-button"
               >
-                {isDisabledBtnSend ? "Đang đăng..." : "Đăng ngay"}
+                {isDisabledBtnSend ? t("publishing") : t("publishNow")}
               </button>
 
               <div className="h-px bg-line-soft" />
@@ -525,7 +529,7 @@ const PostCreate = () => {
                 className="w-full"
                 defaultValue={dayjs()}
                 onChange={(date) => setPublishedAt(date?.toDate() || null)}
-                placeholder="Select publish time"
+                placeholder={t("selectPublishTime")}
                 data-testid="post-create-publish-date-picker"
               />
               <button
@@ -535,7 +539,7 @@ const PostCreate = () => {
                 className="flex h-9 w-full items-center justify-center rounded-[10px] border border-line font-cta text-sm font-medium text-ink hover:border-accent hover:text-accent disabled:opacity-50"
                 data-testid="post-create-schedule-button"
               >
-                Lên lịch
+                {t("schedule")}
               </button>
 
               <button
@@ -545,7 +549,7 @@ const PostCreate = () => {
                 className="flex h-9 w-full items-center justify-center rounded-[10px] text-sm font-medium text-muted hover:text-ink disabled:opacity-50"
                 data-testid="post-create-draft-button"
               >
-                Lưu nháp
+                {t("saveDraft")}
               </button>
             </div>
           </aside>
@@ -554,7 +558,7 @@ const PostCreate = () => {
 
       {/* Category modal */}
       <Modal
-        title="Create New Category"
+        title={t("createCategoryModalTitle")}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancelFormCategory}
@@ -563,7 +567,7 @@ const PostCreate = () => {
         <input
           type="text"
           name="nameCategory"
-          placeholder="Awesome Category"
+          placeholder={t("categoryNamePlaceholder")}
           className={modalInputClass}
           onChange={(e) => setNameCategory(e.target.value)}
           data-testid="post-create-category-modal-input"
@@ -572,7 +576,7 @@ const PostCreate = () => {
 
       {/* Tag modal */}
       <Modal
-        title="Create New Tag"
+        title={t("createTagModalTitle")}
         open={isModalOpenTag}
         onOk={handleOkTag}
         onCancel={handleCancelFormTag}
@@ -582,7 +586,7 @@ const PostCreate = () => {
           type="text"
           name="nameTag"
           value={nameTag}
-          placeholder="Awesome Tag"
+          placeholder={t("tagNamePlaceholder")}
           className={modalInputClass}
           onChange={(e) => setNameTag(e.target.value)}
           data-testid="post-create-tag-modal-input"
@@ -621,20 +625,21 @@ const Preview = () => {
     </div>
   );
 };
-const items: TabsProps["items"] = [
-  {
-    key: "1",
-    label: "Viết",
-    children: <PostCreate />,
-  },
-  {
-    key: "2",
-    label: "Xem trước",
-    children: <Preview />,
-  },
-];
-const PostCreateCMS = () => (
-  <Tabs defaultActiveKey="1" items={items} className="p-3" />
-);
+const PostCreateCMS = () => {
+  const t = useTranslations("PostCreate");
+  const items: TabsProps["items"] = [
+    {
+      key: "1",
+      label: t("tabWrite"),
+      children: <PostCreate />,
+    },
+    {
+      key: "2",
+      label: t("tabPreview"),
+      children: <Preview />,
+    },
+  ];
+  return <Tabs defaultActiveKey="1" items={items} className="p-3" />;
+};
 
 export default PostCreateCMS;

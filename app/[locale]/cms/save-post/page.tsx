@@ -1,23 +1,21 @@
 "use client";
-import PostList from "@/components/PostList";
+import { useTranslations } from "next-intl";
+import { useRequireAuth } from "@/hooks/useRequireAuth";
+import SavedPostsList from "@/components/SavedPostsList";
 
 const SavePost = () => {
+  useRequireAuth();
+  const t = useTranslations("SavedPage");
+
   return (
-    <div
-      className="px-10 md:px-16 lg:px-24 lx:px-32 2xl:px-64"
-      data-testid="cms-save-post-page"
-    >
+    <div data-testid="cms-save-post-page">
       <h1
-        className="my-8 text-2xl text-gray-600"
+        className="font-display text-2xl font-bold tracking-tight text-ink"
         data-testid="cms-save-post-heading"
       >
-        Saved Posts
+        {t("title")}
       </h1>
-      <PostList
-        apiUrl="users/savedInf"
-        showPagination={false}
-        useAuthToken={true}
-      />
+      <SavedPostsList />
     </div>
   );
 };

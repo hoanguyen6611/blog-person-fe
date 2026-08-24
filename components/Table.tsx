@@ -19,6 +19,7 @@ export interface BulkAction {
 interface TableCMSProps {
   buttonCreate?: boolean;
   nameButtonCreate?: string;
+  showToolbar?: boolean;
   columns: any;
   dataSource: any;
   onDelete: (id: string) => void;
@@ -31,6 +32,7 @@ const TableCMS = ({
   columns,
   dataSource,
   nameButtonCreate,
+  showToolbar = true,
   onDelete,
   onBulkDelete,
   extraBulkActions,
@@ -91,29 +93,31 @@ const TableCMS = ({
       className="flex flex-col gap-4 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm md:p-6"
       data-testid="cms-table-card"
     >
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex h-9 min-w-[220px] flex-1 items-center gap-2 rounded-[10px] bg-surface-2 px-3">
-          <Search size={15} className="text-faint" />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={t("searchPlaceholder")}
-            className="w-full bg-transparent text-sm text-ink outline-none placeholder:text-faint"
-            data-testid="cms-table-search-input"
-          />
+      {showToolbar && (
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex h-9 min-w-[220px] flex-1 items-center gap-2 rounded-[10px] bg-surface-2 px-3">
+            <Search size={15} className="text-faint" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={t("searchPlaceholder")}
+              className="w-full bg-transparent text-sm text-ink outline-none placeholder:text-faint"
+              data-testid="cms-table-search-input"
+            />
+          </div>
+          {buttonCreate && (
+            <button
+              type="button"
+              onClick={() => router.push("/write")}
+              className="flex h-9 shrink-0 items-center gap-1.5 rounded-[10px] bg-gradient-to-b from-accent to-accent-dark px-3.5 font-cta text-sm font-medium text-white hover:opacity-90"
+              data-testid="cms-table-create-button"
+            >
+              <Plus size={15} />
+              {nameButtonCreate}
+            </button>
+          )}
         </div>
-        {buttonCreate && (
-          <button
-            type="button"
-            onClick={() => router.push("/write")}
-            className="flex h-9 shrink-0 items-center gap-1.5 rounded-[10px] bg-gradient-to-b from-accent to-accent-dark px-3.5 font-cta text-sm font-medium text-white hover:opacity-90"
-            data-testid="cms-table-create-button"
-          >
-            <Plus size={15} />
-            {nameButtonCreate}
-          </button>
-        )}
-      </div>
+      )}
 
       {selectedRowKeys.length > 0 && (
         <div

@@ -20,6 +20,43 @@ import { Post } from "@/interface/Post";
 import { computeWritingStreak } from "@/lib/writingStreak";
 import { cn } from "@/lib/utils";
 
+const RecentDrafts = () => {
+  const t = useTranslations("Sidebar");
+  const { getToken, isSignedIn } = useAuth();
+  const { data } = useSWR(
+    isSignedIn ? ["recent-drafts"] : null,
+    async () => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/user/draft?page=1&limit=3`,
+        token!
+      );
+    }
+  );
+
+  const drafts: Post[] = data?.posts ?? [];
+  if (drafts.length === 0) return null;
+
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="px-2.5 font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
+        {t("recentDrafts")}
+      </span>
+      {drafts.slice(0, 3).map((draft) => (
+        <Link
+          key={draft._id}
+          href={`/cms/edit/post/${draft._id}`}
+          data-testid={`cms-sidebar-recent-draft-${draft._id}`}
+          className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm text-muted hover:text-ink"
+        >
+          <FileText size={15} className="flex-none text-faint" />
+          <span className="truncate">{draft.title}</span>
+        </Link>
+      ))}
+    </div>
+  );
+};
+
 const WritingStreak = () => {
   const t = useTranslations("Sidebar");
   const { getToken, isSignedIn } = useAuth();
@@ -153,6 +190,7 @@ export default function Sidebar({ admin }: { admin: boolean }) {
           </Link>
         ))}
       </nav>
+      <RecentDrafts />
       <WritingStreak />
     </aside>
   );

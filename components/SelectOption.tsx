@@ -9,6 +9,7 @@ interface SelectOption {
 type SelectOptionProps = {
   name: string;
   label?: string;
+  testId?: string;
   categories: SelectOption[];
   value?: string;
   onChangeCategory?: (value: string) => void;
@@ -19,6 +20,7 @@ type SelectOptionProps = {
 const SelectOption: React.FC<SelectOptionProps> = ({
   name,
   label = "Choose a category",
+  testId,
   categories,
   value,
   onChangeCategory,
@@ -51,7 +53,7 @@ const SelectOption: React.FC<SelectOptionProps> = ({
         onChange={onChangeCategory}
         options={categories}
         allowClear
-        data-testid={`select-${name}`}
+        data-testid={testId ?? `select-${name}`}
         className={
           direction === "col"
             ? "[&_.ant-select-selector]:!h-11 [&_.ant-select-selector]:!items-center [&_.ant-select-selector]:!rounded-xl"
