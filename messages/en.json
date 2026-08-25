@@ -191,7 +191,8 @@
     "totalViews": "Total views",
     "totalFollowers": "Total followers",
     "totalFollowing": "Total following",
-    "totalScheduled": "Scheduled"
+    "totalScheduled": "Scheduled",
+    "pendingComments": "Pending comments"
   },
   "Sidebar": {
     "dashboard": "Dashboard",
@@ -227,7 +228,8 @@
     "month": "Month",
     "year": "Year",
     "monthlyVisit": "Monthly visit",
-    "numberOfVisit": "Number of visit"
+    "numberOfVisit": "Number of visit",
+    "noData": "No data yet."
   },
   "PostTable": {
     "image": "Image",
@@ -272,6 +274,29 @@
     "searchPlaceholder": "Search posts...",
     "backHome": "Home",
     "browsePosts": "Browse posts"
+  },
+  "TrafficStats": {
+    "title": "Traffic",
+    "viewsLabel": "Views (last {days} days)",
+    "returningLabel": "Returning readers",
+    "visitsSuffix": "visits",
+    "periodOptionDays": "{days}d"
+  },
+  "RecentActivity": {
+    "title": "Recent activity",
+    "viewAll": "View all",
+    "empty": "No recent activity."
+  },
+  "PostUpdate": {
+    "editingBadge": "Editing",
+    "pageTitle": "Update post",
+    "loading": "Loading post...",
+    "error": "Failed to load this post.",
+    "notFound": "Post not found.",
+    "updateButton": "Update post",
+    "updating": "Updating...",
+    "toastUpdated": "Post updated successfully",
+    "toastFailed": "Post update failed"
   },
   "Footer": {
     "description": "A place to share knowledge, code and stories.",

@@ -12,14 +12,18 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 const UserPersonalPage = () => {
   useRequireAuth();
   const { user } = useUser();
-  const { getToken } = useAuth();
+  const { getToken, userId } = useAuth();
   const [token, setToken] = useState<string | null>(null);
   useEffect(() => {
+    if (!userId) {
+      setToken(null);
+      return;
+    }
     (async () => {
       const t = await getToken();
       setToken(t);
     })();
-  }, [getToken]);
+  }, [getToken, userId]);
   const { data } = useSWR(
     () =>
       token ? [`${process.env.NEXT_PUBLIC_API_URL}/users/follow`, token] : null,

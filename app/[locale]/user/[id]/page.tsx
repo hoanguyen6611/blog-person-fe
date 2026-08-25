@@ -16,7 +16,7 @@ const UserPage = () => {
   useRequireAuth();
   const params = useParams();
   const { user } = useUser();
-  const { getToken, isSignedIn } = useAuth();
+  const { getToken, isSignedIn, userId } = useAuth();
 
   const [token, setToken] = useState<string | null>(null);
   const [loadingFollow, setLoadingFollow] = useState(false);
@@ -33,13 +33,17 @@ const UserPage = () => {
     }
   );
 
-  // Lấy token một lần
+  // Lấy token, làm mới lại khi đổi tài khoản
   useEffect(() => {
+    if (!userId) {
+      setToken(null);
+      return;
+    }
     (async () => {
       const t = await getToken();
       setToken(t);
     })();
-  }, [getToken]);
+  }, [getToken, userId]);
 
   // Lấy danh sách user mình đang theo dõi
   const { data: followers, mutate } = useSWR(

@@ -23,6 +23,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslations } from "next-intl";
 import ThemeToggle from "./ThemeToggle";
 import { cn } from "@/lib/utils";
+import FilterSheet from "./FilterSheet";
 
 const navPillClass = (active: boolean) =>
   cn(
@@ -118,18 +119,23 @@ export const NotificationBell = ({
 }: {
   variant?: "desktop" | "mobile";
 }) => {
-  const { getToken, isSignedIn } = useAuth();
+  const { getToken, isSignedIn, userId } = useAuth();
   const t = useTranslations("NavBar");
   const [token, setToken] = useState<string | null>(null);
   const [tab, setTab] = useState<"all" | "unread" | "comments">("all");
+  const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    if (!userId) {
+      setToken(null);
+      return;
+    }
     (async () => {
       const t = await getToken();
       setToken(t);
     })();
-  }, [getToken]);
+  }, [getToken, userId]);
 
   const { data: notifications, mutate } = useSWR(
     () =>
@@ -197,10 +203,142 @@ export const NotificationBell = ({
 
   if (!isSignedIn) return null;
 
+  const tabsRow = (
+    <div className="flex gap-1.5 px-4 py-2.5" data-testid="navbar-notifications-tabs">
+      {(["all", "unread", "comments"] as const).map((key) => (
+        <button
+          key={key}
+          type="button"
+          onClick={() => setTab(key)}
+          className={cn(
+            "rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
+            tab === key ? "bg-ink text-bg" : "border border-line text-muted"
+          )}
+        >
+          {key === "all" ? t("tabAll") : key === "unread" ? t("tabUnread") : t("tabComments")}
+        </button>
+      ))}
+    </div>
+  );
+
+  const notificationList = (
+    <div className="p-1.5">
+      {filtered.length === 0 ? (
+        <p className="px-3 py-8 text-center text-sm text-muted">
+          {t("noNotification")}
+        </p>
+      ) : (
+        groups.map(
+          (group) =>
+            group.items.length > 0 && (
+              <div key={group.key}>
+                <div className="px-2 pb-1 pt-2 font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
+                  {group.label}
+                </div>
+                {group.items.map((n) => (
+                  <button
+                    key={n._id}
+                    type="button"
+                    onClick={() => openNotification(n)}
+                    className={cn(
+                      "flex w-full items-start gap-2.5 rounded-[10px] p-2.5 text-left",
+                      !n.isRead && "bg-page"
+                    )}
+                    data-testid={`navbar-notification-item-${n._id}`}
+                  >
+                    <NotificationAvatar type={n.type} />
+                    <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      <span
+                        className={cn(
+                          "text-[13.5px] leading-snug text-ink",
+                          !n.isRead && "font-medium"
+                        )}
+                      >
+                        {n.message}
+                      </span>
+                      <span className="font-meta text-[11.5px] text-faint">
+                        {format(n.createdAt)}
+                      </span>
+                    </div>
+                    {!n.isRead && (
+                      <span className="mt-1 h-1.5 w-1.5 flex-none rounded-full bg-accent" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )
+        )
+      )}
+    </div>
+  );
+
+  const bellButton = (
+    <button
+      type="button"
+      onClick={variant === "mobile" ? () => setMobileOpen(true) : undefined}
+      className="relative flex h-9 w-9 flex-none items-center justify-center rounded-[10px] bg-surface-2 text-ink"
+      data-testid={`navbar-notifications-bell-${variant}`}
+      aria-label={t("notificationsTitle")}
+    >
+      <Bell size={18} strokeWidth={1.6} />
+      {unreadCount > 0 && (
+        <span className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-surface bg-gradient-to-b from-accent to-accent-dark px-1 font-meta text-[10px] font-semibold text-white">
+          {unreadCount}
+        </span>
+      )}
+    </button>
+  );
+
+  if (variant === "mobile") {
+    return (
+      <>
+        {bellButton}
+        <FilterSheet
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+          title={t("notificationsTitle")}
+        >
+          <div data-testid="notification-panel-mobile" className="flex flex-col">
+            <div className="flex items-center gap-2.5 pb-2">
+              {unreadCount > 0 && (
+                <span className="rounded-full bg-accent-soft px-1.5 py-0.5 font-meta text-[11px] font-semibold text-accent-ink">
+                  {unreadCount} {t("tabUnread").toLowerCase()}
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={markAllAsRead}
+                className="ml-auto text-xs font-medium text-accent hover:text-accent-dark"
+                data-testid="navbar-notifications-mark-all-read-button-mobile"
+              >
+                {t("markAllAsRead")}
+              </button>
+            </div>
+            <div className="-mx-4 border-t border-line-soft">
+              <div className="px-4">{tabsRow}</div>
+              <div className="border-t border-line-soft px-2.5">{notificationList}</div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                router.push("/notifications");
+              }}
+              className="mt-3 flex h-11 w-full items-center justify-center rounded-[10px] border border-line font-cta text-sm font-medium text-ink"
+              data-testid="navbar-notifications-view-all-button-mobile"
+            >
+              {t("viewAll")}
+            </button>
+          </div>
+        </FilterSheet>
+      </>
+    );
+  }
+
   const panel = (
     <div
       className="w-[360px] overflow-hidden rounded-[14px] border border-line-soft bg-surface shadow-[0_8px_24px_-4px_rgba(15,23,42,.10),0_2px_6px_-2px_rgba(15,23,42,.06)]"
-      data-testid={`notification-panel-${variant}`}
+      data-testid="notification-panel-desktop"
     >
       <div className="flex items-center gap-2.5 border-b border-line-soft px-4 py-3">
         <span className="font-display text-[15px] font-bold tracking-tight text-ink">
@@ -221,70 +359,9 @@ export const NotificationBell = ({
         </button>
       </div>
 
-      <div className="flex gap-1.5 border-b border-line-soft px-4 py-2.5">
-        {(["all", "unread", "comments"] as const).map((key) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => setTab(key)}
-            className={cn(
-              "rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
-              tab === key ? "bg-ink text-bg" : "border border-line text-muted"
-            )}
-          >
-            {key === "all" ? t("tabAll") : key === "unread" ? t("tabUnread") : t("tabComments")}
-          </button>
-        ))}
-      </div>
+      <div className="border-b border-line-soft">{tabsRow}</div>
 
-      <div className="max-h-[380px] overflow-y-auto p-1.5">
-        {filtered.length === 0 ? (
-          <p className="px-3 py-8 text-center text-sm text-muted">
-            {t("noNotification")}
-          </p>
-        ) : (
-          groups.map(
-            (group) =>
-              group.items.length > 0 && (
-                <div key={group.key}>
-                  <div className="px-2 pb-1 pt-2 font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
-                    {group.label}
-                  </div>
-                  {group.items.map((n) => (
-                    <button
-                      key={n._id}
-                      type="button"
-                      onClick={() => openNotification(n)}
-                      className={cn(
-                        "flex w-full items-start gap-2.5 rounded-[10px] p-2.5 text-left",
-                        !n.isRead && "bg-page"
-                      )}
-                      data-testid={`navbar-notification-item-${n._id}`}
-                    >
-                      <NotificationAvatar type={n.type} />
-                      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                        <span
-                          className={cn(
-                            "text-[13.5px] leading-snug text-ink",
-                            !n.isRead && "font-medium"
-                          )}
-                        >
-                          {n.message}
-                        </span>
-                        <span className="font-meta text-[11.5px] text-faint">
-                          {format(n.createdAt)}
-                        </span>
-                      </div>
-                      {!n.isRead && (
-                        <span className="mt-1 h-1.5 w-1.5 flex-none rounded-full bg-accent" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )
-          )
-        )}
-      </div>
+      <div className="max-h-[380px] overflow-y-auto">{notificationList}</div>
 
       <div className="flex items-center justify-between border-t border-line-soft bg-page px-4 py-2.5">
         <button
@@ -302,19 +379,7 @@ export const NotificationBell = ({
 
   return (
     <Dropdown trigger={["click"]} popupRender={() => panel} placement="bottomRight">
-      <button
-        type="button"
-        className="relative flex h-9 w-9 flex-none items-center justify-center rounded-[10px] bg-surface-2 text-ink"
-        data-testid={`navbar-notifications-bell-${variant}`}
-        aria-label={t("notificationsTitle")}
-      >
-        <Bell size={18} strokeWidth={1.6} />
-        {unreadCount > 0 && (
-          <span className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-surface bg-gradient-to-b from-accent to-accent-dark px-1 font-meta text-[10px] font-semibold text-white">
-            {unreadCount}
-          </span>
-        )}
-      </button>
+      {bellButton}
     </Dropdown>
   );
 };

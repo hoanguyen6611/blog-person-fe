@@ -26,7 +26,7 @@ const FilterSheet = ({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] md:hidden" data-testid="filter-sheet">
+    <div className="fixed inset-0 z-[100]" data-testid="filter-sheet">
       <div
         className="absolute inset-0 bg-ink/40"
         onClick={onClose}

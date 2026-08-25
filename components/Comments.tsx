@@ -34,7 +34,7 @@ const bumpLikeInData = (data: unknown, id: string, delta: number) => {
 
 const Comments = ({ postId }: { postId: string }) => {
   const [desc, setDesc] = useState("");
-  const { getToken } = useAuth();
+  const { getToken, userId } = useAuth();
   const [token, setToken] = useState<string | null>(null);
   const t = useTranslations("Comments");
   const { data, error, isLoading, mutate } = useSWR(
@@ -42,11 +42,15 @@ const Comments = ({ postId }: { postId: string }) => {
     fetcherUseSWR
   );
   useEffect(() => {
+    if (!userId) {
+      setToken(null);
+      return;
+    }
     (async () => {
       const t = await getToken();
       setToken(t);
     })();
-  }, [getToken]);
+  }, [getToken, userId]);
   const { data: likeComments, mutate: mutateLikeComments } = useSWR(
     () =>
       token

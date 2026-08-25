@@ -27,17 +27,21 @@ export default function NotificationsPage() {
   useRequireAuth();
   const t = useTranslations("NotificationsPage");
   const tNav = useTranslations("NavBar");
-  const { getToken, isSignedIn } = useAuth();
+  const { getToken, isSignedIn, userId } = useAuth();
   const [token, setToken] = useState<string | null>(null);
   const [type, setType] = useState<string>("all");
   const [status, setStatus] = useState<StatusFilter>("all");
 
   useEffect(() => {
+    if (!userId) {
+      setToken(null);
+      return;
+    }
     (async () => {
       const t = await getToken();
       setToken(t);
     })();
-  }, [getToken]);
+  }, [getToken, userId]);
 
   const { data, mutate } = useSWR<
     Notification[] | { notifications: Notification[] }

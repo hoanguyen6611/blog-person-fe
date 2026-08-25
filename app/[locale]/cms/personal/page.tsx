@@ -17,19 +17,23 @@ const PersonalPage = () => {
     pageSize: 10,
     total: 0,
   });
-  const { getToken, isSignedIn } = useAuth();
+  const { getToken, isSignedIn, userId } = useAuth();
   const [token, setToken] = useState<string | null>(null);
   useEffect(() => {
+    if (!userId) {
+      setToken(null);
+      return;
+    }
     (async () => {
       const t = await getToken();
       setToken(t);
     })();
-  }, [getToken]);
+  }, [getToken, userId]);
   const { data: posts } = useSWR(
     isSignedIn
-      ? [`fetch-user-posts`, pagination.current, pagination.pageSize]
+      ? [`fetch-user-posts`, userId, pagination.current, pagination.pageSize]
       : null,
-    async ([_, page, limit]) => {
+    async ([_key, _id, page, limit]) => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(
         `${process.env.NEXT_PUBLIC_API_URL}/posts/user?page=${page}&limit=${limit}`,
@@ -38,10 +42,8 @@ const PersonalPage = () => {
     }
   );
   const { data: views } = useSWR(
-    isSignedIn
-      ? [`fetch-user-posts`, pagination.current, pagination.pageSize]
-      : null,
-    async ([_, ,]) => {
+    isSignedIn ? [`fetch-user-posts-sum`, userId] : null,
+    async () => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(
         `${process.env.NEXT_PUBLIC_API_URL}/posts/sumPostUser`,

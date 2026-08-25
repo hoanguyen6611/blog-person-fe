@@ -3,6 +3,7 @@ import ImageShow from "./Image";
 import BookmarkButton from "./BookmarkButton";
 import { Post } from "@/interface/Post";
 import { format } from "timeago.js";
+import { useTranslations } from "next-intl";
 
 const PostRow = ({
   post,
@@ -11,6 +12,7 @@ const PostRow = ({
   post: Post;
   categoryTitle?: string;
 }) => {
+  const t = useTranslations("Statistic");
   return (
     <div
       className="flex gap-4 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm"
@@ -44,10 +46,16 @@ const PostRow = ({
         <p className="text-sm leading-snug text-muted line-clamp-1">
           {post.desc}
         </p>
-        <div className="mt-auto flex items-center gap-2 font-meta text-xs text-faint">
-          <span className="font-semibold text-ink">{post.user?.username}</span>
-          <span>{format(post.createdAt)}</span>
-          {typeof post.visit === "number" && <span>· {post.visit} views</span>}
+        <div className="mt-auto flex flex-wrap items-center gap-x-2 gap-y-0.5 font-meta text-xs text-faint">
+          <span className="whitespace-nowrap font-semibold text-ink">
+            {post.user?.username}
+          </span>
+          <span className="whitespace-nowrap">{format(post.createdAt)}</span>
+          {typeof post.visit === "number" && (
+            <span className="whitespace-nowrap">
+              · {post.visit} {t("views")}
+            </span>
+          )}
         </div>
       </div>
       <BookmarkButton postId={post._id} className="self-start" />

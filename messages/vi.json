@@ -191,7 +191,8 @@
     "totalViews": "Tổng số lượt xem",
     "totalFollowers": "Tổng số người theo dõi",
     "totalFollowing": "Tổng số người được theo dõi",
-    "totalScheduled": "Hẹn giờ đăng"
+    "totalScheduled": "Hẹn giờ đăng",
+    "pendingComments": "Chờ duyệt"
   },
   "Sidebar": {
     "dashboard": "Bảng điều khiển",
@@ -227,7 +228,8 @@
     "month": "Tháng",
     "year": "Năm",
     "monthlyVisit": "Lượt truy cập theo tháng",
-    "numberOfVisit": "Số lượt truy cập"
+    "numberOfVisit": "Số lượt truy cập",
+    "noData": "Chưa có dữ liệu."
   },
   "PostTable": {
     "image": "Hình ảnh",
@@ -272,6 +274,29 @@
     "searchPlaceholder": "Tìm bài viết...",
     "backHome": "Trang chủ",
     "browsePosts": "Xem bài viết"
+  },
+  "TrafficStats": {
+    "title": "Lưu lượng truy cập",
+    "viewsLabel": "Lượt xem {days} ngày qua",
+    "returningLabel": "Người đọc quay lại",
+    "visitsSuffix": "lượt truy cập",
+    "periodOptionDays": "{days} ngày"
+  },
+  "RecentActivity": {
+    "title": "Hoạt động gần đây",
+    "viewAll": "Xem tất cả",
+    "empty": "Chưa có hoạt động nào."
+  },
+  "PostUpdate": {
+    "editingBadge": "Đang chỉnh sửa",
+    "pageTitle": "Cập nhật bài viết",
+    "loading": "Đang tải bài viết...",
+    "error": "Không thể tải bài viết.",
+    "notFound": "Không tìm thấy bài viết.",
+    "updateButton": "Cập nhật bài viết",
+    "updating": "Đang cập nhật...",
+    "toastUpdated": "Cập nhật bài viết thành công",
+    "toastFailed": "Cập nhật bài viết thất bại"
   },
   "Footer": {
     "description": "Nơi chia sẻ kiến thức, công nghệ và những câu chuyện cá nhân.",

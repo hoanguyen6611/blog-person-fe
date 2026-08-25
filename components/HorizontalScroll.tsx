@@ -36,11 +36,11 @@ export default function HorizontalScroll({
     <div className="relative flex min-w-0 items-center">
       {canScrollLeft && (
         <>
-          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-8 bg-gradient-to-r from-white to-transparent dark:from-gray-800" />
+          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-8 bg-gradient-to-r from-page to-transparent" />
           <button
             aria-label="Scroll left"
             onClick={() => scroll(-150)}
-            className="absolute left-0 z-20 hidden -translate-x-1/2 rounded-full bg-white p-1.5 text-gray-600 shadow-md transition hover:scale-110 hover:text-slate-700 dark:bg-gray-700 dark:text-gray-200 sm:flex"
+            className="absolute left-0 z-20 hidden -translate-x-1/2 rounded-full border border-line-soft bg-surface p-1.5 text-muted shadow-md transition hover:scale-110 hover:text-ink sm:flex"
             data-testid="horizontal-scroll-left-button"
           >
             <ChevronLeft size={16} />
@@ -58,11 +58,11 @@ export default function HorizontalScroll({
 
       {canScrollRight && (
         <>
-          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-8 bg-gradient-to-l from-white to-transparent dark:from-gray-800" />
+          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-8 bg-gradient-to-l from-page to-transparent" />
           <button
             aria-label="Scroll right"
             onClick={() => scroll(150)}
-            className="absolute right-0 z-20 hidden translate-x-1/2 rounded-full bg-white p-1.5 text-gray-600 shadow-md transition hover:scale-110 hover:text-slate-700 dark:bg-gray-700 dark:text-gray-200 sm:flex"
+            className="absolute right-0 z-20 hidden translate-x-1/2 rounded-full border border-line-soft bg-surface p-1.5 text-muted shadow-md transition hover:scale-110 hover:text-ink sm:flex"
             data-testid="horizontal-scroll-right-button"
           >
             <ChevronRight size={16} />

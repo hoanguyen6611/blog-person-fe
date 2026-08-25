@@ -9,6 +9,7 @@ import { Search as SearchIcon } from "lucide-react";
 import { Post } from "@/interface/Post";
 import { PostListResponse } from "@/interface/APIResponse";
 import { cn } from "@/lib/utils";
+import ImageShow from "./Image";
 
 const RECENT_KEY = "recentSearches";
 
@@ -201,7 +202,17 @@ export default function SearchOverlay({
                 className="flex items-center gap-3 rounded-lg p-2.5 text-left hover:bg-page"
                 data-testid={`search-overlay-result-${post._id}`}
               >
-                <div className="h-11 w-11 flex-none rounded-lg border border-line-soft bg-gradient-to-b from-page to-surface-2" />
+                <div className="h-11 w-11 flex-none overflow-hidden rounded-lg border border-line-soft bg-gradient-to-b from-page to-surface-2">
+                  {post.img && (
+                    <ImageShow
+                      src={post.img}
+                      alt={post.title}
+                      width={88}
+                      height={88}
+                      className="h-full w-full object-cover"
+                    />
+                  )}
+                </div>
                 <div className="flex min-w-0 flex-col gap-0.5">
                   <span className="truncate text-sm font-semibold text-ink">
                     {post.title}

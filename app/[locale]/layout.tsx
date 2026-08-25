@@ -41,14 +41,16 @@ export default async function LocaleLayout({
           >
             <NextIntlClientProvider locale={locale}>
               <AntdThemeProvider>
-                <NavBar />
-                <div className="px-4 pb-16 md:px-8 md:pb-0 lg:px-16 xl:px-32 2xl:px-64">
-                  <main>
-                    <Providers>{children}</Providers>
-                    <ToastContainer position="top-right" />
-                  </main>
+                <div className="flex min-h-screen flex-col pb-20 md:pb-0">
+                  <NavBar />
+                  <div className="flex-1 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+                    <main>
+                      <Providers>{children}</Providers>
+                      <ToastContainer position="top-right" />
+                    </main>
+                  </div>
+                  <Footer />
                 </div>
-                <Footer />
                 <MobileTabBar />
               </AntdThemeProvider>
             </NextIntlClientProvider>

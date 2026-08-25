@@ -11,10 +11,12 @@ import MonthlyPostChart from "./MonthlyPostChart";
 import CategoryPieChart from "./CategoryPieChart";
 import AuthorStatsTable from "./AuthorStatsTable";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { Flame } from "lucide-react";
 
 export default function Statistic() {
   const t = useTranslations("Statistic");
-  const { getToken, isSignedIn } = useAuth();
+  const { getToken, isSignedIn, userId } = useAuth();
   const [token, setToken] = useState<string | null>(null);
   const [pagination, setPagination] = useState({
     current: 1,
@@ -26,11 +28,15 @@ export default function Statistic() {
     fetcherUseSWR
   );
   useEffect(() => {
+    if (!userId) {
+      setToken(null);
+      return;
+    }
     (async () => {
       const t = await getToken();
       setToken(t);
     })();
-  }, [getToken]);
+  }, [getToken, userId]);
   const { data: stats } = useSWR(
     () =>
       token
@@ -64,68 +70,91 @@ export default function Statistic() {
   }));
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="flex flex-col gap-4">
       <div
-        className="bg-white p-6 rounded-xl shadow dark:text-gray-400 dark:bg-gray-800"
+        className="rounded-2xl border border-line-soft bg-surface p-5 shadow-sm"
         data-testid="cms-statistic-top-articles"
       >
-        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          🔥 {t("top5FeaturedArticles")}
-        </h2>
+        <div className="mb-4 flex items-center gap-2">
+          <span className="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-surface-2 text-muted">
+            <Flame size={16} />
+          </span>
+          <h2 className="text-sm font-bold text-ink">
+            {t("top5FeaturedArticles")}
+          </h2>
+        </div>
 
-        <div className="space-y-4">
-          {stats?.topPosts?.map((post: Post, index: number) => (
-            <div
-              key={post.slug}
-              className="flex items-center gap-4 border-b pb-3 last:border-b-0"
-            >
-              <div className="text-2xl font-bold text-gray-400 w-6">
-                {index + 1}
+        {!stats ? (
+          <div className="flex flex-col gap-3">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="h-14 animate-pulse rounded-xl bg-surface-2" />
+            ))}
+          </div>
+        ) : stats.topPosts?.length === 0 ? (
+          <div className="flex flex-col items-center gap-2 py-8 text-center">
+            <Flame size={22} className="text-faint" />
+            <p className="text-sm text-muted">{t("noData")}</p>
+          </div>
+        ) : (
+          <div className="flex flex-col">
+            {stats.topPosts.map((post: Post, index: number) => (
+              <div
+                key={post.slug}
+                className="flex items-center gap-4 border-b border-line-soft py-3 last:border-b-0"
+              >
+                <span className="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-accent-soft text-sm font-bold text-accent-ink">
+                  {index + 1}
+                </span>
+
+                <ImageShow
+                  src={post.img}
+                  alt={post.title}
+                  className="h-14 w-14 flex-none rounded-xl object-cover"
+                  width={100}
+                  height={100}
+                />
+
+                <div className="min-w-0 flex-1">
+                  <Link
+                    href={`/posts/${post._id}`}
+                    className="line-clamp-2 text-sm font-medium text-ink hover:text-accent-ink"
+                  >
+                    {post.title}
+                  </Link>
+                  <p className="mt-1 text-xs text-faint">
+                    {post.visit} {t("views")}
+                  </p>
+                </div>
               </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-              <ImageShow
-                src={post.img}
-                alt={post.title}
-                className="w-16 h-16 object-cover rounded-md"
-                width={100}
-                height={100}
-              />
-
-              <div className="flex-1">
-                <a
-                  href={`/posts/${post._id}`}
-                  className="text-sm font-medium text-slate-400 hover:underline line-clamp-2"
-                >
-                  {post.title}
-                </a>
-                <p className="text-xs text-gray-500 mt-1">
-                  {post.visit} {t("views")}
-                </p>
-              </div>
-            </div>
-          ))}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div data-testid="cms-statistic-articles-by-month">
+          <MonthlyPostChart
+            data={stats?.postsByMonth}
+            label={t("articlesByMonth")}
+            nameOfYAxis={t("numberOfArticles")}
+          />
+        </div>
+        <div data-testid="cms-statistic-monthly-visit">
+          <MonthlyPostChart
+            data={stats?.monthlyVisit}
+            label={t("monthlyVisit")}
+            nameOfYAxis={t("numberOfVisit")}
+          />
         </div>
       </div>
-      <div data-testid="cms-statistic-articles-by-month">
-        <MonthlyPostChart
-          data={stats?.postsByMonth}
-          label={t("articlesByMonth")}
-          nameOfYAxis={t("numberOfArticles")}
-        />
-      </div>
-      <div data-testid="cms-statistic-monthly-visit">
-        <MonthlyPostChart
-          data={stats?.monthlyVisit}
-          label={t("monthlyVisit")}
-          nameOfYAxis={t("numberOfVisit")}
-        />
-      </div>
-      {/* <MultiYearPostChart data={stats.postsByMonth} /> */}
-      <div data-testid="cms-statistic-articles-by-category">
-        <CategoryPieChart data={postsByCategory} />
-      </div>
-      <div data-testid="cms-statistic-articles-by-author">
-        <AuthorStatsTable data={postsByAuthor} />
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div data-testid="cms-statistic-articles-by-category">
+          <CategoryPieChart data={postsByCategory} />
+        </div>
+        <div data-testid="cms-statistic-articles-by-author">
+          <AuthorStatsTable data={postsByAuthor} />
+        </div>
       </div>
     </div>
   );

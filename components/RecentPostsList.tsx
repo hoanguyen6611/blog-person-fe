@@ -32,7 +32,7 @@ const RecentPostsList = () => {
   const posts: Post[] = data?.posts ?? [];
 
   return (
-    <div className="flex flex-col gap-4" data-testid="recent-posts-list">
+    <div className="flex min-w-0 flex-col gap-4" data-testid="recent-posts-list">
       <div className="flex items-baseline justify-between">
         <h2 className="font-display text-2xl font-bold tracking-tight text-ink">
           {t("recentPosts")}

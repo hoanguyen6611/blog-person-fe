@@ -23,7 +23,7 @@ export default function AdvancedSearchBar() {
   const [author, setAuthor] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const { getToken } = useAuth();
+  const { getToken, userId } = useAuth();
   const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
   const t = useTranslations("AdvancedSearch");
@@ -32,11 +32,15 @@ export default function AdvancedSearchBar() {
     fetcherUseSWR
   );
   useEffect(() => {
+    if (!userId) {
+      setToken(null);
+      return;
+    }
     (async () => {
       const t = await getToken();
       setToken(t);
     })();
-  }, [getToken]);
+  }, [getToken, userId]);
   const { data: authors } = useSWR(
     () =>
       token

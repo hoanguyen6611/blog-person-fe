@@ -7,37 +7,65 @@ import {
   Users,
   UserPlus,
   CalendarClock,
+  MessageCircle,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
 
 const StatCard = ({
   label,
   value,
   icon,
   testId,
+  href,
+  highlight,
 }: {
   label: string;
   value: React.ReactNode;
   icon: React.ReactNode;
   testId?: string;
-}) => (
-  <div
-    className="flex items-center justify-between rounded-2xl border border-line-soft bg-surface p-4 shadow-sm"
-    data-testid={testId}
-  >
-    <div className="flex flex-col gap-1">
-      <span className="font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
-        {label}
-      </span>
-      <span className="font-display text-2xl font-bold tracking-tight text-ink">
-        {value}
-      </span>
+  href?: string;
+  highlight?: boolean;
+}) => {
+  const content = (
+    <>
+      <div className="flex flex-col gap-1">
+        <span className="font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
+          {label}
+        </span>
+        <span className="font-display text-2xl font-bold tracking-tight text-ink">
+          {value}
+        </span>
+      </div>
+      <div
+        className={cn(
+          "flex h-9 w-9 items-center justify-center rounded-lg text-muted",
+          highlight ? "bg-accent-soft text-accent-ink" : "bg-surface-2"
+        )}
+      >
+        {icon}
+      </div>
+    </>
+  );
+  const className = cn(
+    "flex items-center justify-between rounded-2xl border border-line-soft bg-surface p-4 shadow-sm",
+    href && "transition-colors hover:border-accent"
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={className} data-testid={testId}>
+        {content}
+      </Link>
+    );
+  }
+  return (
+    <div className={className} data-testid={testId}>
+      {content}
     </div>
-    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-2 text-muted">
-      {icon}
-    </div>
-  </div>
-);
+  );
+};
 type DashBoardProps = {
   name: string;
   subtitle?: string;
@@ -56,6 +84,7 @@ type DashBoardProps = {
   followers?: number;
   following?: number;
   scheduled?: number;
+  pendingComments?: number;
 };
 const DashBoard = ({
   name,
@@ -67,6 +96,7 @@ const DashBoard = ({
   followers,
   following,
   scheduled,
+  pendingComments,
 }: DashBoardProps) => {
   const t = useTranslations("Dashboard");
   return (
@@ -141,6 +171,16 @@ const DashBoard = ({
             label={t("totalScheduled")}
             value={scheduled}
             icon={<CalendarClock size={18} />}
+          />
+        )}
+        {(pendingComments || pendingComments === 0) && (
+          <StatCard
+            testId="cms-dashboard-pending-comments"
+            label={t("pendingComments")}
+            value={pendingComments}
+            icon={<MessageCircle size={18} />}
+            href="/cms/comments"
+            highlight={pendingComments > 0}
           />
         )}
       </div>

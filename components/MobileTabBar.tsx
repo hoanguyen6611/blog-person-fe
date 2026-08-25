@@ -12,9 +12,16 @@ const tabClass = (active: boolean) =>
     active ? "text-ink" : "text-faint"
   );
 
+const iconWrapClass = (active: boolean) =>
+  cn(
+    "flex h-8 w-8 items-center justify-center rounded-full transition-colors",
+    active && "bg-accent-soft text-accent-ink"
+  );
+
 export default function MobileTabBar() {
   const pathname = usePathname();
   const t = useTranslations("TabBar");
+  const tNav = useTranslations("NavBar");
   const { isSignedIn } = useAuth();
   const { user } = useUser();
   const isAdmin = user?.publicMetadata?.role === "admin";
@@ -31,7 +38,9 @@ export default function MobileTabBar() {
       data-testid="mobile-tab-bar"
     >
       <Link href="/" className={tabClass(isHome)} data-testid="tab-bar-home">
-        <Home size={21} strokeWidth={1.6} />
+        <span className={iconWrapClass(isHome)}>
+          <Home size={19} strokeWidth={1.8} />
+        </span>
         {t("home")}
       </Link>
       <Link
@@ -39,12 +48,14 @@ export default function MobileTabBar() {
         className={tabClass(isTrending)}
         data-testid="tab-bar-trending"
       >
-        <TrendingUp size={21} strokeWidth={1.6} />
+        <span className={iconWrapClass(isTrending)}>
+          <TrendingUp size={19} strokeWidth={1.8} />
+        </span>
         {t("trending")}
       </Link>
       <Link
         href="/write"
-        aria-label={t("home")}
+        aria-label={tNav("newPost")}
         className="-mt-[18px] flex h-[52px] w-[52px] flex-none items-center justify-center rounded-2xl bg-gradient-to-b from-accent to-accent-dark text-white shadow-[0_4px_12px_rgba(0,60,255,.28)]"
         data-testid="tab-bar-write"
       >
@@ -55,11 +66,15 @@ export default function MobileTabBar() {
         className={tabClass(isSaved)}
         data-testid="tab-bar-saved"
       >
-        <Bookmark size={21} strokeWidth={1.6} />
+        <span className={iconWrapClass(isSaved)}>
+          <Bookmark size={19} strokeWidth={1.8} />
+        </span>
         {t("saved")}
       </Link>
       <Link href={meHref} className={tabClass(isMe)} data-testid="tab-bar-me">
-        <UserIcon size={21} strokeWidth={1.6} />
+        <span className={iconWrapClass(isMe)}>
+          <UserIcon size={19} strokeWidth={1.8} />
+        </span>
         {t("me")}
       </Link>
     </nav>
