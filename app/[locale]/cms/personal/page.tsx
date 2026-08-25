@@ -59,7 +59,7 @@ const PersonalPage = () => {
       <p data-testid="cms-personal-not-logged-in">{tCms("notLoggedIn")}</p>
     );
   return (
-    <div className="flex flex-col gap-5" data-testid="cms-personal-page">
+    <div className="flex flex-col gap-6" data-testid="cms-personal-page">
       <div data-testid="cms-personal-dashboard-container">
         <DashBoard
           name={tSidebar("dashboardPersonal")}
@@ -69,7 +69,9 @@ const PersonalPage = () => {
           following={data?.following?.length}
         />
       </div>
-      <FollowList data={data} loading={isLoading} />
+      <div className="rounded-2xl border border-line-soft bg-surface p-5 shadow-sm">
+        <FollowList data={data} loading={isLoading} />
+      </div>
     </div>
   );
 };

@@ -1,14 +1,14 @@
 "use client";
 import ImageShow from "@/components/Image";
 import { Comment } from "@/interface/Comment";
-import { DeleteOutlined } from "@ant-design/icons";
 import { useUser } from "@clerk/nextjs";
-import { Button, Tooltip } from "antd";
-import { MessageCircle, ThumbsUp } from "lucide-react";
+import { Tooltip } from "antd";
+import { MessageCircle, ThumbsUp, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { format } from "timeago.js";
 import { format as formatDate } from "date-fns";
+import { cn } from "@/lib/utils";
 
 type Props = {
   comment: Comment;
@@ -20,7 +20,7 @@ type Props = {
     parentId?: string | null;
   }) => void;
   onLike: (id: string) => void;
-  likeComments: any;
+  likeComments: string[] | undefined;
   onDisLike: (id: string) => void;
 };
 
@@ -38,184 +38,131 @@ const CommentItem = ({
   const { user } = useUser();
   const t = useTranslations("Comments");
   const isAdmin = user?.publicMetadata?.role === "admin" || false;
-  const handleReply = () => {
-    onReply({
-      desc: desc,
-      post: postId,
-      parentId: isReply ? comment._id : null,
-    });
+
+  const handleReply = (e: React.FormEvent) => {
+    e.preventDefault();
+    onReply({ desc, post: postId, parentId: comment._id });
     setIsReply(false);
     setDesc("");
   };
-  const isLiked = likeComments?.includes(comment._id);
 
-  return (
-    <div data-testid={`comment-${comment._id}`}>
-      <div className="p-4 bg-slate-50 rounded-xl dark:bg-gray-800">
-        <div className="flex items-center gap-4">
-          <ImageShow
-            src={comment.user.img}
-            className="w-10 h-10 rounded-full object-cover"
-            width={40}
-            height={40}
-            alt="userImg"
-          />
-          <span className="font-medium">{comment.user.username}</span>
+  const CommentBubble = ({
+    item,
+    isReplyItem,
+  }: {
+    item: Comment;
+    isReplyItem?: boolean;
+  }) => {
+    const liked = likeComments?.includes(item._id);
+    const canDelete = item.user.username === user?.username || isAdmin;
 
-          <Tooltip
-            title={formatDate(new Date(comment?.createdAt), "dd/MM/yyyy hh:mm")}
-          >
-            <span className="text-sm text-gray-500">
-              {format(comment?.createdAt)}
+    return (
+      <div className={cn("flex flex-col gap-2", isReplyItem && "ml-8 mt-3")}>
+        <div
+          className="rounded-2xl border border-line-soft bg-surface p-4 shadow-sm"
+          data-testid={isReplyItem ? undefined : `comment-${item._id}`}
+        >
+          <div className="flex items-center gap-3">
+            <ImageShow
+              src={item.user.img}
+              className="h-9 w-9 flex-none rounded-full object-cover"
+              width={36}
+              height={36}
+              alt="userImg"
+            />
+            <span className="text-sm font-semibold text-ink">
+              {item.user.username}
             </span>
-          </Tooltip>
-          {(comment.user.username === user?.username || isAdmin) && (
-            <button
-              className="text-sm text-gray-500"
-              onClick={() => onDelete(comment._id)}
-              data-testid={`comment-delete-button-${comment._id}`}
+            <Tooltip
+              title={formatDate(new Date(item.createdAt), "dd/MM/yyyy hh:mm")}
             >
-              <DeleteOutlined
-                className="cursor-pointer"
-                style={{ color: "red", fontSize: "16px" }}
-              />
+              <span className="font-mono text-xs text-muted">
+                {format(item.createdAt)}
+              </span>
+            </Tooltip>
+            {canDelete && (
+              <button
+                type="button"
+                className="ml-auto text-muted hover:text-red-500"
+                onClick={() => onDelete(item._id)}
+                data-testid={`comment-delete-button-${item._id}`}
+              >
+                <Trash2 size={14} />
+              </button>
+            )}
+          </div>
+          <p className="mt-2.5 text-sm text-ink">{item.desc}</p>
+        </div>
+        <div className="flex items-center gap-1 px-1">
+          <button
+            type="button"
+            onClick={() => (liked ? onDisLike(item._id) : onLike(item._id))}
+            className={cn(
+              "flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium",
+              liked ? "text-accent-ink" : "text-muted hover:text-ink"
+            )}
+            data-testid={`comment-like-button-${item._id}`}
+          >
+            <ThumbsUp size={14} />
+            <span data-testid={`comment-like-count-${item._id}`}>
+              {item.like}
+            </span>
+          </button>
+          {!isReplyItem && (
+            <button
+              type="button"
+              onClick={() => setIsReply(true)}
+              className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-muted hover:text-ink"
+              data-testid={`comment-reply-button-${item._id}`}
+            >
+              <MessageCircle size={14} />
+              {t("reply")}
             </button>
           )}
         </div>
-        <div className="mt-4">
-          <p>{comment.desc}</p>
-        </div>
       </div>
-      {!isReply && (
-        <div className="flex">
-          <Button
-            type="text"
-            onClick={() =>
-              isLiked ? onDisLike(comment._id) : onLike(comment._id)
-            }
-            data-testid={`comment-like-button-${comment._id}`}
-          >
-            <ThumbsUp
-              className={
-                isLiked
-                  ? "text-slate-800 dark:text-slate-300"
-                  : "text-gray-500"
-              }
-            />
-            <span
-              className="dark:text-gray-400"
-              data-testid={`comment-like-count-${comment._id}`}
-            >
-              {comment.like}
-            </span>
-          </Button>
-          <Button
-            type="text"
-            className="text-sm text-gray-500 "
-            icon={<MessageCircle color="currentColor" />}
-            onClick={() => setIsReply(true)}
-            data-testid={`comment-reply-button-${comment._id}`}
-          >
-            <span className="dark:text-gray-400">{t("reply")}</span>
-          </Button>
-        </div>
-      )}
+    );
+  };
+
+  return (
+    <div>
+      <CommentBubble item={comment} />
+
       {isReply && (
-        <div className="mt-4">
-          <form
-            action=""
-            className="flex items-center justify-between gap-8 w-full"
-            onSubmit={handleReply}
-          >
-            <textarea
-              placeholder="Write a comment..."
-              className="w-full p-4 rounded-xl bg-white dark:bg-gray-800 dark:text-gray-100"
-              value={desc}
-              onChange={(e) => setDesc(e.target.value)}
-              name="desc"
-              data-testid="comment-reply-textarea"
-            />
-            <div className="flex items-center gap-4">
-              <button
-                disabled={desc.length === 0}
-                className="bg-slate-500 text-white px-4 py-3 font-medium rounded-xl disabled:opacity-50"
-                data-testid={`comment-reply-send-button-${comment._id}`}
-              >
-                {t("send")}
-              </button>
-              <button
-                onClick={() => setIsReply(false)}
-                className="bg-red-500 text-white px-4 py-3 font-medium rounded-xl"
-                data-testid={`comment-reply-cancel-button-${comment._id}`}
-              >
-                {t("cancel")}
-              </button>
-            </div>
-          </form>
-        </div>
+        <form onSubmit={handleReply} className="ml-8 mt-3 flex flex-col gap-2">
+          <textarea
+            placeholder={t("writeComment")}
+            className="min-h-[64px] w-full resize-none rounded-[10px] border border-line bg-page p-3 text-sm text-ink outline-none focus:border-accent"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+            name="desc"
+            data-testid="comment-reply-textarea"
+          />
+          <div className="flex items-center gap-2">
+            <button
+              type="submit"
+              disabled={desc.length === 0}
+              className="flex h-9 items-center rounded-[10px] bg-gradient-to-b from-accent to-accent-dark px-3.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+              data-testid={`comment-reply-send-button-${comment._id}`}
+            >
+              {t("send")}
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsReply(false)}
+              className="flex h-9 items-center rounded-[10px] border border-line px-3.5 text-sm font-medium text-muted hover:text-ink"
+              data-testid={`comment-reply-cancel-button-${comment._id}`}
+            >
+              {t("cancel")}
+            </button>
+          </div>
+        </form>
       )}
-      {comment.replies && (
+
+      {comment.replies && comment.replies.length > 0 && (
         <div>
           {comment.replies.map((reply: Comment) => (
-            <div key={reply._id} className="ml-6">
-              <div className="p-4 bg-slate-50 rounded-xl mt-4">
-                <div className="flex items-center gap-4">
-                  <ImageShow
-                    src={reply.user.img}
-                    className="w-10 h-10 rounded-full object-cover"
-                    width={40}
-                    height={40}
-                    alt="userImg"
-                  />
-                  <span className="font-medium">{reply.user.username}</span>
-                  <Tooltip
-                    title={formatDate(
-                      new Date(comment?.createdAt),
-                      "dd/MM/yyyy hh:mm"
-                    )}
-                  >
-                    <span className="text-sm text-gray-500">
-                      {format(comment?.createdAt)}
-                    </span>
-                  </Tooltip>
-                  {(reply.user.username === user?.username || isAdmin) && (
-                    <button
-                      className="text-sm text-gray-500"
-                      onClick={() => onDelete(reply._id)}
-                      data-testid={`comment-delete-button-${reply._id}`}
-                    >
-                      <DeleteOutlined
-                        className="cursor-pointer"
-                        style={{ color: "red", fontSize: "16px" }}
-                      />
-                    </button>
-                  )}
-                </div>
-                <div className="mt-4">
-                  <p>{reply.desc}</p>
-                </div>
-              </div>
-              <Button
-                type="text"
-                onClick={() =>
-                  likeComments?.includes(reply._id)
-                    ? onDisLike(reply._id)
-                    : onLike(reply._id)
-                }
-                data-testid={`comment-like-button-${reply._id}`}
-              >
-                <ThumbsUp
-                  className={
-                    likeComments?.includes(reply._id)
-                      ? "text-slate-800 dark:text-slate-300"
-                      : "text-gray-500"
-                  }
-                />
-                <span data-testid={`comment-like-count-${reply._id}`}>
-                  {reply.like}
-                </span>
-              </Button>
-            </div>
+            <CommentBubble key={reply._id} item={reply} isReplyItem />
           ))}
         </div>
       )}

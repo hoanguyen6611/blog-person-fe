@@ -1,8 +1,5 @@
 "use client";
-import useSWR from "swr";
-import { fetcherWithTokenUseSWR } from "@/api/useswr";
-import { useAuth } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import ImageShow from "./Image";
 
 type UserItem = {
@@ -12,30 +9,33 @@ type UserItem = {
   img?: string;
 };
 
-const FollowList = ({ data, loading }: { data: any; loading: boolean }) => {
-  const { getToken } = useAuth();
-  const [token, setToken] = useState<string | null>(null);
+type FollowListData = {
+  followers?: UserItem[];
+  following?: UserItem[];
+};
 
-  useEffect(() => {
-    (async () => {
-      const t = await getToken();
-      setToken(t);
-    })();
-  }, [getToken]);
+const FollowList = ({
+  data,
+  loading,
+}: {
+  data: FollowListData;
+  loading: boolean;
+}) => {
+  const t = useTranslations("FollowList");
 
   const renderUserList = (users: UserItem[], title: string) => (
-    <div>
-      <h2 className="text-lg font-semibold mb-2 dark:text-gray-200">
+    <div className="flex flex-col gap-3">
+      <span className="font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
         {title}
-      </h2>
-      <div className="space-y-4">
+      </span>
+      <div className="flex flex-col gap-2.5">
         {users.length === 0 ? (
-          <p className="text-gray-500 dark:text-gray-400">No users.</p>
+          <p className="text-sm text-muted">{t("empty")}</p>
         ) : (
           users.map((user) => (
             <div
               key={user._id}
-              className="flex items-center gap-4 p-3 rounded-xl bg-white dark:bg-gray-800 shadow-sm"
+              className="flex items-center gap-3 rounded-2xl border border-line-soft bg-surface p-3 shadow-sm"
               data-testid={`follow-list-item-${user._id}`}
             >
               <ImageShow
@@ -43,15 +43,13 @@ const FollowList = ({ data, loading }: { data: any; loading: boolean }) => {
                 alt={user.username}
                 width={40}
                 height={40}
-                className="rounded-full object-cover"
+                className="h-10 w-10 flex-none rounded-full object-cover"
               />
-              <div>
-                <p className="font-medium dark:text-gray-100">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-ink">
                   {user.username}
                 </p>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
-                  {user.fullname}
-                </p>
+                <p className="truncate text-xs text-muted">{user.fullname}</p>
               </div>
             </div>
           ))
@@ -60,16 +58,12 @@ const FollowList = ({ data, loading }: { data: any; loading: boolean }) => {
     </div>
   );
 
+  if (loading) return <p className="text-sm text-muted">Loading...</p>;
+
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-10">
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          {renderUserList(data?.followers || [], "👥 Followers")}
-          {renderUserList(data?.following || [], "🚶‍♂️ Following")}
-        </>
-      )}
+    <div className="grid gap-6 sm:grid-cols-2">
+      {renderUserList(data?.followers || [], t("followers"))}
+      {renderUserList(data?.following || [], t("following"))}
     </div>
   );
 };

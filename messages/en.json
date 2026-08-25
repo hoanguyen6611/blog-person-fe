@@ -262,6 +262,17 @@
     "action": "Action",
     "newTag": "New Tag"
   },
+  "FollowList": {
+    "followers": "Followers",
+    "following": "Following",
+    "empty": "No users yet."
+  },
+  "NotFound": {
+    "description": "Oops! The page you're looking for doesn't exist.",
+    "searchPlaceholder": "Search posts...",
+    "backHome": "Home",
+    "browsePosts": "Browse posts"
+  },
   "Footer": {
     "description": "A place to share knowledge, code and stories.",
     "about": "About",

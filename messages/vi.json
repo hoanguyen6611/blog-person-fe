@@ -262,6 +262,17 @@
     "action": "Tác vụ",
     "newTag": "Thêm thẻ"
   },
+  "FollowList": {
+    "followers": "Người theo dõi",
+    "following": "Đang theo dõi",
+    "empty": "Chưa có người dùng nào."
+  },
+  "NotFound": {
+    "description": "Rất tiếc! Trang bạn đang tìm không tồn tại.",
+    "searchPlaceholder": "Tìm bài viết...",
+    "backHome": "Trang chủ",
+    "browsePosts": "Xem bài viết"
+  },
   "Footer": {
     "description": "Nơi chia sẻ kiến thức, công nghệ và những câu chuyện cá nhân.",
     "about": "Giới thiệu",

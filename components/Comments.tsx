@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Send } from "lucide-react";
 import { Comment } from "@/interface/Comment";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "../api/useswr";
 import { useTranslations } from "next-intl";
@@ -164,45 +165,49 @@ const Comments = ({ postId }: { postId: string }) => {
     }
   };
   const comments = Array.isArray(data) ? data : data?.comments || [];
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Failed to load</p>;
+  if (isLoading) return <p className="text-sm text-muted">Loading...</p>;
+  if (error) return <p className="text-sm text-muted">Failed to load</p>;
   return (
-    <div className="flex flex-col gap-8 lg:w-3/5">
-      <h1 className="text-xl text-black font-bold dark:text-gray-400">
+    <div className="flex flex-col gap-6" data-testid="comments-section">
+      <h2 className="font-display text-xl font-bold tracking-tight text-ink">
         {t("title")}
-      </h1>
+      </h2>
       <form
-        action=""
-        className="flex items-center justify-between gap-8 w-full"
+        className="flex flex-col gap-3 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm sm:flex-row sm:items-start"
         onSubmit={handleSubmit}
       >
         <textarea
           placeholder={t("writeComment")}
-          className="w-full p-4 rounded-xl bg-white dark:bg-gray-800 dark:text-gray-100"
+          className="min-h-[48px] w-full flex-1 resize-none rounded-[10px] border border-line bg-page p-3 text-sm text-ink outline-none focus:border-accent"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
           name="desc"
           data-testid="comment-textarea"
         />
         <button
-          className="bg-slate-500 text-white px-4 py-3 font-medium rounded-xl"
+          type="submit"
+          disabled={!desc.trim()}
+          className="flex h-10 shrink-0 items-center gap-1.5 rounded-[10px] bg-gradient-to-b from-accent to-accent-dark px-4 font-cta text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
           data-testid="comment-submit-button"
         >
+          <Send size={14} />
           {t("comment")}
         </button>
       </form>
-      {comments.map((comment: Comment) => (
-        <CommentItem
-          key={comment._id}
-          comment={comment}
-          postId={postId}
-          onDelete={handleDeleteComment}
-          onReply={handleReply}
-          onLike={handleLike}
-          likeComments={likeComments}
-          onDisLike={handleDisLike}
-        />
-      ))}
+      <div className="flex flex-col gap-5">
+        {comments.map((comment: Comment) => (
+          <CommentItem
+            key={comment._id}
+            comment={comment}
+            postId={postId}
+            onDelete={handleDeleteComment}
+            onReply={handleReply}
+            onLike={handleLike}
+            likeComments={likeComments}
+            onDisLike={handleDisLike}
+          />
+        ))}
+      </div>
     </div>
   );
 };

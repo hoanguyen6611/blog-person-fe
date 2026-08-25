@@ -204,7 +204,7 @@ const PostCreate = () => {
         router.push(`/cms/posts`);
       } else if (mode === "schedule") {
         toast.success(t("toastScheduled"));
-        router.push(`/cms/posts/schedule`);
+        router.push(`/cms/post-schedule`);
       } else {
         toast.success(t("toastPublished"));
         router.push(`/posts/${res.data._id}`);

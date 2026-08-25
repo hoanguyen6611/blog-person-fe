@@ -3,10 +3,13 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
+import { ArrowLeft, BookOpen, Search, SearchX } from "lucide-react";
 
 export default function NotFound() {
   const [query, setQuery] = useState("");
   const router = useRouter();
+  const t = useTranslations("NotFound");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,63 +20,69 @@ export default function NotFound() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-4 py-16 bg-white dark:bg-black"
+      className="flex min-h-screen items-center justify-center bg-page px-4 py-16"
       data-testid="not-found-page"
     >
       <motion.div
-        className="text-center space-y-6 max-w-xl"
-        initial={{ opacity: 0, y: 50 }}
+        className="flex max-w-xl flex-col items-center gap-6 text-center"
+        initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.5 }}
       >
-        <h1 className="text-6xl font-bold text-gray-800 dark:text-gray-400">
-          404
-        </h1>
-        <p className="text-xl text-gray-600 dark:text-gray-300">
-          Oops! Trang bạn đang tìm không tồn tại.
-        </p>
-
-        <motion.img
-          src="https://ik.imagekit.io/cjx1zgaos/undraw_page-not-found_6wni.svg?updatedAt=1751122656195"
-          alt="404 illustration"
-          className="w-72 mx-auto"
-          initial={{ scale: 0.9 }}
+        <motion.div
+          className="flex h-20 w-20 items-center justify-center rounded-2xl border border-line-soft bg-surface text-accent-ink shadow-sm"
+          initial={{ scale: 0.85 }}
           animate={{ scale: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-        />
+          transition={{ delay: 0.1, duration: 0.4 }}
+        >
+          <SearchX size={36} strokeWidth={1.5} />
+        </motion.div>
 
-        <form onSubmit={handleSearch} className="flex justify-center mt-4">
+        <div className="flex flex-col gap-2">
+          <h1 className="font-display text-6xl font-bold tracking-tight text-ink">
+            404
+          </h1>
+          <p className="text-base text-muted">{t("description")}</p>
+        </div>
+
+        <form
+          onSubmit={handleSearch}
+          className="flex w-full max-w-md items-center gap-2 rounded-2xl border border-line-soft bg-surface p-1.5 shadow-sm"
+        >
           <input
             type="text"
-            placeholder="Tìm bài viết..."
+            placeholder={t("searchPlaceholder")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full max-w-md px-4 py-2 rounded-l-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-gray-400"
+            className="h-10 w-full flex-1 rounded-xl bg-transparent px-3 text-sm text-ink outline-none placeholder:text-faint"
             data-testid="not-found-search-input"
           />
           <button
             type="submit"
-            className="px-4 py-2 bg-slate-600 text-white rounded-r-lg hover:bg-slate-700 transition"
+            className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-to-b from-accent to-accent-dark text-white transition-opacity hover:opacity-90"
             data-testid="not-found-search-button"
+            aria-label={t("searchPlaceholder")}
           >
-            🔍
+            <Search size={16} />
           </button>
         </form>
 
-        <div className="space-x-4 mt-6">
+        <div className="mt-2 flex items-center gap-3">
           <Link
             href="/"
-            className="inline-block px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-400 rounded-xl hover:opacity-90 transition"
+            className="flex items-center gap-1.5 rounded-xl border border-line-soft bg-surface px-5 py-2.5 text-sm font-medium text-ink shadow-sm transition-opacity hover:opacity-90"
             data-testid="not-found-home-link"
           >
-            ⬅️ Trang chủ
+            <ArrowLeft size={14} />
+            {t("backHome")}
           </Link>
           <Link
             href="/posts"
-            className="inline-block px-6 py-3 bg-slate-600 text-white rounded-xl hover:bg-slate-700 transition"
+            className="flex items-center gap-1.5 rounded-xl bg-gradient-to-b from-accent to-accent-dark px-5 py-2.5 font-cta text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
             data-testid="not-found-posts-link"
           >
-            📚 Xem bài viết
+            <BookOpen size={14} />
+            {t("browsePosts")}
           </Link>
         </div>
       </motion.div>
