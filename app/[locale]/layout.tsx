@@ -14,8 +14,8 @@ import Footer from "@/components/Footer";
 import MobileTabBar from "@/components/MobileTabBar";
 
 export const metadata: Metadata = {
-  title: "Blog Personal",
-  description: "Blog Personal Hoane",
+  title: "Tech News",
+  description: "Tech News",
 };
 
 export default async function LocaleLayout({
