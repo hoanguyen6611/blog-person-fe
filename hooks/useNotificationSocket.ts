@@ -15,11 +15,26 @@ export function useNotificationSocket(
   useEffect(() => {
     if (!isSignedIn || socketRef.current?.connected) return;
 
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL;
+    if (!socketUrl) {
+      console.error(
+        "❌ Socket not started: NEXT_PUBLIC_SOCKET_URL is not set in this build's environment."
+      );
+      setStatus("disconnected");
+      return;
+    }
+
     (async () => {
       const token = await getToken();
-      const socket = clientIO(process.env.NEXT_PUBLIC_SOCKET_URL!, {
+      const socket = clientIO(socketUrl, {
         auth: { token },
-        transports: ["websocket"],
+        // Let the client negotiate polling -> websocket instead of forcing
+        // a raw WebSocket upgrade on the first request. Forcing
+        // ["websocket"] only works when every proxy/host in front of the
+        // socket server passes the Upgrade handshake through cleanly; on
+        // hosts where it doesn't, the connection fails silently with no
+        // fallback even though the same code works fine on localhost.
+        transports: ["polling", "websocket"],
         reconnection: true,
         reconnectionAttempts: 5,
         reconnectionDelay: 2000,
@@ -40,7 +55,10 @@ export function useNotificationSocket(
 
       socket.on("connect_error", (err: any) => {
         setStatus("disconnected");
-        console.error("❌ Socket connection error:", err.message);
+        console.error(
+          `❌ Socket connection error (url: ${socketUrl}):`,
+          err.message
+        );
       });
 
       // Tránh trùng lặp
