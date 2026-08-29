@@ -1,18 +1,71 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
-import { FaFacebookF, FaGithub, FaLinkedinIn } from "react-icons/fa";
+import { useLocale, useTranslations } from "next-intl";
+import useSWR from "swr";
+import {
+  FaFacebookF,
+  FaGithub,
+  FaInstagram,
+  FaLinkedinIn,
+  FaTwitter,
+  FaYoutube,
+} from "react-icons/fa";
+import { fetcherUseSWR } from "@/api/useswr";
+import { ResolvedSiteSettings } from "@/interface/SiteSetting";
+import ImageShow from "./Image";
+
+const DEFAULT_SOCIALS = {
+  facebook: "https://www.facebook.com/hoahuy2606",
+  linkedin: "https://www.linkedin.com/in/hoanguyen6611/",
+  github: "https://github.com/hoanguyen6611",
+};
 
 export default function Footer() {
   const t = useTranslations("Footer");
+  const locale = useLocale();
   const year = new Date().getFullYear();
+  const { data: settings } = useSWR<ResolvedSiteSettings>(
+    `${process.env.NEXT_PUBLIC_API_URL}/settings?locale=${locale}`,
+    fetcherUseSWR
+  );
+
+  const siteName = settings?.site?.name;
+  const description = settings?.site?.footerText || t("description");
+  const logo = settings?.site?.logo;
 
   const socials = [
-    { icon: <FaFacebookF />, href: "https://www.facebook.com/hoahuy2606", name: "facebook" },
-    { icon: <FaLinkedinIn />, href: "https://www.linkedin.com/in/hoanguyen6611/", name: "linkedin" },
-    { icon: <FaGithub />, href: "https://github.com/hoanguyen6611", name: "github" },
-  ];
+    {
+      icon: <FaFacebookF />,
+      href: settings?.social?.facebook || DEFAULT_SOCIALS.facebook,
+      name: "facebook",
+    },
+    {
+      icon: <FaTwitter />,
+      href: settings?.social?.twitter,
+      name: "twitter",
+    },
+    {
+      icon: <FaInstagram />,
+      href: settings?.social?.instagram,
+      name: "instagram",
+    },
+    {
+      icon: <FaYoutube />,
+      href: settings?.social?.youtube,
+      name: "youtube",
+    },
+    {
+      icon: <FaLinkedinIn />,
+      href: settings?.social?.linkedin || DEFAULT_SOCIALS.linkedin,
+      name: "linkedin",
+    },
+    {
+      icon: <FaGithub />,
+      href: settings?.social?.github || DEFAULT_SOCIALS.github,
+      name: "github",
+    },
+  ].filter((s) => s.href);
 
   return (
     <footer className="mt-16 border-t border-line bg-surface text-muted">
@@ -21,15 +74,27 @@ export default function Footer() {
         <div className="text-center md:text-left">
           <Link
             href="/"
-            className="font-display text-lg font-bold text-ink"
+            className="flex items-center justify-center gap-2 font-display text-lg font-bold text-ink md:justify-start"
             data-testid="footer-logo-link"
           >
-            Blog<span className="text-accent"> Person</span>
+            {logo && (
+              <ImageShow
+                src={logo}
+                alt={siteName || "logo"}
+                width={28}
+                height={28}
+                className="h-7 w-7 rounded object-cover"
+              />
+            )}
+            {siteName ? (
+              siteName
+            ) : (
+              <>
+                Blog<span className="text-accent"> Person</span>
+              </>
+            )}
           </Link>
-          <p className="text-sm mt-1 text-muted max-w-xs">
-            {t("description") ||
-              "A place to share knowledge, code and stories."}
-          </p>
+          <p className="text-sm mt-1 text-muted max-w-xs">{description}</p>
         </div>
 
         {/* Navigation */}
@@ -75,7 +140,7 @@ export default function Footer() {
       </div>
 
       <div className="text-center py-4 border-t border-line font-mono text-xs text-muted">
-        © {year} Blog Person. {t("rights") || "All rights reserved."}
+        © {year} {siteName || "Blog Person"}. {t("rights") || "All rights reserved."}
       </div>
     </footer>
   );

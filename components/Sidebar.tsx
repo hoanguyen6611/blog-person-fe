@@ -11,6 +11,7 @@ import {
   Tag,
   AlarmClockCheck,
   MessageCircle,
+  Globe,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import useSWR from "swr";
@@ -107,6 +108,7 @@ export default function Sidebar({ admin }: { admin: boolean }) {
     "/cms/category": "cms-sidebar-categories-link",
     "/cms/tag": "cms-sidebar-tags-link",
     "/cms/comments": "cms-sidebar-comments-link",
+    "/cms/site-settings": "cms-sidebar-site-settings-link",
     "/cms/personal": "cms-sidebar-personal-dashboard-link",
     "/cms/posts": "cms-sidebar-my-posts-link",
     "/cms/post-schedule": "cms-sidebar-schedule-link",
@@ -137,6 +139,11 @@ export default function Sidebar({ admin }: { admin: boolean }) {
             href: "/cms/comments",
             label: t("comments"),
             icon: <MessageCircle size={20} />,
+          },
+          {
+            href: "/cms/site-settings",
+            label: t("siteSettings"),
+            icon: <Globe size={20} />,
           },
         ]
       : []),
