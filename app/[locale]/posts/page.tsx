@@ -1,15 +1,45 @@
 "use client";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import useSWR from "swr";
 import { SlidersHorizontal } from "lucide-react";
 import PostList from "@/components/PostList";
 import SideMenu from "@/components/SideMenu";
 import PostSortControl from "@/components/PostSortControl";
 import FilterSheet from "@/components/FilterSheet";
 import { useTranslations } from "next-intl";
+import { fetcherUseSWR } from "@/api/useswr";
+import { Category } from "@/interface/Category";
+import { Tag } from "@/interface/Tag";
 
 const PostListPage = () => {
   const [filterOpen, setFilterOpen] = useState(false);
   const t = useTranslations("PostsPage");
+  const searchParams = useSearchParams();
+  const activeTagId = searchParams.get("tag");
+  const activeCatId = searchParams.get("cat");
+
+  const { data: tagsData } = useSWR(
+    activeTagId ? `${process.env.NEXT_PUBLIC_API_URL}/tags` : null,
+    fetcherUseSWR
+  );
+  const { data: categoriesData } = useSWR(
+    activeCatId ? `${process.env.NEXT_PUBLIC_API_URL}/category` : null,
+    fetcherUseSWR
+  );
+
+  const activeTagName = tagsData?.tags?.find(
+    (tag: Tag) => tag._id === activeTagId
+  )?.name;
+  const activeCategoryName = categoriesData?.categories?.find(
+    (cat: Category) => cat._id === activeCatId
+  )?.title;
+
+  const heading = activeTagId
+    ? t("filteredByTag", { tag: activeTagName ?? "" })
+    : activeCatId
+      ? t("filteredByCategory", { category: activeCategoryName ?? "" })
+      : t("title");
 
   return (
     <div className="py-8" data-testid="posts-page">
@@ -20,8 +50,11 @@ const PostListPage = () => {
 
         <div className="flex flex-col gap-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h1 className="font-display text-2xl font-bold tracking-tight text-ink">
-              {t("title")}
+            <h1
+              className="font-display text-2xl font-bold tracking-tight text-ink"
+              data-testid="posts-page-heading"
+            >
+              {heading}
             </h1>
             <div className="flex items-center gap-2">
               <button

@@ -108,6 +108,8 @@
     "search": "Search",
     "category": "Category",
     "popularTags": "Popular tags",
+    "filteredByTag": "Posts tagged #{tag}",
+    "filteredByCategory": "Posts in {category}",
     "clearFilters": "Clear filters",
     "filter": "Filter",
     "close": "Close",

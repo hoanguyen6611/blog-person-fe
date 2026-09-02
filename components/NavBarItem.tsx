@@ -143,7 +143,11 @@ export const NotificationBell = ({
     async ([url]) => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(url, token!);
-    }
+    },
+    // The socket push below already calls mutate() the instant a new event
+    // arrives — this interval is just a safety net so the badge still
+    // self-corrects on its own if the socket connection ever drops.
+    { refreshInterval: 30000, revalidateOnFocus: true }
   );
 
   const list: Notification[] = Array.isArray(notifications)

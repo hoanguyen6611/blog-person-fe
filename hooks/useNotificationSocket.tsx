@@ -3,9 +3,29 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { io as clientIO, Socket } from "socket.io-client";
 import { toast } from "react-toastify";
+import { Bell, FileText, Heart, MessageSquare, UserPlus } from "lucide-react";
 
 type SocketStatus = "connected" | "disconnected" | "connecting";
 type Listener = (data: any) => void;
+
+const TYPE_ICON: Record<string, typeof Bell> = {
+  comment: MessageSquare,
+  post: FileText,
+  like: Heart,
+  follow: UserPlus,
+};
+
+const NotificationToast = ({ type, message }: { type?: string; message: string }) => {
+  const Icon = TYPE_ICON[type ?? ""] ?? Bell;
+  return (
+    <div className="flex items-start gap-3">
+      <span className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-accent-soft text-accent-ink">
+        <Icon size={16} />
+      </span>
+      <p className="text-sm leading-snug text-ink">{message}</p>
+    </div>
+  );
+};
 
 // The bell is mounted twice at once (desktop + mobile variants both live in
 // the DOM, toggled by CSS only). Without a module-level singleton, each
@@ -64,7 +84,11 @@ const ensureSocket = (token: string) => {
       // Shown once per event here, centrally — not from each subscriber's
       // onReceive — since the bell mounts twice (desktop + mobile) and both
       // subscribe to the same shared socket.
-      if (data?.message) toast.success(data.message);
+      if (data?.message) {
+        toast(<NotificationToast type={data?.type} message={data.message} />, {
+          icon: false,
+        });
+      }
       listeners.forEach((fn) => fn(data));
     });
   });

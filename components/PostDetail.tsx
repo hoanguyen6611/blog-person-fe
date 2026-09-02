@@ -64,9 +64,9 @@ export default function PostDetail({ post }: { post: Post }) {
   const categoryTitle = categories?.categories.find(
     (cat: Category) => cat._id === post?.category
   )?.title;
-  const tagNames = tags?.tags
-    ?.filter((tag: TagInterface) => post.tags.includes(tag._id))
-    .map((tag: TagInterface) => tag.name);
+  const postTags: TagInterface[] = tags?.tags?.filter((tag: TagInterface) =>
+    post.tags.includes(tag._id)
+  );
   const readTeasers: RelatedPost[] = (relatedPosts?.relatedPosts ?? []).slice(0, 3);
 
   return (
@@ -236,18 +236,20 @@ export default function PostDetail({ post }: { post: Post }) {
             </div>
           )}
 
-          {canReadFull && tagNames && tagNames.length > 0 && (
+          {canReadFull && postTags && postTags.length > 0 && (
             <div
               className="flex flex-wrap items-center gap-2"
               data-testid="post-detail-tags"
             >
-              {tagNames.map((tag: string) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-line px-3 py-1 text-xs text-muted"
+              {postTags.map((tag) => (
+                <Link
+                  key={tag._id}
+                  href={`/posts?tag=${tag._id}`}
+                  className="rounded-full border border-line px-3 py-1 text-xs text-muted transition-colors hover:border-accent hover:text-accent-ink"
+                  data-testid={`post-detail-tag-${tag._id}`}
                 >
-                  #{tag}
-                </span>
+                  #{tag.name}
+                </Link>
               ))}
             </div>
           )}

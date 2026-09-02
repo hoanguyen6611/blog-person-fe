@@ -73,6 +73,59 @@
   filter: brightness(0.88);
 }
 
+/* Re-theme react-toastify to match the design tokens instead of its default
+   plain-white/generic-icon look. Only variable overrides — the library's
+   own stylesheet still handles layout/animation. Selector is "html:root"
+   (not plain ":root") so this wins on specificity regardless of which
+   chunk Next.js's bundler happens to place last — relying on import
+   order between "./globals.css" and "react-toastify/dist/ReactToastify.css"
+   turned out not to be reliable across dev/build. */
+html:root {
+  --toastify-toast-background: var(--color-surface);
+  --toastify-color-light: var(--color-surface);
+  --toastify-color-dark: var(--color-surface);
+  --toastify-text-color-light: var(--color-ink);
+  --toastify-text-color-dark: var(--color-ink);
+  --toastify-toast-bd-radius: 16px;
+  --toastify-toast-padding: 14px 16px;
+  --toastify-toast-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.1),
+    0 2px 6px -2px rgba(15, 23, 42, 0.06);
+  --toastify-font-family: var(--font-sans);
+
+  --toastify-color-success: var(--color-success);
+  --toastify-text-color-success: var(--color-ink);
+  --toastify-icon-color-success: var(--color-success);
+  --toastify-color-progress-success: var(--color-success);
+
+  --toastify-color-warning: var(--color-warning);
+  --toastify-text-color-warning: var(--color-ink);
+  --toastify-icon-color-warning: var(--color-warning);
+  --toastify-color-progress-warning: var(--color-warning);
+
+  --toastify-color-error: #ef4444;
+  --toastify-text-color-error: var(--color-ink);
+  --toastify-icon-color-error: #ef4444;
+  --toastify-color-progress-error: #ef4444;
+
+  --toastify-color-info: var(--color-accent);
+  --toastify-text-color-info: var(--color-ink);
+  --toastify-icon-color-info: var(--color-accent-ink);
+  --toastify-color-progress-info: var(--color-accent);
+}
+
+.Toastify__toast {
+  border: 1px solid var(--color-line-soft);
+  font-family: var(--font-sans);
+}
+
+.Toastify__close-button {
+  color: var(--color-faint);
+  opacity: 1;
+}
+.Toastify__close-button:hover {
+  color: var(--color-ink);
+}
+
 body {
   width: 100vw;
   overflow-x: hidden;

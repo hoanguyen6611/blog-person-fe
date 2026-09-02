@@ -108,6 +108,8 @@
     "search": "Tìm kiếm",
     "category": "Danh mục",
     "popularTags": "Thẻ phổ biến",
+    "filteredByTag": "Bài viết gắn thẻ #{tag}",
+    "filteredByCategory": "Bài viết trong danh mục {category}",
     "clearFilters": "Xoá bộ lọc",
     "filter": "Bộ lọc",
     "close": "Đóng",

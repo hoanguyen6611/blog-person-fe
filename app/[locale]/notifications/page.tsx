@@ -43,7 +43,8 @@ export default function NotificationsPage() {
     async ([url]: readonly [string]) => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(url, token!);
-    }
+    },
+    { refreshInterval: 30000, revalidateOnFocus: true }
   );
   const notifications: Notification[] = useMemo(
     () => (Array.isArray(data) ? data : data?.notifications ?? []),

@@ -28,7 +28,8 @@ export default function RecentActivity() {
         `${process.env.NEXT_PUBLIC_API_URL}/notifications`,
         token!
       );
-    }
+    },
+    { refreshInterval: 30000, revalidateOnFocus: true }
   );
 
   const items: Notification[] = (
