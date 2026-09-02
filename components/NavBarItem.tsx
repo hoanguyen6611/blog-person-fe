@@ -7,10 +7,10 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import { Dropdown } from "antd";
-import { Bell, FileText, MessageSquare, UserPlus, Plus } from "lucide-react";
+import { Bell, FileText, Heart, MessageSquare, UserPlus, Plus } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import { isToday, isThisWeek } from "date-fns";
@@ -100,8 +100,15 @@ const typeAvatarClass: Record<string, string> = {
   comment: "bg-avatar-blue-bg text-avatar-blue-text",
 };
 
+const typeIcon: Record<string, typeof MessageSquare> = {
+  comment: MessageSquare,
+  post: FileText,
+  like: Heart,
+  follow: UserPlus,
+};
+
 const NotificationAvatar = ({ type }: { type: string }) => {
-  const Icon = type === "comment" ? MessageSquare : type === "post" ? FileText : UserPlus;
+  const Icon = typeIcon[type] ?? UserPlus;
   return (
     <div
       className={cn(
@@ -121,26 +128,22 @@ export const NotificationBell = ({
 }) => {
   const { getToken, isSignedIn, userId } = useAuth();
   const t = useTranslations("NavBar");
-  const [token, setToken] = useState<string | null>(null);
   const [tab, setTab] = useState<"all" | "unread" | "comments">("all");
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    if (!userId) {
-      setToken(null);
-      return;
-    }
-    (async () => {
-      const t = await getToken();
-      setToken(t);
-    })();
-  }, [getToken, userId]);
-
+  // Keyed by userId, not the raw token: Clerk's getToken() can mint a
+  // different signed JWT string on each call even for the same session, and
+  // this bell is always mounted twice (desktop + mobile variants both live
+  // in the DOM). If the key included the token, each instance ended up with
+  // its own separate SWR cache entry, so marking a notification read (and
+  // mutating) on one instance never updated the other's badge count.
   const { data: notifications, mutate } = useSWR(
-    () =>
-      token ? [`${process.env.NEXT_PUBLIC_API_URL}/notifications`, token] : null,
-    ([url, token]) => fetcherWithTokenUseSWR(url, token)
+    userId ? [`${process.env.NEXT_PUBLIC_API_URL}/notifications`, userId] : null,
+    async ([url]) => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(url, token!);
+    }
   );
 
   const list: Notification[] = Array.isArray(notifications)
@@ -191,8 +194,7 @@ export const NotificationBell = ({
     }
   };
 
-  useNotificationSocket((data) => {
-    toast.success(data.message);
+  useNotificationSocket(() => {
     mutate();
   });
 

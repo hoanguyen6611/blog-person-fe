@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@clerk/nextjs";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import useSWR, { mutate as globalMutate } from "swr";
 import axios from "axios";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
@@ -28,28 +28,22 @@ export default function NotificationsPage() {
   const t = useTranslations("NotificationsPage");
   const tNav = useTranslations("NavBar");
   const { getToken, isSignedIn, userId } = useAuth();
-  const [token, setToken] = useState<string | null>(null);
   const [type, setType] = useState<string>("all");
   const [status, setStatus] = useState<StatusFilter>("all");
 
-  useEffect(() => {
-    if (!userId) {
-      setToken(null);
-      return;
-    }
-    (async () => {
-      const t = await getToken();
-      setToken(t);
-    })();
-  }, [getToken, userId]);
-
+  // Keyed by userId, not the raw token — see NavBarItem.tsx's NotificationBell
+  // for why: Clerk's getToken() can mint a different JWT string per call, and
+  // keying by it fragments the cache this page shares with the bell's badge.
   const { data, mutate } = useSWR<
     Notification[] | { notifications: Notification[] }
   >(
-    token
-      ? ([`${process.env.NEXT_PUBLIC_API_URL}/notifications/all`, token] as const)
+    userId
+      ? ([`${process.env.NEXT_PUBLIC_API_URL}/notifications/all`, userId] as const)
       : null,
-    ([url, token]: readonly [string, string]) => fetcherWithTokenUseSWR(url, token)
+    async ([url]: readonly [string]) => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(url, token!);
+    }
   );
   const notifications: Notification[] = useMemo(
     () => (Array.isArray(data) ? data : data?.notifications ?? []),
@@ -64,7 +58,7 @@ export default function NotificationsPage() {
       { headers: { Authorization: `Bearer ${token}` } }
     );
     mutate();
-    globalMutate([`${process.env.NEXT_PUBLIC_API_URL}/notifications`, token]);
+    globalMutate([`${process.env.NEXT_PUBLIC_API_URL}/notifications`, userId]);
   };
 
   const markAllAsRead = async () => {
@@ -75,7 +69,7 @@ export default function NotificationsPage() {
       { headers: { Authorization: `Bearer ${token}` } }
     );
     mutate();
-    globalMutate([`${process.env.NEXT_PUBLIC_API_URL}/notifications`, token]);
+    globalMutate([`${process.env.NEXT_PUBLIC_API_URL}/notifications`, userId]);
   };
 
   const typeCounts = useMemo(() => {
