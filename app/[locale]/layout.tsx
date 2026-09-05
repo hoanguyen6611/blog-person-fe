@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import NavBar from "../../components/NavBar";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -16,6 +16,16 @@ import MobileTabBar from "@/components/MobileTabBar";
 export const metadata: Metadata = {
   title: "Tech News",
   description: "Tech News",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Tech News",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#003cff",
 };
 
 export default async function LocaleLayout({

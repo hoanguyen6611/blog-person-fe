@@ -1,0 +1,21 @@
+{
+  "name": "Tech News",
+  "short_name": "Tech News",
+  "description": "Chia sẻ kiến thức, công nghệ và những câu chuyện nghề.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e9e9ed",
+  "theme_color": "#003cff",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
