@@ -10,7 +10,8 @@
     "featuredPosts": "Featured Posts",
     "recentPosts": "Recent Posts",
     "viewAll": "View all",
-    "trendingThisWeek": "Trending this week"
+    "trendingThisWeek": "Trending this week",
+    "recentlyViewed": "Recently viewed"
   },
   "MainCategories": {
     "allPosts": "All Posts",
@@ -102,6 +103,23 @@
     "groupEarlier": "Earlier",
     "summary": "{unread} unread of {total} notifications",
     "markRead": "Mark read"
+  },
+  "SlowRequestBanner": {
+    "message": "Server is waking up, this may take a moment…"
+  },
+  "OfflineBanner": {
+    "message": "You're offline — some content may not load."
+  },
+  "PushNotifications": {
+    "title": "Push notifications",
+    "description": "Get notified even after you've closed the tab.",
+    "subscribedText": "Push notifications are on for this device.",
+    "deniedText": "You've blocked notification permission in your browser. Re-enable it in your browser settings.",
+    "enableButton": "Enable push notifications",
+    "disableButton": "Disable push notifications",
+    "toastSubscribed": "Push notifications enabled",
+    "toastUnsubscribed": "Push notifications disabled",
+    "toastFailed": "Couldn't update push notifications, please try again."
   },
   "PostsPage": {
     "title": "Development Blog",
@@ -352,6 +370,10 @@
     "loginRequired": "You should login",
     "newPostTitle": "New post",
     "wordCountSuffix": "words",
+    "autosaveFoundText": "Found an autosaved draft from {time} — restore it?",
+    "autosaveRestoreButton": "Restore",
+    "autosaveDismissButton": "Dismiss",
+    "autosaveSavedAt": "Autosaved at {time}",
     "titlePlaceholder": "New post title here...",
     "descPlaceholder": "Add a short description (shown on the homepage and search results)…",
     "insertImage": "Insert image",

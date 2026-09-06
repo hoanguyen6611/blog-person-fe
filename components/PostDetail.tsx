@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DOMPurify from "dompurify";
 import { Link } from "@/i18n/navigation";
 import useSWR from "swr";
@@ -28,6 +28,7 @@ import { getContentPreview } from "@/lib/contentPreview";
 import { addHeadingIds } from "@/lib/postContentToc";
 import { cn } from "@/lib/utils";
 import { useAppearanceSettings } from "@/hooks/useAppearanceSettings";
+import { recordPostView } from "@/hooks/useReadingHistory";
 
 export default function PostDetail({ post }: { post: Post }) {
   const { isSignedIn } = useAuth();
@@ -36,6 +37,11 @@ export default function PostDetail({ post }: { post: Post }) {
   const { settings } = useAppearanceSettings();
   const showSidebars = !settings.focusMode;
   const [feedback, setFeedback] = useState<"yes" | "unsure" | null>(null);
+
+  useEffect(() => {
+    recordPostView({ postId: post._id, title: post.title, img: post.img });
+  }, [post._id, post.title, post.img]);
+
   const { data: categories } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
     fetcherUseSWR

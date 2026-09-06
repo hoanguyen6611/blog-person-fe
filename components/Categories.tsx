@@ -17,15 +17,28 @@ const rowClass = (active: boolean) =>
       : "text-muted hover:text-ink"
   );
 
-const CategoryCount = ({ catId }: { catId?: string }) => {
+// If /category ever returns postCount per category (mirroring /tags), this
+// renders it directly with zero extra requests. Until then it falls back to
+// the old one-request-per-category behavior, so nothing breaks either way.
+const CategoryCount = ({
+  catId,
+  presetCount,
+}: {
+  catId?: string;
+  presetCount?: number;
+}) => {
+  const shouldFetch = presetCount === undefined;
   const { data } = useSWR<PostListResponse>(
-    `${process.env.NEXT_PUBLIC_API_URL}/posts?limit=1${
-      catId ? `&cat=${catId}` : ""
-    }`,
+    shouldFetch
+      ? `${process.env.NEXT_PUBLIC_API_URL}/posts?limit=1${
+          catId ? `&cat=${catId}` : ""
+        }`
+      : null,
     fetcherUseSWR
   );
-  if (data?.totalPosts === undefined) return null;
-  return <span className="font-mono text-xs text-faintest">{data.totalPosts}</span>;
+  const count = presetCount ?? data?.totalPosts;
+  if (count === undefined) return null;
+  return <span className="font-mono text-xs text-faintest">{count}</span>;
 };
 
 const Categories = ({
@@ -60,7 +73,9 @@ const Categories = ({
           data-testid={`categories-link-${category._id}-${variant}`}
         >
           {category.title}
-          {showCounts && <CategoryCount catId={category._id} />}
+          {showCounts && (
+            <CategoryCount catId={category._id} presetCount={category.postCount} />
+          )}
         </Link>
       ))}
     </div>

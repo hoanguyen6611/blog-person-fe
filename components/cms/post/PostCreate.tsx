@@ -25,6 +25,8 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { countWords } from "@/lib/wordCount";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { useDraftAutosave } from "@/hooks/useDraftAutosave";
+import { History, X } from "lucide-react";
 
 interface FormPost {
   title: string;
@@ -63,6 +65,11 @@ const PostCreate = () => {
   const { setFormData, setContentCreatePost, contentCreatePost } =
     useTableStore();
   const editorRef = useRef<EditorHandle>(null);
+  const autosave = useDraftAutosave("post-create-draft");
+  const [restoreDraft, setRestoreDraft] = useState<{
+    payload: { title: string; desc: string; category: string; content: string; tags: string[]; cover: string };
+    savedAt: number;
+  } | null>(null);
   const { data: dataCategories, mutate } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/category`,
     fetcherUseSWR
@@ -101,6 +108,19 @@ const PostCreate = () => {
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // Offer to restore a locally-autosaved draft once, on mount, before the
+  // autosave-on-change effect below has a chance to overwrite/clear it.
+  useEffect(() => {
+    const found = autosave.restore();
+    if (found) setRestoreDraft(found);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    autosave.save({ title, desc, category: nameCategory, content: post, tags, cover });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title, desc, nameCategory, post, tags, cover]);
 
   const wordCount = useMemo(() => countWords(post), [post]);
   const checklist = useMemo(
@@ -199,6 +219,7 @@ const PostCreate = () => {
         img: "",
       });
       setContentCreatePost("");
+      autosave.clear();
       if (mode === "draft") {
         toast.success(t("toastDraftSaved"));
         router.push(`/cms/posts`);
@@ -294,6 +315,24 @@ const PostCreate = () => {
   const handleChange = (value: string[]) => {
     setTags(value);
   };
+  const handleRestoreDraft = () => {
+    if (!restoreDraft) return;
+    const { title: rTitle, desc: rDesc, category, content, tags: rTags, cover: rCover } =
+      restoreDraft.payload;
+    setTitle(rTitle);
+    setDesc(rDesc);
+    setNameCategory(category);
+    setPost(content);
+    setContentCreatePost(content);
+    setTags(rTags);
+    setCover(rCover);
+    setFormData({ title: rTitle, desc: rDesc, category, content, img: rCover });
+    setRestoreDraft(null);
+  };
+  const handleDismissDraft = () => {
+    autosave.clear();
+    setRestoreDraft(null);
+  };
   const tagsOptions = dataTags?.tags.map((tag: Tag) => ({
     value: tag._id,
     label: tag.name,
@@ -315,11 +354,53 @@ const PostCreate = () => {
   return (
     <div data-testid="post-create-page" className="min-h-screen bg-page pb-16">
       <div className="mx-auto max-w-[1200px] px-4 py-6 md:px-8">
+        {/* Restore autosaved draft */}
+        {restoreDraft && (
+          <div
+            className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl border border-accent-soft bg-accent-soft px-4 py-3"
+            data-testid="post-create-restore-draft-banner"
+          >
+            <History size={16} className="flex-none text-accent-ink" />
+            <span className="flex-1 text-sm text-ink">
+              {t("autosaveFoundText", {
+                time: new Date(restoreDraft.savedAt).toLocaleTimeString(),
+              })}
+            </span>
+            <button
+              type="button"
+              onClick={handleRestoreDraft}
+              className="flex h-8 items-center rounded-lg bg-accent px-3 text-xs font-semibold text-white hover:opacity-90"
+              data-testid="post-create-restore-draft-button"
+            >
+              {t("autosaveRestoreButton")}
+            </button>
+            <button
+              type="button"
+              onClick={handleDismissDraft}
+              aria-label={t("autosaveDismissButton")}
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-muted hover:text-ink"
+              data-testid="post-create-dismiss-draft-button"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        )}
+
         {/* Top bar */}
         <div className="mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-line-soft bg-surface px-4 py-3 shadow-sm">
           <span className="font-display text-base font-bold tracking-tight text-ink">
             {title || t("newPostTitle")}
           </span>
+          {autosave.savedAt && (
+            <span
+              className="font-meta text-xs text-faint"
+              data-testid="post-create-autosave-indicator"
+            >
+              {t("autosaveSavedAt", {
+                time: new Date(autosave.savedAt).toLocaleTimeString(),
+              })}
+            </span>
+          )}
           <span className="ml-auto font-meta text-xs text-faint">
             {wordCount} {t("wordCountSuffix")}
           </span>

@@ -13,6 +13,7 @@ import { Notification } from "@/interface/Notification";
 import { Heart, MessageCircle, UserPlus, Newspaper, Check } from "lucide-react";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { cn } from "@/lib/utils";
+import PushNotificationToggle from "@/components/PushNotificationToggle";
 
 const TYPE_ICON: Record<string, React.ElementType> = {
   comment: MessageCircle,
@@ -159,6 +160,10 @@ export default function NotificationsPage() {
             ))}
           </div>
         </div>
+
+        <div className="h-px bg-line" />
+
+        <PushNotificationToggle />
       </aside>
 
       <div className="flex flex-col gap-5">

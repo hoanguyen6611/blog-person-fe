@@ -2,13 +2,11 @@
 import { createFromIconfontCN } from "@ant-design/icons";
 import { Linkedin } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { SITE_URL } from "@/lib/siteUrl";
 
 export default function ShareButtons({ title }: { title: string }) {
   const pathname = usePathname();
-  const origin =
-    typeof window !== "undefined"
-      ? window.location.origin
-      : "https://blog-person-fe.vercel.app";
+  const origin = typeof window !== "undefined" ? window.location.origin : SITE_URL;
   const fullUrl = `${origin}${pathname}`;
   const encodedUrl = encodeURIComponent(fullUrl);
   const encodedTitle = encodeURIComponent(title);

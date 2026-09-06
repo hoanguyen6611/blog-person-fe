@@ -10,7 +10,8 @@
     "featuredPosts": "Bài viết nổi bật",
     "recentPosts": "Bài viết gần đây",
     "viewAll": "Xem tất cả",
-    "trendingThisWeek": "Nổi bật tuần này"
+    "trendingThisWeek": "Nổi bật tuần này",
+    "recentlyViewed": "Đã xem gần đây"
   },
   "MainCategories": {
     "allPosts": "Tất cả",
@@ -102,6 +103,23 @@
     "groupEarlier": "Trước đó",
     "summary": "{unread} chưa đọc trong {total} thông báo",
     "markRead": "Đánh dấu đã đọc"
+  },
+  "SlowRequestBanner": {
+    "message": "Server đang khởi động, có thể mất chút thời gian…"
+  },
+  "OfflineBanner": {
+    "message": "Bạn đang offline — một số nội dung có thể không tải được."
+  },
+  "PushNotifications": {
+    "title": "Thông báo đẩy",
+    "description": "Nhận thông báo ngay cả khi đã đóng tab trình duyệt.",
+    "subscribedText": "Đã bật thông báo đẩy trên thiết bị này.",
+    "deniedText": "Bạn đã chặn quyền thông báo trong trình duyệt. Vào cài đặt trình duyệt để bật lại.",
+    "enableButton": "Bật thông báo đẩy",
+    "disableButton": "Tắt thông báo đẩy",
+    "toastSubscribed": "Đã bật thông báo đẩy",
+    "toastUnsubscribed": "Đã tắt thông báo đẩy",
+    "toastFailed": "Không thể cập nhật thông báo đẩy, vui lòng thử lại."
   },
   "PostsPage": {
     "title": "Blog kỹ thuật",
@@ -352,6 +370,10 @@
     "loginRequired": "Bạn cần đăng nhập",
     "newPostTitle": "Bài viết mới",
     "wordCountSuffix": "từ",
+    "autosaveFoundText": "Phát hiện bản nháp tự động lưu lúc {time}, bạn có muốn khôi phục?",
+    "autosaveRestoreButton": "Khôi phục",
+    "autosaveDismissButton": "Bỏ qua",
+    "autosaveSavedAt": "Đã lưu tự động lúc {time}",
     "titlePlaceholder": "Nhập tiêu đề bài viết...",
     "descPlaceholder": "Thêm mô tả ngắn (hiện ở trang chủ và kết quả tìm kiếm)…",
     "insertImage": "Chèn ảnh",

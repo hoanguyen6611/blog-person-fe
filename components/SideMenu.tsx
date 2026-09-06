@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from "swr";
-import { Link, useRouter } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { fetcherUseSWR } from "@/api/useswr";
 import Categories from "./Categories";
@@ -17,7 +17,25 @@ const SideMenu = ({
   const router = useRouter();
   const t = useTranslations("PostsPage");
   const searchParams = useSearchParams();
-  const activeTag = searchParams.get("tag");
+  // "tags" (plural, comma-separated) is the multi-select param; "tag"
+  // (singular) is kept for links built elsewhere (e.g. a tag on a post's
+  // detail page) that only ever pick one — both resolve to the same
+  // highlighted/selected set here.
+  const activeTagsParam = searchParams.get("tags");
+  const activeTagParam = searchParams.get("tag");
+  const activeTagIds = new Set(
+    activeTagsParam
+      ? activeTagsParam.split(",").filter(Boolean)
+      : activeTagParam
+        ? [activeTagParam]
+        : []
+  );
+  const toggleTag = (id: string) => {
+    const next = new Set(activeTagIds);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    router.push(next.size > 0 ? `/posts?tags=${Array.from(next).join(",")}` : "/posts");
+  };
   const { data } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/tags`,
     fetcherUseSWR
@@ -47,12 +65,14 @@ const SideMenu = ({
             </span>
             <div className="flex flex-wrap gap-1.5">
               {tags.slice(0, 8).map((tag) => (
-                <Link
+                <button
                   key={tag._id}
-                  href={`/posts?tag=${tag._id}`}
+                  type="button"
+                  onClick={() => toggleTag(tag._id)}
+                  aria-pressed={activeTagIds.has(tag._id)}
                   className={cn(
                     "flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs transition-colors",
-                    activeTag === tag._id
+                    activeTagIds.has(tag._id)
                       ? "border-accent bg-accent-soft text-accent-ink"
                       : "border-line text-muted hover:border-accent-soft hover:bg-accent-soft hover:text-accent-ink"
                   )}
@@ -62,7 +82,7 @@ const SideMenu = ({
                   <span className="font-mono text-[11px] text-faintest">
                     {tag.postCount}
                   </span>
-                </Link>
+                </button>
               ))}
             </div>
           </div>

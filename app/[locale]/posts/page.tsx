@@ -16,11 +16,17 @@ const PostListPage = () => {
   const [filterOpen, setFilterOpen] = useState(false);
   const t = useTranslations("PostsPage");
   const searchParams = useSearchParams();
-  const activeTagId = searchParams.get("tag");
+  const activeTagsParam = searchParams.get("tags");
+  const activeTagParam = searchParams.get("tag");
+  const activeTagIds = activeTagsParam
+    ? activeTagsParam.split(",").filter(Boolean)
+    : activeTagParam
+      ? [activeTagParam]
+      : [];
   const activeCatId = searchParams.get("cat");
 
   const { data: tagsData } = useSWR(
-    activeTagId ? `${process.env.NEXT_PUBLIC_API_URL}/tags` : null,
+    activeTagIds.length > 0 ? `${process.env.NEXT_PUBLIC_API_URL}/tags` : null,
     fetcherUseSWR
   );
   const { data: categoriesData } = useSWR(
@@ -28,15 +34,18 @@ const PostListPage = () => {
     fetcherUseSWR
   );
 
-  const activeTagName = tagsData?.tags?.find(
-    (tag: Tag) => tag._id === activeTagId
-  )?.name;
+  const activeTagNames = (tagsData?.tags ?? [])
+    .filter((tag: Tag) => activeTagIds.includes(tag._id))
+    .map((tag: Tag) => tag.name)
+    // The i18n string already prefixes "#" once before {tag} — joining with
+    // ", #" so every additional tag past the first also gets one.
+    .join(", #");
   const activeCategoryName = categoriesData?.categories?.find(
     (cat: Category) => cat._id === activeCatId
   )?.title;
 
-  const heading = activeTagId
-    ? t("filteredByTag", { tag: activeTagName ?? "" })
+  const heading = activeTagIds.length > 0
+    ? t("filteredByTag", { tag: activeTagNames })
     : activeCatId
       ? t("filteredByCategory", { category: activeCategoryName ?? "" })
       : t("title");

@@ -4,6 +4,7 @@ import Banner from "@/components/Banner";
 import MainCategories from "@/components/MainCategories";
 import RecentPostsList from "@/components/RecentPostsList";
 import TrendingWidget from "@/components/TrendingWidget";
+import RecentlyViewedWidget from "@/components/RecentlyViewedWidget";
 import { motion } from "framer-motion";
 
 export default function Home() {
@@ -38,8 +39,9 @@ export default function Home() {
         >
           <div className="grid gap-6 lg:grid-cols-[1fr_300px] lg:items-start">
             <RecentPostsList />
-            <div className="hidden lg:block lg:sticky lg:top-24">
+            <div className="hidden lg:sticky lg:top-24 lg:flex lg:flex-col lg:gap-4">
               <TrendingWidget />
+              <RecentlyViewedWidget />
             </div>
           </div>
         </motion.section>
