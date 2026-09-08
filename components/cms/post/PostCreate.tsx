@@ -42,6 +42,8 @@ interface FormPost {
 const modalInputClass =
   "w-full rounded-[10px] border border-line bg-surface p-3 text-base text-ink outline-none focus:border-accent";
 
+const CATEGORY_PAGE_SIZE = 10;
+
 const PostCreate = () => {
   useRequireAuth();
   const t = useTranslations("PostCreate");
@@ -55,6 +57,10 @@ const PostCreate = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenTag, setIsModalOpenTag] = useState(false);
   const [nameCategory, setNameCategory] = useState("");
+  const [categorySearchText, setCategorySearchText] = useState("");
+  const [categoryVisibleCount, setCategoryVisibleCount] = useState(
+    CATEGORY_PAGE_SIZE
+  );
   const [nameTag, setNameTag] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [post, setPost] = useState("");
@@ -71,7 +77,7 @@ const PostCreate = () => {
     savedAt: number;
   } | null>(null);
   const { data: dataCategories, mutate } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    `${process.env.NEXT_PUBLIC_API_URL}/category/all`,
     fetcherUseSWR
   );
   const { data: dataTags, mutate: mutateTags } = useSWR(
@@ -277,12 +283,23 @@ const PostCreate = () => {
       isPublished: true,
     });
   };
-  const categoryOptions = dataCategories?.categories.map(
-    (category: Category) => ({
+  const allCategoryOptions =
+    dataCategories?.categories.map((category: Category) => ({
       value: category._id,
       label: category.title,
-    })
-  );
+    })) ?? [];
+  const normalizedCategorySearch = categorySearchText.trim().toLowerCase();
+  // Searching goes against the full fetched list regardless of how many
+  // are currently "loaded" into view — only the collapsed, no-search state
+  // is paginated 10 at a time.
+  const categoryHasMore =
+    !normalizedCategorySearch &&
+    allCategoryOptions.length > categoryVisibleCount;
+  const categoryOptions = normalizedCategorySearch
+    ? allCategoryOptions.filter((option: { label: string; value: string }) =>
+        option.label.toLowerCase().includes(normalizedCategorySearch)
+      )
+    : allCategoryOptions.slice(0, categoryVisibleCount);
   const showModalFormCategory = () => {
     setIsModalOpen(true);
   };
@@ -311,6 +328,11 @@ const PostCreate = () => {
   const changeCategory = (value: string) => {
     setNameCategory(value);
     setFormData((prev) => ({ ...prev, category: value }));
+    setCategorySearchText("");
+    setCategoryVisibleCount(CATEGORY_PAGE_SIZE);
+  };
+  const loadMoreCategories = () => {
+    setCategoryVisibleCount((count) => count + CATEGORY_PAGE_SIZE);
   };
   const handleChange = (value: string[]) => {
     setTags(value);
@@ -529,6 +551,30 @@ const PostCreate = () => {
                 testId="select-category"
                 categories={categoryOptions}
                 onChangeCategory={changeCategory}
+                onSearch={setCategorySearchText}
+                filterOption={false}
+                popupRender={(menu) => (
+                  <>
+                    {menu}
+                    {categoryHasMore && (
+                      <>
+                        <div className="my-1 h-px bg-line" />
+                        <button
+                          type="button"
+                          // Keeps the dropdown open — otherwise antd treats
+                          // this mousedown as a blur and closes it before
+                          // the click (and the count bump) ever lands.
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={loadMoreCategories}
+                          className="flex w-full items-center justify-center rounded-lg px-2.5 py-2 text-sm text-muted hover:bg-page hover:text-ink"
+                          data-testid="select-category-load-more"
+                        >
+                          {t("loadMoreCategories")}
+                        </button>
+                      </>
+                    )}
+                  </>
+                )}
               />
               <button
                 type="button"

@@ -1,5 +1,14 @@
 const STATIC_CACHE = "tech-news-static-v1";
-const OFFLINE_URL = "/offline.html";
+const OFFLINE_URL_VI = "/offline.html";
+const OFFLINE_URL_EN = "/offline-en.html";
+
+// The offline fallback has no server to run next-intl's locale resolution,
+// so it's picked directly from the "/en/..." vs "/vi/..." prefix already on
+// the failed navigation request's own URL.
+const offlineUrlFor = (pathname) =>
+  pathname.startsWith("/en/") || pathname === "/en"
+    ? OFFLINE_URL_EN
+    : OFFLINE_URL_VI;
 
 // Basic offline support: previously-visited pages and static assets still
 // load with no network; anything never cached falls back to a static
@@ -11,7 +20,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(STATIC_CACHE)
-      .then((cache) => cache.add(OFFLINE_URL))
+      .then((cache) => cache.addAll([OFFLINE_URL_VI, OFFLINE_URL_EN]))
       .catch(() => {
         // offline.html missing is not fatal — just means no offline
         // fallback page until the next successful install.
@@ -58,7 +67,7 @@ self.addEventListener("fetch", (event) => {
           return response;
         } catch {
           const cached = await caches.match(request);
-          return cached || caches.match(OFFLINE_URL);
+          return cached || caches.match(offlineUrlFor(url.pathname));
         }
       })()
     );

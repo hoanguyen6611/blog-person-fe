@@ -54,7 +54,7 @@ export default function AboutPage() {
     fetcherUseSWR
   );
   const { data: categoriesData } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    `${process.env.NEXT_PUBLIC_API_URL}/category/all`,
     fetcherUseSWR
   );
   const { data: oldestData } = useSWR<PostListResponse>(

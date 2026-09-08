@@ -66,7 +66,7 @@ const PostPage = () => {
     total: 0,
   });
   const { data: categories } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    `${process.env.NEXT_PUBLIC_API_URL}/category/all`,
     fetcherUseSWR
   );
   const { data: tagsData } = useSWR(

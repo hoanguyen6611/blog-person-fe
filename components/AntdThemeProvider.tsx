@@ -1,5 +1,11 @@
 "use client";
 
+// Must be imported before any antd component renders — antd v5's portal-
+// based components (Dropdown, Select, Tooltip, Modal, ...) rely on
+// ReactDOM.findDOMNode internally, which React 19 removed entirely. Without
+// this patch those components fail to position/mount their popup with no
+// console error, so e.g. a Dropdown's trigger click appears to do nothing.
+import "@ant-design/v5-patch-for-react-19";
 import { ConfigProvider, theme as antdTheme } from "antd";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";

@@ -16,7 +16,7 @@ const RecentPostsList = () => {
     fetcherUseSWR
   );
   const { data: categories } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    `${process.env.NEXT_PUBLIC_API_URL}/category/all`,
     fetcherUseSWR
   );
 

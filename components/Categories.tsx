@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Category } from "@/interface/Category";
 import { Link } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
@@ -8,6 +9,8 @@ import { fetcherUseSWR } from "../api/useswr";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { PostListResponse } from "@/interface/APIResponse";
+
+const COLLAPSED_COUNT = 15;
 
 const rowClass = (active: boolean) =>
   cn(
@@ -51,10 +54,23 @@ const Categories = ({
   const t = useTranslations("PostDetail");
   const searchParams = useSearchParams();
   const activeCat = searchParams.get("cat");
+  const [expanded, setExpanded] = useState(false);
+  // Categories/SideMenu never unmounts when only the "cat" query param
+  // changes (same route, e.g. picking a filter or hitting back to it) — so
+  // without this, "expanded" would keep whatever value it had from before,
+  // instead of the collapsed default a fresh look at the list should start
+  // from.
+  useEffect(() => {
+    setExpanded(false);
+  }, [activeCat]);
   const { data } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    `${process.env.NEXT_PUBLIC_API_URL}/category/all`,
     fetcherUseSWR
   );
+  const categories: Category[] = data?.categories || [];
+  const hasMore = categories.length > COLLAPSED_COUNT;
+  const visibleCategories =
+    expanded || !hasMore ? categories : categories.slice(0, COLLAPSED_COUNT);
   return (
     <div className="flex flex-col gap-0.5">
       <Link
@@ -65,7 +81,7 @@ const Categories = ({
         {t("all")}
         {showCounts && <CategoryCount />}
       </Link>
-      {(data?.categories || []).map((category: Category) => (
+      {visibleCategories.map((category: Category) => (
         <Link
           href={`/posts?cat=${category._id}`}
           key={category._id}
@@ -78,6 +94,17 @@ const Categories = ({
           )}
         </Link>
       ))}
+      {hasMore && !expanded && (
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          className={cn(rowClass(false), "justify-center")}
+          data-testid={`categories-show-more-${variant}`}
+          aria-label={t("showMoreCategories")}
+        >
+          &#8226;&#8226;&#8226;
+        </button>
+      )}
     </div>
   );
 };

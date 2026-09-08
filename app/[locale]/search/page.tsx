@@ -28,7 +28,7 @@ export default function AdvancedSearchBar() {
   const router = useRouter();
   const t = useTranslations("AdvancedSearch");
   const { data: dataCategories } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    `${process.env.NEXT_PUBLIC_API_URL}/category/all`,
     fetcherUseSWR
   );
   useEffect(() => {

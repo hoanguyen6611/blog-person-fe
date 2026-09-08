@@ -18,6 +18,8 @@ import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { countWords } from "@/lib/wordCount";
 import { useTranslations } from "next-intl";
 
+const CATEGORY_PAGE_SIZE = 10;
+
 const PostUpdate = () => {
   useRequireAuth();
   const t = useTranslations("PostUpdate");
@@ -38,13 +40,17 @@ const PostUpdate = () => {
     }
   );
   const { data: dataCategories } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/category`,
+    `${process.env.NEXT_PUBLIC_API_URL}/category/all`,
     fetcherUseSWR
   );
   const [cover, setCover] = useState("");
   const [coverVideo, setCoverVideo] = useState("");
   const [coverImage, setCoverImage] = useState("");
   const [category, setCategory] = useState("");
+  const [categorySearchText, setCategorySearchText] = useState("");
+  const [categoryVisibleCount, setCategoryVisibleCount] = useState(
+    CATEGORY_PAGE_SIZE
+  );
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [isDisabledBtnSend, setIsDisabledBtnSend] = useState(false);
@@ -124,12 +130,45 @@ const PostUpdate = () => {
       toast.error(t("toastFailed"));
     }
   };
-  const categoryOptions = dataCategories?.categories?.map(
-    (category: Category) => ({
+  const allCategoryOptions =
+    dataCategories?.categories?.map((category: Category) => ({
       label: category.title,
       value: category._id,
-    })
-  );
+    })) ?? [];
+  const normalizedCategorySearch = categorySearchText.trim().toLowerCase();
+  // Searching goes against the full fetched list regardless of how many
+  // are currently "loaded" into view — only the collapsed, no-search state
+  // is paginated 10 at a time.
+  const categoryHasMore =
+    !normalizedCategorySearch &&
+    allCategoryOptions.length > categoryVisibleCount;
+  const categoryOptions = normalizedCategorySearch
+    ? allCategoryOptions.filter((option: { label: string; value: string }) =>
+        option.label.toLowerCase().includes(normalizedCategorySearch)
+      )
+    : (() => {
+        const visible = allCategoryOptions.slice(0, categoryVisibleCount);
+        // The post's existing category can be outside the collapsed slice
+        // (e.g. it's the 15th category alphabetically) — without its option
+        // present, antd's Select can't resolve `value` to a label to show.
+        const selectedOutsideSlice =
+          category &&
+          !visible.some((option: { value: string }) => option.value === category) &&
+          allCategoryOptions.find(
+            (option: { value: string }) => option.value === category
+          );
+        return selectedOutsideSlice
+          ? [selectedOutsideSlice, ...visible]
+          : visible;
+      })();
+  const changeCategory = (value: string) => {
+    setCategory(value);
+    setCategorySearchText("");
+    setCategoryVisibleCount(CATEGORY_PAGE_SIZE);
+  };
+  const loadMoreCategories = () => {
+    setCategoryVisibleCount((count) => count + CATEGORY_PAGE_SIZE);
+  };
   const onChange = (content: string) => {
     setContentCreatePost(content);
     setEditorInitialContent(content);
@@ -260,7 +299,31 @@ const PostUpdate = () => {
                 testId="post-update-category-select"
                 categories={categoryOptions}
                 value={category}
-                onChangeCategory={(value: string) => setCategory(value)}
+                onChangeCategory={changeCategory}
+                onSearch={setCategorySearchText}
+                filterOption={false}
+                popupRender={(menu) => (
+                  <>
+                    {menu}
+                    {categoryHasMore && (
+                      <>
+                        <div className="my-1 h-px bg-line" />
+                        <button
+                          type="button"
+                          // Keeps the dropdown open — otherwise antd treats
+                          // this mousedown as a blur and closes it before
+                          // the click (and the count bump) ever lands.
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={loadMoreCategories}
+                          className="flex w-full items-center justify-center rounded-lg px-2.5 py-2 text-sm text-muted hover:bg-page hover:text-ink"
+                          data-testid="post-update-category-load-more"
+                        >
+                          {tCreate("loadMoreCategories")}
+                        </button>
+                      </>
+                    )}
+                  </>
+                )}
               />
             </div>
 

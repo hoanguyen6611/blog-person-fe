@@ -15,6 +15,15 @@ type SelectOptionProps = {
   onChangeCategory?: (value: string) => void;
   direction?: "row" | "col";
   className?: string;
+  // Lets a caller take over search (e.g. to search a full dataset while
+  // only a paginated slice of it is passed in `categories`) instead of
+  // antd's default client-side filtering over the options actually
+  // rendered — pair with filterOption={false}.
+  onSearch?: (value: string) => void;
+  filterOption?: boolean;
+  // Appended below the option list inside the dropdown — e.g. a "load
+  // more" button — without affecting antd's own selection/close behavior.
+  popupRender?: React.ComponentProps<typeof Select>["popupRender"];
 };
 
 const SelectOption: React.FC<SelectOptionProps> = ({
@@ -26,6 +35,9 @@ const SelectOption: React.FC<SelectOptionProps> = ({
   onChangeCategory,
   direction = "row",
   className,
+  onSearch,
+  filterOption = true,
+  popupRender,
 }) => {
   return (
     <div
@@ -50,6 +62,9 @@ const SelectOption: React.FC<SelectOptionProps> = ({
         value={value}
         placeholder={name}
         optionFilterProp="label"
+        filterOption={filterOption}
+        onSearch={onSearch}
+        popupRender={popupRender}
         onChange={onChangeCategory}
         options={categories}
         allowClear

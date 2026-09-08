@@ -30,7 +30,7 @@ const PostListPage = () => {
     fetcherUseSWR
   );
   const { data: categoriesData } = useSWR(
-    activeCatId ? `${process.env.NEXT_PUBLIC_API_URL}/category` : null,
+    activeCatId ? `${process.env.NEXT_PUBLIC_API_URL}/category/all` : null,
     fetcherUseSWR
   );
 

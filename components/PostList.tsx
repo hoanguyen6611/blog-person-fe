@@ -35,7 +35,7 @@ const PostListContent = ({
   const router = useRouter();
   const { getToken } = useAuth();
   const { data: categoriesData } = useSWR(
-    variant === "grid" ? `${process.env.NEXT_PUBLIC_API_URL}/category` : null,
+    variant === "grid" ? `${process.env.NEXT_PUBLIC_API_URL}/category/all` : null,
     fetcherUseSWR
   );
 

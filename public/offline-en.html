@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Offline · Tech News</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f9f9fb;
+        --surface: #ffffff;
+        --ink: #1c2024;
+        --muted: #6f6f77;
+        --line: #e2e2e4;
+        --accent: #003cff;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1a1d23;
+          --surface: #16181c;
+          --ink: #edeef0;
+          --muted: #9da1aa;
+          --line: #32373e;
+          --accent: #3b6bff;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        padding: 24px;
+      }
+      .card {
+        max-width: 360px;
+        text-align: center;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 32px 24px;
+        box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.1);
+      }
+      h1 {
+        font-size: 20px;
+        margin: 16px 0 8px;
+      }
+      p {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+        margin: 0 0 20px;
+      }
+      button {
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div style="font-size: 32px">📡</div>
+      <h1>You're offline</h1>
+      <p>No network connection and this page hasn't been saved yet. Check your connection and try again.</p>
+      <button onclick="location.reload()">Retry</button>
+    </div>
+  </body>
+</html>

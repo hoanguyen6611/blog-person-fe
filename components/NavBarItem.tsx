@@ -130,6 +130,7 @@ export const NotificationBell = ({
   const t = useTranslations("NavBar");
   const [tab, setTab] = useState<"all" | "unread" | "comments">("all");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [desktopOpen, setDesktopOpen] = useState(false);
   const router = useRouter();
 
   // Keyed by userId, not the raw token: Clerk's getToken() can mint a
@@ -203,6 +204,12 @@ export const NotificationBell = ({
   });
 
   const openNotification = (n: Notification) => {
+    // Close immediately instead of leaving it to unmount-on-navigate: a
+    // route transition can take a moment (or never resolve if the target
+    // page's own data fetch is slow), during which the panel would
+    // otherwise just sit open over the old page.
+    setDesktopOpen(false);
+    setMobileOpen(false);
     if (!n.isRead) markAsRead(n._id);
     router.push(n.type === "comment" || n.type === "like" || n.type === "post" ? `/posts/${n.postId}` : "/user");
   };
@@ -372,7 +379,10 @@ export const NotificationBell = ({
       <div className="flex items-center justify-between border-t border-line-soft bg-page px-4 py-2.5">
         <button
           type="button"
-          onClick={() => router.push("/notifications")}
+          onClick={() => {
+            setDesktopOpen(false);
+            router.push("/notifications");
+          }}
           className="text-xs font-medium text-accent hover:text-accent-dark"
           data-testid="navbar-notifications-view-all-button"
         >
@@ -384,7 +394,13 @@ export const NotificationBell = ({
   );
 
   return (
-    <Dropdown trigger={["click"]} popupRender={() => panel} placement="bottomRight">
+    <Dropdown
+      trigger={["click"]}
+      open={desktopOpen}
+      onOpenChange={setDesktopOpen}
+      popupRender={() => panel}
+      placement="bottomRight"
+    >
       {bellButton}
     </Dropdown>
   );
