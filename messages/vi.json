@@ -85,7 +85,13 @@
     "sortOldest": "Cũ nhất",
     "views30Days": "Lượt xem 30 ngày",
     "followersLabel": "Người theo dõi",
-    "searchMyPosts": "Tìm bài viết của bạn..."
+    "searchMyPosts": "Tìm bài viết của bạn...",
+    "recentPosts": "Bài viết gần đây",
+    "noPostsYet": "Bạn chưa có bài viết nào.",
+    "viewAll": "Xem tất cả",
+    "viewProfile": "Xem trang cá nhân",
+    "memberSince": "Tác giả từ {date}",
+    "connections": "Kết nối"
   },
   "NotificationsPage": {
     "notSignedIn": "Bạn chưa đăng nhập.",
@@ -122,7 +128,7 @@
     "toastFailed": "Không thể cập nhật thông báo đẩy, vui lòng thử lại."
   },
   "PostsPage": {
-    "title": "Blog kỹ thuật",
+    "title": "Danh sách bài viết",
     "search": "Tìm kiếm",
     "category": "Danh mục",
     "popularTags": "Thẻ phổ biến",
@@ -329,6 +335,15 @@
     "followers": "Người theo dõi",
     "following": "Đang theo dõi",
     "empty": "Chưa có người dùng nào."
+  },
+  "UserProfile": {
+    "notSignedIn": "Bạn chưa đăng nhập.",
+    "statPosts": "bài viết",
+    "statFollowers": "người theo dõi",
+    "statFollowing": "đang theo dõi",
+    "managePosts": "Quản lý bài viết",
+    "posts": "Bài viết",
+    "connections": "Kết nối"
   },
   "NotFound": {
     "description": "Rất tiếc! Trang bạn đang tìm không tồn tại.",

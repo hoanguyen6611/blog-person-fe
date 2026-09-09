@@ -83,6 +83,8 @@ export const NavLinks = () => {
 
 export const NewPostButton = () => {
   const t = useTranslations("NavBar");
+  const pathname = usePathname();
+  if (pathname.startsWith("/cms")) return null;
   return (
     <Link
       href="/write"

@@ -85,7 +85,13 @@
     "sortOldest": "Oldest",
     "views30Days": "30-day views",
     "followersLabel": "Followers",
-    "searchMyPosts": "Search your posts..."
+    "searchMyPosts": "Search your posts...",
+    "recentPosts": "Recent posts",
+    "noPostsYet": "You haven't published anything yet.",
+    "viewAll": "View all",
+    "viewProfile": "View profile",
+    "memberSince": "Author since {date}",
+    "connections": "Connections"
   },
   "NotificationsPage": {
     "notSignedIn": "You are not logged in.",
@@ -329,6 +335,15 @@
     "followers": "Followers",
     "following": "Following",
     "empty": "No users yet."
+  },
+  "UserProfile": {
+    "notSignedIn": "You are not signed in.",
+    "statPosts": "posts",
+    "statFollowers": "followers",
+    "statFollowing": "following",
+    "managePosts": "Manage posts",
+    "posts": "Posts",
+    "connections": "Connections"
   },
   "NotFound": {
     "description": "Oops! The page you're looking for doesn't exist.",
