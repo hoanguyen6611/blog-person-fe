@@ -19,6 +19,8 @@ const PendingCommentsPage = () => {
   useRequireAuth();
   const { getToken, isSignedIn } = useAuth();
   const tSidebar = useTranslations("Sidebar");
+  const t = useTranslations("CmsComments");
+  const tCms = useTranslations("Cms");
   const [replyingId, setReplyingId] = useState<string | null>(null);
   const [replyText, setReplyText] = useState("");
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -47,7 +49,7 @@ const PendingCommentsPage = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      toast.success("Đã duyệt bình luận");
+      toast.success(t("toastApproved"));
       await mutate();
     } finally {
       setBusyId(null);
@@ -63,7 +65,7 @@ const PendingCommentsPage = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      toast.success("Đã ẩn bình luận");
+      toast.success(t("toastHidden"));
       await mutate();
     } finally {
       setBusyId(null);
@@ -84,7 +86,7 @@ const PendingCommentsPage = () => {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      toast.success("Đã trả lời bình luận");
+      toast.success(t("toastReplied"));
       setReplyingId(null);
       setReplyText("");
       await mutate();
@@ -96,19 +98,19 @@ const PendingCommentsPage = () => {
   if (!isSignedIn)
     return (
       <p className="py-16 text-center text-sm text-muted" data-testid="cms-comments-page">
-        Bạn chưa đăng nhập.
+        {tCms("notLoggedIn")}
       </p>
     );
   if (isLoading)
     return (
       <p className="py-16 text-center text-sm text-muted" data-testid="cms-comments-page">
-        Loading...
+        {t("loading")}
       </p>
     );
   if (error)
     return (
       <p className="py-16 text-center text-sm text-muted" data-testid="cms-comments-page">
-        Failed to load
+        {t("loadError")}
       </p>
     );
 
@@ -119,14 +121,14 @@ const PendingCommentsPage = () => {
           {tSidebar("comments")}
         </h1>
         <p className="font-meta text-sm text-faint">
-          {comments.length} bình luận chờ duyệt
+          {t("pendingCount", { count: comments.length })}
         </p>
       </div>
 
       {comments.length === 0 ? (
         <div className="flex flex-col items-center gap-2 rounded-2xl border border-line-soft bg-surface p-10 text-center shadow-sm">
           <MessageCircle size={24} className="text-faint" />
-          <p className="text-sm text-muted">Không có bình luận nào chờ duyệt.</p>
+          <p className="text-sm text-muted">{t("empty")}</p>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
@@ -148,7 +150,7 @@ const PendingCommentsPage = () => {
                   className="ml-auto text-xs font-medium text-accent-ink hover:underline"
                   data-testid={`cms-comment-view-post-${comment._id}`}
                 >
-                  Xem bài viết
+                  {t("viewPost")}
                 </Link>
               </div>
               <p className="text-sm text-ink">{comment.desc}</p>
@@ -162,7 +164,7 @@ const PendingCommentsPage = () => {
                   data-testid={`cms-comment-approve-button-${comment._id}`}
                 >
                   <Check size={13} />
-                  Duyệt
+                  {t("approve")}
                 </button>
                 <button
                   type="button"
@@ -172,7 +174,7 @@ const PendingCommentsPage = () => {
                   className="flex h-8 items-center gap-1.5 rounded-lg border border-line px-3 text-xs font-medium text-muted hover:text-ink"
                   data-testid={`cms-comment-reply-button-${comment._id}`}
                 >
-                  Trả lời
+                  {t("reply")}
                 </button>
                 <button
                   type="button"
@@ -182,7 +184,7 @@ const PendingCommentsPage = () => {
                   data-testid={`cms-comment-hide-button-${comment._id}`}
                 >
                   <EyeOff size={13} />
-                  Ẩn
+                  {t("hide")}
                 </button>
               </div>
 
@@ -191,7 +193,7 @@ const PendingCommentsPage = () => {
                   <textarea
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
-                    placeholder="Viết trả lời..."
+                    placeholder={t("replyPlaceholder")}
                     className="min-h-[72px] w-full rounded-[10px] border border-line bg-page p-3 text-sm text-ink outline-none focus:border-accent"
                     data-testid={`cms-comment-reply-textarea-${comment._id}`}
                   />
@@ -203,7 +205,7 @@ const PendingCommentsPage = () => {
                       className="flex h-8 items-center rounded-lg bg-gradient-to-b from-accent to-accent-dark px-3 text-xs font-semibold text-white disabled:opacity-50"
                       data-testid={`cms-comment-reply-send-button-${comment._id}`}
                     >
-                      Gửi
+                      {t("send")}
                     </button>
                     <button
                       type="button"
@@ -214,7 +216,7 @@ const PendingCommentsPage = () => {
                       className="flex h-8 items-center rounded-lg px-3 text-xs font-medium text-muted hover:text-ink"
                       data-testid={`cms-comment-reply-cancel-button-${comment._id}`}
                     >
-                      Hủy
+                      {t("cancel")}
                     </button>
                   </div>
                 </div>

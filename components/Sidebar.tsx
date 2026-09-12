@@ -10,6 +10,7 @@ import {
   AlarmClockCheck,
   MessageCircle,
   Globe,
+  Mail,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import useSWR from "swr";
@@ -109,6 +110,7 @@ export default function Sidebar({ admin }: { admin: boolean }) {
     "/cms/category": "cms-sidebar-categories-link",
     "/cms/tag": "cms-sidebar-tags-link",
     "/cms/comments": "cms-sidebar-comments-link",
+    "/cms/newsletter": "cms-sidebar-newsletter-link",
     "/cms/site-settings": "cms-sidebar-site-settings-link",
     "/cms/personal": "cms-sidebar-personal-dashboard-link",
     "/cms/posts": "cms-sidebar-my-posts-link",
@@ -138,6 +140,11 @@ export default function Sidebar({ admin }: { admin: boolean }) {
             href: "/cms/comments",
             label: t("comments"),
             icon: <MessageCircle size={20} />,
+          },
+          {
+            href: "/cms/newsletter",
+            label: t("newsletter"),
+            icon: <Mail size={20} />,
           },
           {
             href: "/cms/site-settings",

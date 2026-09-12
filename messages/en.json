@@ -241,6 +241,7 @@
     "comments": "Comments",
     "settings": "Settings",
     "siteSettings": "Site settings",
+    "newsletter": "Newsletter",
     "dashboardPersonal": "Dashboard Personal",
     "myPosts": "My Posts",
     "myPostsSchedule": "My Posts Schedule",
@@ -248,6 +249,22 @@
     "writingStreak": "Writing streak",
     "writingStreakBody": "{count, plural, =1 {1 week} other {# weeks}} in a row with a post.",
     "recentDrafts": "Recent drafts"
+  },
+  "CmsComments": {
+    "loading": "Loading...",
+    "loadError": "Failed to load comments.",
+    "pendingCount": "{count, plural, =1 {1 comment pending review} other {# comments pending review}}",
+    "empty": "No comments pending review.",
+    "viewPost": "View post",
+    "approve": "Approve",
+    "reply": "Reply",
+    "hide": "Hide",
+    "replyPlaceholder": "Write a reply...",
+    "send": "Send",
+    "cancel": "Cancel",
+    "toastApproved": "Comment approved",
+    "toastHidden": "Comment hidden",
+    "toastReplied": "Reply posted"
   },
   "SiteSettings": {
     "pageTitle": "Site settings",
@@ -328,6 +345,17 @@
     "createdAt": "Created At",
     "action": "Action",
     "newCategory": "New Category"
+  },
+  "SubscriberTable": {
+    "email": "Email",
+    "status": "Status",
+    "subscribedAt": "Subscribed at",
+    "action": "Action",
+    "totalSubscribers": "Total subscribers",
+    "activeSubscribers": "Active",
+    "toggleSuccess": "Status updated",
+    "deleteSuccess": "Subscriber deleted",
+    "empty": "No one has subscribed yet."
   },
   "UserTable": {
     "image": "Image",

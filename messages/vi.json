@@ -241,6 +241,7 @@
     "comments": "Bình luận",
     "settings": "Cài đặt",
     "siteSettings": "Cài đặt website",
+    "newsletter": "Bản tin",
     "dashboardPersonal": "Bảng điều khiển cá nhân",
     "myPosts": "Bài viết của tôi",
     "myPostsSchedule": "Bài viết đã lên lịch",
@@ -248,6 +249,22 @@
     "writingStreak": "Chuỗi viết bài",
     "writingStreakBody": "{count} tuần liên tiếp có bài viết mới.",
     "recentDrafts": "Nháp gần đây"
+  },
+  "CmsComments": {
+    "loading": "Đang tải...",
+    "loadError": "Không thể tải bình luận.",
+    "pendingCount": "{count} bình luận chờ duyệt",
+    "empty": "Không có bình luận nào chờ duyệt.",
+    "viewPost": "Xem bài viết",
+    "approve": "Duyệt",
+    "reply": "Trả lời",
+    "hide": "Ẩn",
+    "replyPlaceholder": "Viết trả lời...",
+    "send": "Gửi",
+    "cancel": "Hủy",
+    "toastApproved": "Đã duyệt bình luận",
+    "toastHidden": "Đã ẩn bình luận",
+    "toastReplied": "Đã trả lời bình luận"
   },
   "SiteSettings": {
     "pageTitle": "Cài đặt website",
@@ -328,6 +345,17 @@
     "createdAt": "Ngày tạo",
     "action": "Tác vụ",
     "newCategory": "Thêm danh mục"
+  },
+  "SubscriberTable": {
+    "email": "Email",
+    "status": "Trạng thái",
+    "subscribedAt": "Ngày đăng ký",
+    "action": "Tác vụ",
+    "totalSubscribers": "Tổng số người đăng ký",
+    "activeSubscribers": "Đang hoạt động",
+    "toggleSuccess": "Đã cập nhật trạng thái",
+    "deleteSuccess": "Đã xoá người đăng ký",
+    "empty": "Chưa có ai đăng ký bản tin."
   },
   "UserTable": {
     "image": "Hình ảnh",
