@@ -1,21 +1,31 @@
 "use client";
 import { fetcherUseSWR, fetcherWithTokenUseSWR } from "@/api/useswr";
 import TableCMS, { BulkAction } from "@/components/Table";
-import { useAuth, UserButton } from "@clerk/nextjs";
+import AuthorPostCards from "@/components/cms/post/AuthorPostCards";
+import { useAuth, useUser, UserButton } from "@clerk/nextjs";
 import { Dropdown, Modal, Select, TableColumnsType } from "antd";
-import { usePathname, useRouter } from "@/i18n/navigation";
+import { usePathname, useRouter, Link } from "@/i18n/navigation";
 import useSWR from "swr";
 import { format as formatTimeAgo } from "timeago.js";
 import { MoreOutlined } from "@ant-design/icons";
-import { Plus, Search, Shapes, Tag as TagIcon, Send } from "lucide-react";
+import {
+  Plus,
+  Search,
+  Shapes,
+  Tag as TagIcon,
+  Send,
+  UserRound,
+  Palette,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Category } from "@/interface/Category";
 import { Tag } from "@/interface/Tag";
 import { Post } from "@/interface/Post";
+import { User } from "@/interface/User";
 import { useTableStore } from "@/store/useTableStore";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 interface DataType extends Post {
@@ -54,10 +64,17 @@ const PostPage = () => {
   const pathname = usePathname();
   const t = useTranslations("PostTable");
   const tCms = useTranslations("Cms");
+  const tNav = useTranslations("NavBar");
+  const locale = useLocale();
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
+  const { user } = useUser();
+  const isAdmin = user?.publicMetadata?.role === "admin" || false;
   const { setIsShowFormDelete, setIdDelete } = useTableStore();
   const [activeTab, setActiveTab] = useState<TabKey>("all");
+  const [cardDeleteTargetId, setCardDeleteTargetId] = useState<string | null>(
+    null
+  );
   const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
   const [searchQuery, setSearchQuery] = useState("");
   const [pagination, setPagination] = useState({
@@ -83,6 +100,20 @@ const PostPage = () => {
       );
     }
   );
+  // Admin-only — powers the "Tác giả" column filter dropdown. Fetched as
+  // the full user list (not scoped to the current page's posts) so an
+  // author shows up as a filter option even if their posts aren't on the
+  // currently loaded page.
+  const { data: allUsersData } = useSWR(
+    isSignedIn && isAdmin ? ["all-users-for-author-filter"] : null,
+    async () => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/sumUser`,
+        token!
+      );
+    }
+  );
   // Admin-only endpoint — silently unavailable for regular authors, falls
   // back to "—" in the stat card below rather than showing a stale number.
   const { data: trafficData } = useSWR(
@@ -95,6 +126,19 @@ const PostPage = () => {
       );
     },
     { shouldRetryOnError: false }
+  );
+  // Non-admin authors only — same total-views-across-my-posts figure already
+  // shown on /cms/personal, used here instead of the admin-only 30-day
+  // traffic stat which always renders "—" for them.
+  const { data: totalViewsData } = useSWR(
+    isSignedIn && !isAdmin ? ["total-views-own"] : null,
+    async () => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/sumPostUser`,
+        token!
+      );
+    }
   );
   const { data: scheduleData, mutate: mutateSchedule } = useSWR(
     isSignedIn ? ["schedule-list"] : null,
@@ -364,6 +408,26 @@ const PostPage = () => {
       key: "title",
     },
     {
+      title: t("author"),
+      key: "author",
+      filters: allUsersData?.users
+        ?.map((u: User) => ({ text: u.username, value: u._id }))
+        .sort((a: { text: string }, b: { text: string }) =>
+          a.text.localeCompare(b.text)
+        ),
+      onFilter: (value, record) => record.user?._id === value,
+      render: (_, record) => (
+        <div className="flex items-center gap-2">
+          <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-surface-2 text-[10.5px] font-semibold text-muted">
+            {(record.user?.username || "?").slice(0, 2).toUpperCase()}
+          </span>
+          <span className="font-meta text-[12.5px] text-muted">
+            {record.user?.username}
+          </span>
+        </div>
+      ),
+    },
+    {
       title: t("category"),
       dataIndex: "categoryName",
       key: "categoryName",
@@ -478,7 +542,20 @@ const PostPage = () => {
           <Plus size={15} />
           {t("newPost")}
         </button>
-        <UserButton afterSignOutUrl="/" />
+        <UserButton afterSignOutUrl="/">
+          <UserButton.MenuItems>
+            <UserButton.Link
+              label={tNav("personal")}
+              labelIcon={<UserRound size={15} />}
+              href={`/${locale}/user`}
+            />
+            <UserButton.Link
+              label={tNav("accountSettings")}
+              labelIcon={<Palette size={15} />}
+              href={`/${locale}/settings`}
+            />
+          </UserButton.MenuItems>
+        </UserButton>
       </div>
 
       {/* Compact stat cards */}
@@ -497,8 +574,12 @@ const PostPage = () => {
           testId="cms-posts-stat-draft"
         />
         <StatCard
-          label={tCms("views30Days")}
-          value={trafficData?.totalViews?.toLocaleString("vi-VN") ?? "—"}
+          label={isAdmin ? tCms("views30Days") : tCms("totalViews")}
+          value={
+            isAdmin
+              ? trafficData?.totalViews?.toLocaleString("vi-VN") ?? "—"
+              : totalViewsData?.totalVisits?.toLocaleString("vi-VN") ?? "—"
+          }
           testId="cms-posts-stat-views"
         />
         <StatCard
@@ -550,62 +631,106 @@ const PostPage = () => {
         />
       </div>
 
-      <TableCMS
-        columns={columns}
-        dataSource={dataSource}
-        showToolbar={false}
-        onDelete={handleDeletePost}
-        onBulkDelete={handleBulkDeleteReal}
-        extraBulkActions={extraBulkActions}
-        nameModalDelete="post"
-      />
-
-      <Modal
-        title="Đổi danh mục"
-        open={bulkCategoryOpen}
-        onOk={confirmBulkCategory}
-        onCancel={() => setBulkCategoryOpen(false)}
-        confirmLoading={bulkCategorySubmitting}
-        okButtonProps={{ "data-testid": "cms-posts-bulk-category-confirm-button" }}
-      >
-        <Select
-          className="w-full"
-          placeholder="Chọn danh mục"
-          options={categoryOptions}
-          value={bulkCategoryValue}
-          onChange={(value) => setBulkCategoryValue(value)}
-          data-testid="cms-posts-bulk-category-select"
+      {isAdmin ? (
+        <TableCMS
+          columns={columns}
+          dataSource={dataSource}
+          showToolbar={false}
+          onDelete={handleDeletePost}
+          onBulkDelete={handleBulkDeleteReal}
+          extraBulkActions={extraBulkActions}
+          nameModalDelete="post"
         />
-      </Modal>
-
-      <Modal
-        title="Thêm thẻ"
-        open={bulkTagsOpen}
-        onOk={confirmBulkTags}
-        onCancel={() => setBulkTagsOpen(false)}
-        confirmLoading={bulkTagsSubmitting}
-        okButtonProps={{ "data-testid": "cms-posts-bulk-tags-confirm-button" }}
-      >
-        <Select
-          mode="multiple"
-          className="w-full"
-          placeholder="Chọn thẻ"
-          options={tagOptions}
-          value={bulkTagsValue}
-          onChange={(value) => setBulkTagsValue(value)}
-          data-testid="cms-posts-bulk-tags-select"
+      ) : (
+        <AuthorPostCards
+          posts={dataSource}
+          onPublish={handlePublishDraft}
+          onDeleteRequest={setCardDeleteTargetId}
+          emptyStateAction={
+            <Link
+              href="/write"
+              className="flex h-9 items-center gap-1.5 rounded-[10px] bg-gradient-to-b from-accent to-accent-dark px-3.5 font-cta text-sm font-medium text-white"
+              data-testid="author-post-cards-empty-write-link"
+            >
+              <Plus size={15} />
+              {t("newPost")}
+            </Link>
+          }
         />
-      </Modal>
+      )}
+
+      {isAdmin && (
+        <>
+          <Modal
+            title="Đổi danh mục"
+            open={bulkCategoryOpen}
+            onOk={confirmBulkCategory}
+            onCancel={() => setBulkCategoryOpen(false)}
+            confirmLoading={bulkCategorySubmitting}
+            okButtonProps={{
+              "data-testid": "cms-posts-bulk-category-confirm-button",
+            }}
+          >
+            <Select
+              className="w-full"
+              placeholder="Chọn danh mục"
+              options={categoryOptions}
+              value={bulkCategoryValue}
+              onChange={(value) => setBulkCategoryValue(value)}
+              data-testid="cms-posts-bulk-category-select"
+            />
+          </Modal>
+
+          <Modal
+            title="Thêm thẻ"
+            open={bulkTagsOpen}
+            onOk={confirmBulkTags}
+            onCancel={() => setBulkTagsOpen(false)}
+            confirmLoading={bulkTagsSubmitting}
+            okButtonProps={{
+              "data-testid": "cms-posts-bulk-tags-confirm-button",
+            }}
+          >
+            <Select
+              mode="multiple"
+              className="w-full"
+              placeholder="Chọn thẻ"
+              options={tagOptions}
+              value={bulkTagsValue}
+              onChange={(value) => setBulkTagsValue(value)}
+              data-testid="cms-posts-bulk-tags-select"
+            />
+          </Modal>
+
+          <Modal
+            title={`Xuất bản ${bulkPublishKeys.length} bài viết?`}
+            open={bulkPublishOpen}
+            onOk={confirmBulkPublish}
+            onCancel={() => setBulkPublishOpen(false)}
+            confirmLoading={bulkPublishSubmitting}
+            okButtonProps={{
+              "data-testid": "cms-posts-bulk-publish-confirm-button",
+            }}
+          >
+            <p>Các bài viết đã chọn sẽ được đăng công khai ngay lập tức.</p>
+          </Modal>
+        </>
+      )}
 
       <Modal
-        title={`Xuất bản ${bulkPublishKeys.length} bài viết?`}
-        open={bulkPublishOpen}
-        onOk={confirmBulkPublish}
-        onCancel={() => setBulkPublishOpen(false)}
-        confirmLoading={bulkPublishSubmitting}
-        okButtonProps={{ "data-testid": "cms-posts-bulk-publish-confirm-button" }}
+        title={tCms("bulkDeleteConfirmTitle", { count: 1 })}
+        open={cardDeleteTargetId !== null}
+        onOk={async () => {
+          if (!cardDeleteTargetId) return;
+          await handleDeletePost(cardDeleteTargetId);
+          setCardDeleteTargetId(null);
+        }}
+        onCancel={() => setCardDeleteTargetId(null)}
+        okButtonProps={{ "data-testid": "author-post-cards-delete-confirm-button" }}
       >
-        <p>Các bài viết đã chọn sẽ được đăng công khai ngay lập tức.</p>
+        <p>
+          {tCms("bulkDeleteConfirmBody", { nameModalDelete: "bài viết" })}
+        </p>
       </Modal>
     </div>
   );

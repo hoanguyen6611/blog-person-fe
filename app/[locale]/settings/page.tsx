@@ -50,7 +50,10 @@ export default function SettingsPage() {
   useEffect(() => setMounted(true), []);
 
   return (
-    <div className="flex max-w-2xl flex-col gap-6 py-6" data-testid="cms-settings-page">
+    <div
+      className="mx-auto flex max-w-2xl flex-col gap-6 py-8"
+      data-testid="settings-page"
+    >
       <h1 className="font-display text-2xl font-bold tracking-tight text-ink">
         Giao diện
       </h1>

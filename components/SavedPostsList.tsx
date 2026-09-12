@@ -5,21 +5,37 @@ import { useTranslations } from "next-intl";
 import { fetcherUseSWR } from "@/api/useswr";
 import { Link } from "@/i18n/navigation";
 import { Post } from "@/interface/Post";
+import { Category } from "@/interface/Category";
 import { useSavePost } from "@/hooks/useSavePost";
-import PostListItem from "@/components/PostListItem";
+import PostCard from "@/components/PostCard";
 import { Bookmark } from "lucide-react";
 
-const SavedPostEntry = ({ id }: { id: string }) => {
+const SavedPostEntry = ({
+  id,
+  categoryTitle,
+}: {
+  id: string;
+  categoryTitle: (categoryId: string) => string | undefined;
+}) => {
   const { data } = useSWR<Post>(["saved-post", id], ([, postId]) =>
     fetcherUseSWR(`${process.env.NEXT_PUBLIC_API_URL}/posts/${postId}`)
   );
   if (!data) return null;
-  return <PostListItem post={data} />;
+  return <PostCard post={data} categoryTitle={categoryTitle(data.category)} />;
 };
 
 export default function SavedPostsList() {
   const t = useTranslations("SavedPage");
   const { savedPostIds } = useSavePost();
+  const { data: categoriesData } = useSWR(
+    savedPostIds.length > 0
+      ? `${process.env.NEXT_PUBLIC_API_URL}/category/all`
+      : null,
+    fetcherUseSWR
+  );
+  const categoryTitle = (categoryId: string) =>
+    categoriesData?.categories?.find((c: Category) => c._id === categoryId)
+      ?.title;
 
   if (savedPostIds.length === 0) {
     return (
@@ -40,9 +56,12 @@ export default function SavedPostsList() {
   }
 
   return (
-    <div className="mt-6 flex flex-col gap-4" data-testid="saved-posts-list">
+    <div
+      className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+      data-testid="saved-posts-list"
+    >
       {savedPostIds.map((id) => (
-        <SavedPostEntry key={id} id={id} />
+        <SavedPostEntry key={id} id={id} categoryTitle={categoryTitle} />
       ))}
     </div>
   );

@@ -91,7 +91,32 @@ export default async function LocaleLayout({
     notFound();
   }
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        variables: {
+          colorPrimary: "var(--color-accent)",
+          colorBackground: "var(--color-surface)",
+          colorText: "var(--color-ink)",
+          colorTextSecondary: "var(--color-muted)",
+          colorInputBackground: "var(--color-surface-2)",
+          colorInputText: "var(--color-ink)",
+          colorDanger: "#dc2626",
+          colorSuccess: "var(--color-success)",
+          colorWarning: "var(--color-warning)",
+          borderRadius: "12px",
+          fontFamily: "var(--font-sans)",
+        },
+        elements: {
+          card: "shadow-lg border border-line-soft",
+          userButtonPopoverCard: "shadow-lg border border-line-soft",
+          userButtonPopoverActionButton: "hover:bg-surface-2",
+          userButtonPopoverActionButtonText: "font-medium",
+          userButtonPopoverFooter: "border-t border-line-soft",
+          formButtonPrimary:
+            "bg-gradient-to-b from-accent to-accent-dark hover:opacity-90 text-white",
+        },
+      }}
+    >
       <html lang={locale} suppressHydrationWarning>
         <body>
           <ThemeProvider

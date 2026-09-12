@@ -7,7 +7,16 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import { Dropdown } from "antd";
-import { Bell, FileText, Heart, MessageSquare, UserPlus, Plus } from "lucide-react";
+import {
+  Bell,
+  FileText,
+  Heart,
+  MessageSquare,
+  UserPlus,
+  Plus,
+  UserRound,
+  Palette,
+} from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -20,7 +29,7 @@ import { useNotificationSocket } from "@/hooks/useNotificationSocket";
 import { Notification } from "@/interface/Notification";
 import axios from "axios";
 import LanguageSwitcher from "./LanguageSwitcher";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import ThemeToggle from "./ThemeToggle";
 import { cn } from "@/lib/utils";
 import FilterSheet from "./FilterSheet";
@@ -70,13 +79,15 @@ export const NavLinks = () => {
       >
         {t("about")}
       </Link>
-      <Link
-        href={cmsHref}
-        className={navPillClass(pathname.startsWith("/cms"))}
-        data-testid="navbar-cms-link"
-      >
-        {t("cms")}
-      </Link>
+      {isAdmin && (
+        <Link
+          href={cmsHref}
+          className={navPillClass(pathname.startsWith("/cms"))}
+          data-testid="navbar-cms-link"
+        >
+          {t("cms")}
+        </Link>
+      )}
     </>
   );
 };
@@ -414,6 +425,7 @@ export const AuthSlot = ({
   variant?: "desktop" | "mobile";
 }) => {
   const t = useTranslations("NavBar");
+  const locale = useLocale();
   return (
     <>
       <SignedOut>
@@ -432,7 +444,20 @@ export const AuthSlot = ({
                 userButtonAvatarBox: "h-8 w-8",
               },
             }}
-          />
+          >
+            <UserButton.MenuItems>
+              <UserButton.Link
+                label={t("personal")}
+                labelIcon={<UserRound size={15} />}
+                href={`/${locale}/user`}
+              />
+              <UserButton.Link
+                label={t("accountSettings")}
+                labelIcon={<Palette size={15} />}
+                href={`/${locale}/settings`}
+              />
+            </UserButton.MenuItems>
+          </UserButton>
         </div>
       </SignedIn>
     </>

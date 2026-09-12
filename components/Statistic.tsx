@@ -4,7 +4,7 @@ import { Category } from "@/interface/Category";
 import { Post } from "@/interface/Post";
 import { User } from "@/interface/User";
 import { useAuth } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 import ImageShow from "./Image";
 import MonthlyPostChart from "./MonthlyPostChart";
@@ -16,8 +16,7 @@ import { Flame } from "lucide-react";
 
 export default function Statistic() {
   const t = useTranslations("Statistic");
-  const { getToken, isSignedIn, userId } = useAuth();
-  const [token, setToken] = useState<string | null>(null);
+  const { getToken, isSignedIn } = useAuth();
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -27,22 +26,19 @@ export default function Statistic() {
     `${process.env.NEXT_PUBLIC_API_URL}/category/all`,
     fetcherUseSWR
   );
-  useEffect(() => {
-    if (!userId) {
-      setToken(null);
-      return;
-    }
-    (async () => {
-      const t = await getToken();
-      setToken(t);
-    })();
-  }, [getToken, userId]);
+  // Fetch a fresh token inside the SWR fetcher (not cached in state) — a
+  // Clerk JWT expires in ~60s, so a token grabbed once on mount and reused
+  // for later revalidations (refocus, reconnect) would send a stale token
+  // and get a silent 401 from the backend.
   const { data: stats } = useSWR(
-    () =>
-      token
-        ? [`${process.env.NEXT_PUBLIC_API_URL}/posts/statistic`, token]
-        : null,
-    ([url, token]) => fetcherWithTokenUseSWR(url, token)
+    isSignedIn ? ["posts-statistic"] : null,
+    async () => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/statistic`,
+        token!
+      );
+    }
   );
   const { data: users } = useSWR(
     isSignedIn

@@ -17,4 +17,7 @@ export interface Post {
   img: string;
   publishedAt?: string | null;
   isPublished?: boolean;
+  commentCount?: number;
+  videoUrl?: string;
+  videoDuration?: number;
 }

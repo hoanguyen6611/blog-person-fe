@@ -594,6 +594,8 @@ const PostCreate = () => {
               </span>
               <Select
                 mode="multiple"
+                showSearch
+                optionFilterProp="label"
                 style={{ width: "100%" }}
                 placeholder={t("selectTags")}
                 onChange={handleChange}

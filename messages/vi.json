@@ -11,7 +11,18 @@
     "recentPosts": "Bài viết gần đây",
     "viewAll": "Xem tất cả",
     "trendingThisWeek": "Nổi bật tuần này",
-    "recentlyViewed": "Đã xem gần đây"
+    "recentlyViewed": "Đã xem gần đây",
+    "ctaBadge": "Đọc, viết, và bàn luận",
+    "ctaHeading": "Viết bài đầu tiên của bạn tuần này",
+    "ctaDescription": "Không cần là chuyên gia. Một cái bug bạn vừa gỡ, một quyết định kiến trúc bạn vừa đổi ý — vài trăm từ là đủ để người khác tiết kiệm một buổi chiều.",
+    "ctaFeatureEditorTitle": "Trình soạn bài",
+    "ctaFeatureEditorDesc": "Mở là gõ được ngay, tự lưu nháp, chèn ảnh và video ngay trong bài.",
+    "ctaFeatureDiscussionTitle": "Bàn luận",
+    "ctaFeatureDiscussionDesc": "Người đọc bình luận trực tiếp dưới bài, trả lời theo nhánh.",
+    "ctaFeatureNewsletterTitle": "Bản tin",
+    "ctaFeatureNewsletterDesc": "Bài của bạn có cơ hội xuất hiện trong bản tin gửi tới người đọc.",
+    "videoPostsEyebrow": "Bài có video",
+    "videoPostsHeading": "Xem cách làm, không chỉ đọc"
   },
   "MainCategories": {
     "allPosts": "Tất cả",
@@ -38,6 +49,7 @@
     "cms": "Trang quản lý",
     "info": "Thông tin",
     "personal": "Trang cá nhân",
+    "accountSettings": "Cài đặt",
     "newPost": "Bài viết mới",
     "notificationSettings": "Cài đặt",
     "notificationsTitle": "Thông báo",
@@ -232,7 +244,6 @@
     "dashboardPersonal": "Bảng điều khiển cá nhân",
     "myPosts": "Bài viết của tôi",
     "myPostsSchedule": "Bài viết đã lên lịch",
-    "savePost": "Bài viết đã lưu",
     "tags": "Thẻ",
     "writingStreak": "Chuỗi viết bài",
     "writingStreakBody": "{count} tuần liên tiếp có bài viết mới.",
@@ -296,7 +307,8 @@
     "year": "Năm",
     "monthlyVisit": "Lượt truy cập theo tháng",
     "numberOfVisit": "Số lượt truy cập",
-    "noData": "Chưa có dữ liệu."
+    "noData": "Chưa có dữ liệu.",
+    "readTime": "phút đọc"
   },
   "PostTable": {
     "image": "Hình ảnh",
@@ -343,7 +355,11 @@
     "statFollowing": "đang theo dõi",
     "managePosts": "Quản lý bài viết",
     "posts": "Bài viết",
-    "connections": "Kết nối"
+    "saved": "Đã lưu",
+    "connections": "Kết nối",
+    "follow": "Theo dõi",
+    "followingAction": "Đang theo dõi",
+    "memberSince": "Tham gia từ {date}"
   },
   "NotFound": {
     "description": "Rất tiếc! Trang bạn đang tìm không tồn tại.",
@@ -379,7 +395,25 @@
     "about": "Giới thiệu",
     "contact": "Liên hệ",
     "privacy": "Chính sách bảo mật",
-    "rights": "Mọi quyền được bảo lưu."
+    "rights": "Mọi quyền được bảo lưu.",
+    "contentHeading": "Nội dung",
+    "newest": "Mới nhất",
+    "mostPopular": "Phổ biến nhất",
+    "saved": "Đã lưu",
+    "categoriesHeading": "Chuyên mục",
+    "communityHeading": "Cộng đồng",
+    "writePost": "Viết bài",
+    "newBadge": "Mới",
+    "myProfile": "Trang cá nhân",
+    "aboutHeading": "Về trang",
+    "newsletterHeading": "Bản tin",
+    "newsletterDescription": "Ba bài đáng đọc nhất mỗi thứ Ba.",
+    "newsletterPlaceholder": "email@cua-ban.com",
+    "newsletterSubscribe": "Đăng ký",
+    "newsletterSubscribing": "Đang đăng ký...",
+    "newsletterSuccess": "Đăng ký thành công! Cảm ơn bạn đã theo dõi.",
+    "newsletterInvalidEmail": "Email không hợp lệ.",
+    "newsletterError": "Có lỗi xảy ra, vui lòng thử lại sau."
   },
   "PostCreate": {
     "loading": "Đang tải",

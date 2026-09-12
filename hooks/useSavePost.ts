@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
 import axios from "axios";
@@ -11,19 +10,20 @@ import { useRouter } from "@/i18n/navigation";
 export function useSavePost() {
   const { getToken, isSignedIn } = useAuth();
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
 
-  useEffect(() => {
-    (async () => {
-      const t = await getToken();
-      setToken(t);
-    })();
-  }, [getToken]);
-
+  // Fetch a fresh token inside the SWR fetcher (not cached in state) — a
+  // Clerk JWT expires in ~60s, so a token grabbed once on mount and reused
+  // for later revalidations (refocus, reconnect) would send a stale token
+  // and get a silent 401 from the backend.
   const { data: savedPostIds, mutate } = useSWR<string[]>(
-    token ? [`${process.env.NEXT_PUBLIC_API_URL}/users/saved`, token] : null,
-    ([url, token]: readonly [string, string]) =>
-      fetcherWithTokenUseSWR(url, token)
+    isSignedIn ? ["users-saved"] : null,
+    async () => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/saved`,
+        token!
+      );
+    }
   );
 
   const isSaved = (postId: string) =>

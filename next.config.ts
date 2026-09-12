@@ -32,6 +32,11 @@ const nextConfig: NextConfig = {
   /* config options here */
   images: {
     domains: ["drive.google.com"],
+    remotePatterns: [
+      { protocol: "https", hostname: "ik.imagekit.io" },
+      { protocol: "https", hostname: "img.clerk.com" },
+      { protocol: "https", hostname: "images.clerk.dev" },
+    ],
   },
 };
 const withNextIntl = createNextIntlPlugin();

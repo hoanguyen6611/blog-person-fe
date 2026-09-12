@@ -3,7 +3,6 @@ import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import DashBoard from "@/components/Dashboard";
 import { useAuth, useUser } from "@clerk/nextjs";
 import useSWR from "swr";
-import { useEffect, useState } from "react";
 import { Eye, Pencil, Plus, UserRound } from "lucide-react";
 import { format } from "timeago.js";
 import FollowList from "@/components/FollowList";
@@ -23,23 +22,12 @@ const PersonalPage = () => {
   const tNav = useTranslations("NavBar");
   const { user } = useUser();
   const { getToken, isSignedIn, userId } = useAuth();
-  const [token, setToken] = useState<string | null>(null);
-  useEffect(() => {
-    if (!userId) {
-      setToken(null);
-      return;
-    }
-    (async () => {
-      const t = await getToken();
-      setToken(t);
-    })();
-  }, [getToken, userId]);
   const { data: posts } = useSWR(
     isSignedIn ? [`fetch-user-posts`, userId, RECENT_POSTS_LIMIT] : null,
     async ([, , limit]) => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(
-        `${process.env.NEXT_PUBLIC_API_URL}/posts/user?page=1&limit=${limit}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/user?page=1&limit=${limit}&scope=own`,
         token!
       );
     }
@@ -49,15 +37,22 @@ const PersonalPage = () => {
     async () => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(
-        `${process.env.NEXT_PUBLIC_API_URL}/posts/sumPostUser`,
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/sumPostUser?scope=own`,
         token!
       );
     }
   );
+  // Fetch a fresh token inside the fetcher each time (not cached in state) —
+  // see the comment in app/[locale]/user/[id]/page.tsx for why.
   const { data, isLoading } = useSWR(
-    () =>
-      token ? [`${process.env.NEXT_PUBLIC_API_URL}/users/follow`, token] : null,
-    ([url, token]) => fetcherWithTokenUseSWR(url, token)
+    isSignedIn ? ["users-follow"] : null,
+    async () => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/follow`,
+        token!
+      );
+    }
   );
 
   if (!isSignedIn)

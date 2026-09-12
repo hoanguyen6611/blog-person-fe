@@ -11,7 +11,18 @@
     "recentPosts": "Recent Posts",
     "viewAll": "View all posts",
     "trendingThisWeek": "Trending this week",
-    "recentlyViewed": "Recently viewed"
+    "recentlyViewed": "Recently viewed",
+    "ctaBadge": "Read, write, and discuss",
+    "ctaHeading": "Write your first post this week",
+    "ctaDescription": "You don't need to be an expert. A bug you just fixed, an architecture decision you changed your mind about — a few hundred words is enough to save someone else an afternoon.",
+    "ctaFeatureEditorTitle": "Editor",
+    "ctaFeatureEditorDesc": "Start typing right away, drafts autosave, drop in images and video inline.",
+    "ctaFeatureDiscussionTitle": "Discussion",
+    "ctaFeatureDiscussionDesc": "Readers comment right under your post, with threaded replies.",
+    "ctaFeatureNewsletterTitle": "Newsletter",
+    "ctaFeatureNewsletterDesc": "Your post has a chance to be featured in the newsletter readers get.",
+    "videoPostsEyebrow": "Video posts",
+    "videoPostsHeading": "Watch how it's done, not just read about it"
   },
   "MainCategories": {
     "allPosts": "All Posts",
@@ -38,6 +49,7 @@
     "cms": "CMS",
     "info": "Information",
     "personal": "Personal",
+    "accountSettings": "Settings",
     "newPost": "New Post",
     "notificationSettings": "Settings",
     "notificationsTitle": "Notifications",
@@ -232,7 +244,6 @@
     "dashboardPersonal": "Dashboard Personal",
     "myPosts": "My Posts",
     "myPostsSchedule": "My Posts Schedule",
-    "savePost": "Save Post",
     "tags": "Tags",
     "writingStreak": "Writing streak",
     "writingStreakBody": "{count, plural, =1 {1 week} other {# weeks}} in a row with a post.",
@@ -296,7 +307,8 @@
     "year": "Year",
     "monthlyVisit": "Monthly visit",
     "numberOfVisit": "Number of visit",
-    "noData": "No data yet."
+    "noData": "No data yet.",
+    "readTime": "min read"
   },
   "PostTable": {
     "image": "Image",
@@ -343,7 +355,11 @@
     "statFollowing": "following",
     "managePosts": "Manage posts",
     "posts": "Posts",
-    "connections": "Connections"
+    "saved": "Saved",
+    "connections": "Connections",
+    "follow": "Follow",
+    "followingAction": "Following",
+    "memberSince": "Joined {date}"
   },
   "NotFound": {
     "description": "Oops! The page you're looking for doesn't exist.",
@@ -379,7 +395,25 @@
     "about": "About",
     "contact": "Contact",
     "privacy": "Privacy Policy",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "contentHeading": "Content",
+    "newest": "Newest",
+    "mostPopular": "Most popular",
+    "saved": "Saved",
+    "categoriesHeading": "Categories",
+    "communityHeading": "Community",
+    "writePost": "Write a post",
+    "newBadge": "New",
+    "myProfile": "My profile",
+    "aboutHeading": "About the site",
+    "newsletterHeading": "Newsletter",
+    "newsletterDescription": "The three best reads, every Tuesday.",
+    "newsletterPlaceholder": "you@example.com",
+    "newsletterSubscribe": "Subscribe",
+    "newsletterSubscribing": "Subscribing...",
+    "newsletterSuccess": "Subscribed! Thanks for following along.",
+    "newsletterInvalidEmail": "That email doesn't look right.",
+    "newsletterError": "Something went wrong, please try again."
   },
   "PostCreate": {
     "loading": "Loading",

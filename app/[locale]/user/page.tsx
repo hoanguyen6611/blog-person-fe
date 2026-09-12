@@ -3,13 +3,24 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import ImageShow from "@/components/Image";
 import PostList from "@/components/PostList";
 import FollowList from "@/components/FollowList";
+import SavedPostsList from "@/components/SavedPostsList";
 import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import { useEffect, useState } from "react";
-import { LayoutGrid } from "lucide-react";
+import { LayoutGrid, Bookmark } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { useTranslations } from "next-intl";
+import { useSavePost } from "@/hooks/useSavePost";
+import { cn } from "@/lib/utils";
+
+type ProfileTab = "posts" | "saved";
+
+const tabPillClass = (active: boolean) =>
+  cn(
+    "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-semibold transition-colors",
+    active ? "bg-ink text-bg" : "bg-surface-2 text-muted hover:text-ink"
+  );
 
 const UserPersonalPage = () => {
   useRequireAuth();
@@ -17,6 +28,8 @@ const UserPersonalPage = () => {
   const { user } = useUser();
   const { getToken, userId } = useAuth();
   const [token, setToken] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<ProfileTab>("posts");
+  const { savedPostIds } = useSavePost();
   useEffect(() => {
     if (!userId) {
       setToken(null);
@@ -31,7 +44,7 @@ const UserPersonalPage = () => {
     token ? [`fetch-user-posts-count`, token] : null,
     async ([, token]) => {
       return fetcherWithTokenUseSWR(
-        `${process.env.NEXT_PUBLIC_API_URL}/posts/user?page=1&limit=1`,
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/user?page=1&limit=1&scope=own`,
         token
       );
     }
@@ -115,17 +128,39 @@ const UserPersonalPage = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_300px] lg:items-start">
-        {/* Posts */}
+        {/* Posts / Saved */}
         <div data-testid="user-posts-section">
-          <h2 className="mb-3.5 font-display text-base font-bold tracking-tight text-ink">
-            {t("posts")}
-          </h2>
-          <PostList
-            apiUrl="posts/user"
-            showPagination={false}
-            useAuthToken={true}
-            variant="grid"
-          />
+          <div className="mb-3.5 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setActiveTab("posts")}
+              className={tabPillClass(activeTab === "posts")}
+              data-testid="user-profile-tab-posts"
+            >
+              {t("posts")}
+              {typeof postsSummary?.totalPosts === "number" &&
+                ` (${postsSummary.totalPosts})`}
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("saved")}
+              className={tabPillClass(activeTab === "saved")}
+              data-testid="user-profile-tab-saved"
+            >
+              <Bookmark size={13} />
+              {t("saved")} ({savedPostIds.length})
+            </button>
+          </div>
+          {activeTab === "posts" ? (
+            <PostList
+              apiUrl="posts/user?scope=own"
+              showPagination={false}
+              useAuthToken={true}
+              variant="grid"
+            />
+          ) : (
+            <SavedPostsList />
+          )}
         </div>
 
         {/* Connections */}

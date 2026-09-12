@@ -140,16 +140,21 @@ export default function PostDetail({ post }: { post: Post }) {
             </h1>
             <p className="text-muted">{post.desc}</p>
             <div className="flex flex-wrap items-center gap-3 border-y border-line-soft py-3">
-              <ImageShow
-                src={post?.user?.img}
-                alt={post.user?.username}
-                className="h-9 w-9 rounded-full object-cover"
-                width={36}
-                height={36}
-              />
+              <Link
+                href={`/user/${post?.user?._id}`}
+                data-testid="post-detail-author-avatar-link"
+              >
+                <ImageShow
+                  src={post?.user?.img}
+                  alt={post.user?.username}
+                  className="h-9 w-9 rounded-full object-cover"
+                  width={36}
+                  height={36}
+                />
+              </Link>
               <div className="flex flex-col">
                 <Link
-                  href={`/posts?author=${post?.user?.username}`}
+                  href={`/user/${post?.user?._id}`}
                   className="text-sm font-semibold text-ink hover:text-accent-ink"
                   data-testid="post-detail-author-link"
                 >

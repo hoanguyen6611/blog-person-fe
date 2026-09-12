@@ -9,6 +9,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import UploadV1 from "@/components/UploadV1";
 import SelectOption from "@/components/SelectOption";
 import { Category } from "@/interface/Category";
+import { Tag } from "@/interface/Tag";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Editor, { EditorHandle } from "@/components/Editor/Editor";
@@ -17,8 +18,13 @@ import BackToTopButton from "@/components/BackToTopButton";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { countWords } from "@/lib/wordCount";
 import { useTranslations } from "next-intl";
+import { Modal, Select } from "antd";
+import { Plus } from "lucide-react";
 
 const CATEGORY_PAGE_SIZE = 10;
+
+const modalInputClass =
+  "w-full rounded-[10px] border border-line bg-surface p-3 text-base text-ink outline-none focus:border-accent";
 
 const PostUpdate = () => {
   useRequireAuth();
@@ -43,6 +49,10 @@ const PostUpdate = () => {
     `${process.env.NEXT_PUBLIC_API_URL}/category/all`,
     fetcherUseSWR
   );
+  const { data: dataTags, mutate: mutateTags } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/tags`,
+    fetcherUseSWR
+  );
   const [cover, setCover] = useState("");
   const [coverVideo, setCoverVideo] = useState("");
   const [coverImage, setCoverImage] = useState("");
@@ -51,6 +61,9 @@ const PostUpdate = () => {
   const [categoryVisibleCount, setCategoryVisibleCount] = useState(
     CATEGORY_PAGE_SIZE
   );
+  const [tags, setTags] = useState<string[]>([]);
+  const [isModalOpenTag, setIsModalOpenTag] = useState(false);
+  const [nameTag, setNameTag] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [isDisabledBtnSend, setIsDisabledBtnSend] = useState(false);
@@ -65,6 +78,7 @@ const PostUpdate = () => {
     setEditorInitialContent(data?.content || "");
     setCover(data?.img || "");
     setCategory(data?.category || "");
+    setTags(data?.tags || []);
     setTitle(data?.title || "");
     setDesc(data?.desc || "");
   }, [data]);
@@ -104,6 +118,7 @@ const PostUpdate = () => {
     const dataForm = {
       title,
       category,
+      tags,
       desc,
       content: editorInitialContent,
       img: cover,
@@ -168,6 +183,44 @@ const PostUpdate = () => {
   };
   const loadMoreCategories = () => {
     setCategoryVisibleCount((count) => count + CATEGORY_PAGE_SIZE);
+  };
+  const tagsOptions = dataTags?.tags?.map((tag: Tag) => ({
+    value: tag._id,
+    label: tag.name,
+  }));
+  const handleChangeTags = (value: string[]) => {
+    setTags(value);
+  };
+  const showModalFormTag = () => {
+    setIsModalOpenTag(true);
+  };
+  const handleCancelFormTag = () => {
+    setIsModalOpenTag(false);
+  };
+  const handleOkTag = async () => {
+    const dataFormTag = {
+      name: nameTag,
+    };
+    const token = await getToken();
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/tags`,
+      {
+        ...dataFormTag,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (res.status === 201) {
+      toast.success(tCreate("toastTagCreated"));
+      setIsModalOpenTag(false);
+      await mutateTags();
+      setNameTag("");
+    } else {
+      toast.error(tCreate("toastTagFailed"));
+    }
   };
   const onChange = (content: string) => {
     setContentCreatePost(content);
@@ -327,6 +380,33 @@ const PostUpdate = () => {
               />
             </div>
 
+            {/* Tags */}
+            <div className="flex flex-col gap-2 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm">
+              <span className="font-meta text-[11px] font-medium uppercase tracking-wide text-faintest">
+                {tCreate("tags")}
+              </span>
+              <Select
+                mode="multiple"
+                showSearch
+                optionFilterProp="label"
+                style={{ width: "100%" }}
+                placeholder={tCreate("selectTags")}
+                value={tags}
+                onChange={handleChangeTags}
+                options={tagsOptions}
+                data-testid="post-update-tags-select"
+              />
+              <button
+                type="button"
+                onClick={showModalFormTag}
+                className="flex h-8 items-center justify-center gap-1.5 rounded-lg border border-line text-xs font-medium text-muted hover:text-ink"
+                data-testid="post-update-new-tag-button"
+              >
+                <Plus size={13} />
+                {tCreate("newTag")}
+              </button>
+            </div>
+
             {/* Update action */}
             <div className="flex flex-col gap-2.5 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm">
               <button
@@ -341,6 +421,25 @@ const PostUpdate = () => {
           </aside>
         </form>
       </div>
+
+      {/* Tag modal */}
+      <Modal
+        title={tCreate("createTagModalTitle")}
+        open={isModalOpenTag}
+        onOk={handleOkTag}
+        onCancel={handleCancelFormTag}
+        okButtonProps={{ "data-testid": "post-update-tag-modal-confirm-button" }}
+      >
+        <input
+          type="text"
+          name="nameTag"
+          value={nameTag}
+          placeholder={tCreate("tagNamePlaceholder")}
+          className={modalInputClass}
+          onChange={(e) => setNameTag(e.target.value)}
+          data-testid="post-update-tag-modal-input"
+        />
+      </Modal>
 
       <BackToTopButton />
     </div>

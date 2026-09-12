@@ -2,6 +2,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import MenuBar from "./MenuBar";
+import "./style.css";
 import TextAlign from "@tiptap/extension-text-align";
 import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
@@ -58,7 +59,8 @@ const Editor = forwardRef<EditorHandle, EditorProps>(
       content: content,
       editorProps: {
         attributes: {
-          class: "min-h-[156px] border rounded-md bg-slate-50 py-2 px-3",
+          class:
+            "post-content min-h-[360px] rounded-2xl border border-line-soft bg-surface px-4 py-3.5 outline-none",
         },
       },
       onUpdate: ({ editor }) => {

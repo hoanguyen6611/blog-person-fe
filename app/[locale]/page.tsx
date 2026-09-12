@@ -1,10 +1,13 @@
 "use client";
 
 import Banner from "@/components/Banner";
+import FeaturedPost from "@/components/FeaturedPost";
 import MainCategories from "@/components/MainCategories";
 import RecentPostsList from "@/components/RecentPostsList";
 import TrendingWidget from "@/components/TrendingWidget";
 import RecentlyViewedWidget from "@/components/RecentlyViewedWidget";
+import VideoPostsSection from "@/components/VideoPostsSection";
+import WriteCta from "@/components/WriteCta";
 import { motion } from "framer-motion";
 
 export default function Home() {
@@ -25,6 +28,16 @@ export default function Home() {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
+          data-testid="home-featured-section"
+        >
+          <FeaturedPost />
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: true }}
           data-testid="home-categories-section"
         >
           <MainCategories />
@@ -44,6 +57,26 @@ export default function Home() {
               <RecentlyViewedWidget />
             </div>
           </div>
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: true }}
+          data-testid="home-video-posts-section"
+        >
+          <VideoPostsSection />
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: true }}
+          data-testid="home-write-cta-section"
+        >
+          <WriteCta />
         </motion.section>
       </div>
     </div>

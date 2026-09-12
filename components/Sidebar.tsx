@@ -4,9 +4,7 @@ import {
   ChartArea,
   FileText,
   Users,
-  Settings,
   Shapes,
-  Heart,
   PersonStanding,
   Tag,
   AlarmClockCheck,
@@ -29,7 +27,7 @@ const RecentDrafts = () => {
     async () => {
       const token = await getToken();
       return fetcherWithTokenUseSWR(
-        `${process.env.NEXT_PUBLIC_API_URL}/posts/user/draft?page=1&limit=3`,
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/user/draft?page=1&limit=3&scope=own`,
         token!
       );
     }
@@ -63,7 +61,10 @@ const WritingStreak = () => {
   const { getToken, isSignedIn } = useAuth();
   const { data } = useSWR(
     isSignedIn
-      ? [`${process.env.NEXT_PUBLIC_API_URL}/posts/user?page=1&limit=200`, "streak"]
+      ? [
+          `${process.env.NEXT_PUBLIC_API_URL}/posts/user?page=1&limit=200&scope=own`,
+          "streak",
+        ]
       : null,
     ([url]) => getToken().then((token) => fetcherWithTokenUseSWR(url, token!))
   );
@@ -112,8 +113,6 @@ export default function Sidebar({ admin }: { admin: boolean }) {
     "/cms/personal": "cms-sidebar-personal-dashboard-link",
     "/cms/posts": "cms-sidebar-my-posts-link",
     "/cms/post-schedule": "cms-sidebar-schedule-link",
-    "/cms/settings": "cms-sidebar-settings-link",
-    "/cms/save-post": "cms-sidebar-save-post-link",
   };
 
   const links = [
@@ -162,12 +161,6 @@ export default function Sidebar({ admin }: { admin: boolean }) {
       label: t("myPostsSchedule"),
       icon: <AlarmClockCheck size={20} />,
     },
-    {
-      href: "/cms/settings",
-      label: t("settings"),
-      icon: <Settings size={20} />,
-    },
-    { href: "/cms/save-post", label: t("savePost"), icon: <Heart size={20} /> },
   ];
 
   return (
