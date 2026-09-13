@@ -36,6 +36,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "ik.imagekit.io" },
       { protocol: "https", hostname: "img.clerk.com" },
       { protocol: "https", hostname: "images.clerk.dev" },
+      { protocol: "https", hostname: "www.gravatar.com" },
     ],
   },
 };

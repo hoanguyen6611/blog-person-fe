@@ -69,7 +69,12 @@
     "dislike": "Dislike",
     "delete": "Delete",
     "cancel": "Cancel",
-    "send": "Send"
+    "send": "Send",
+    "edit": "Edit",
+    "edited": "(edited)",
+    "save": "Save",
+    "editErrorEmpty": "Comment can't be empty.",
+    "editError": "Couldn't save your edit, please try again."
   },
   "Cms": {
     "notLoggedIn": "You are not logged in.",

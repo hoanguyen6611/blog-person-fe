@@ -9,5 +9,6 @@ export interface Comment {
   updatedAt: string;
   like: number;
   status?: "pending" | "approved" | "hidden";
+  isEdited?: boolean;
   replies?: Comment[];
 }

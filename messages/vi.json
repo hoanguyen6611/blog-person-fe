@@ -69,7 +69,12 @@
     "dislike": "Không thích",
     "delete": "Xóa",
     "cancel": "Hủy",
-    "send": "Gửi"
+    "send": "Gửi",
+    "edit": "Sửa",
+    "edited": "(đã chỉnh sửa)",
+    "save": "Lưu",
+    "editErrorEmpty": "Nội dung không được để trống.",
+    "editError": "Không thể lưu chỉnh sửa, vui lòng thử lại."
   },
   "Cms": {
     "notLoggedIn": "Bạn chưa đăng nhập.",

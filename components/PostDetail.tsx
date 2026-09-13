@@ -9,6 +9,7 @@ import { useTimeAgo } from "@/lib/timeAgo";
 import { format as formatDate } from "date-fns";
 
 import ImageShow from "@/components/Image";
+import Avatar from "@/components/Avatar";
 import PostMenuActions from "@/components/PostMenuActions";
 import BookmarkButton from "@/components/BookmarkButton";
 import Comments from "@/components/Comments";
@@ -145,12 +146,10 @@ export default function PostDetail({ post }: { post: Post }) {
                 href={`/user/${post?.user?._id}`}
                 data-testid="post-detail-author-avatar-link"
               >
-                <ImageShow
+                <Avatar
                   src={post?.user?.img}
-                  alt={post.user?.username}
-                  className="h-9 w-9 rounded-full object-cover"
-                  width={36}
-                  height={36}
+                  name={post.user?.username || ""}
+                  size={36}
                 />
               </Link>
               <div className="flex flex-col">

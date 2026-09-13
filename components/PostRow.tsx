@@ -1,6 +1,6 @@
 "use client";
 import { Link } from "@/i18n/navigation";
-import ImageShow from "./Image";
+import Avatar from "./Avatar";
 import BookmarkButton from "./BookmarkButton";
 import { Post } from "@/interface/Post";
 import { useTimeAgo } from "@/lib/timeAgo";
@@ -24,12 +24,10 @@ const PostRow = ({
       data-testid={`post-row-${post._id}`}
     >
       <div className="flex flex-none items-center gap-3 sm:w-[180px]">
-        <ImageShow
-          src={post.user?.img || ""}
-          alt={post.user?.username || ""}
-          width={40}
-          height={40}
-          className="h-10 w-10 flex-none rounded-full object-cover"
+        <Avatar
+          src={post.user?.img}
+          name={post.user?.username || ""}
+          size={40}
         />
         <div className="flex min-w-0 flex-col gap-0.5">
           <span className="truncate text-sm font-semibold text-ink">

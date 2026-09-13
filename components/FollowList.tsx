@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import ImageShow from "./Image";
+import Avatar from "./Avatar";
 
 type UserItem = {
   _id: string;
@@ -35,13 +35,7 @@ const UserRow = ({
     className="flex items-center gap-3"
     data-testid={`follow-list-item-${user._id}`}
   >
-    <ImageShow
-      src={user.img || "/default-avatar.png"}
-      alt={user.username}
-      width={36}
-      height={36}
-      className="h-9 w-9 flex-none rounded-full object-cover"
-    />
+    <Avatar src={user.img} name={user.username} size={36} />
     <div className="min-w-0 flex-1">
       <p className="truncate text-sm font-semibold text-ink">
         {user.username}
@@ -159,13 +153,7 @@ const FollowList = ({
               className="flex items-center gap-3 rounded-2xl border border-line-soft bg-surface p-3 shadow-sm"
               data-testid={`follow-list-item-${user._id}`}
             >
-              <ImageShow
-                src={user.img || "/default-avatar.png"}
-                alt={user.username}
-                width={40}
-                height={40}
-                className="h-10 w-10 flex-none rounded-full object-cover"
-              />
+              <Avatar src={user.img} name={user.username} size={40} />
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-ink">
                   {user.username}

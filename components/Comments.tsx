@@ -73,6 +73,19 @@ const Comments = ({ postId }: { postId: string }) => {
       await mutate();
     }
   };
+  const handleEditComment = async (id: string, desc: string) => {
+    const token = await getToken();
+    try {
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/comments/${id}`,
+        { desc },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      await mutate();
+    } catch {
+      toast.error(t("editError"));
+    }
+  };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const dataForm = {
@@ -205,6 +218,7 @@ const Comments = ({ postId }: { postId: string }) => {
             comment={comment}
             postId={postId}
             onDelete={handleDeleteComment}
+            onEdit={handleEditComment}
             onReply={handleReply}
             onLike={handleLike}
             likeComments={likeComments}

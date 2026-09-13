@@ -1,6 +1,6 @@
 "use client";
 import { useAuth, useUser } from "@clerk/nextjs";
-import ImageShow from "@/components/Image";
+import Avatar from "@/components/Avatar";
 import PostList from "@/components/PostList";
 import { useParams } from "next/navigation";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
@@ -131,12 +131,10 @@ const UserPage = () => {
         data-testid="author-profile-header"
       >
         <div className="flex flex-wrap items-start gap-4">
-          <ImageShow
-            src={profileData?.img || ""}
-            alt={profileData?.username || ""}
-            width={84}
-            height={84}
-            className="h-[84px] w-[84px] flex-none rounded-full object-cover"
+          <Avatar
+            src={profileData?.img}
+            name={profileData?.username || ""}
+            size={84}
           />
           <div className="flex min-w-[180px] flex-1 flex-col gap-1">
             <span className="break-words font-display text-2xl font-extrabold tracking-tight text-ink">
