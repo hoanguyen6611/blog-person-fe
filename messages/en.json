@@ -111,6 +111,7 @@
     "allTypes": "All",
     "type": {
       "comment": "Comments",
+      "reply": "Replies",
       "like": "Likes",
       "follow": "Followers",
       "post": "New posts"
@@ -355,7 +356,14 @@
     "activeSubscribers": "Active",
     "toggleSuccess": "Status updated",
     "deleteSuccess": "Subscriber deleted",
-    "empty": "No one has subscribed yet."
+    "empty": "No one has subscribed yet.",
+    "previewHeading": "Preview next newsletter",
+    "previewEmpty": "No posts from the last 7 days to send.",
+    "sendNow": "Send now",
+    "sendConfirmTitle": "Send the newsletter now?",
+    "sendConfirmBody": "It will go out to {count} active subscribers immediately.",
+    "sendSuccess": "Sent to {sent} subscribers ({failed} failed)",
+    "sendError": "Couldn't send the newsletter. Check whether RESEND_API_KEY is configured."
   },
   "UserTable": {
     "image": "Image",
@@ -374,7 +382,8 @@
   "FollowList": {
     "followers": "Followers",
     "following": "Following",
-    "empty": "No users yet."
+    "empty": "No users yet.",
+    "unfollow": "Unfollow"
   },
   "UserProfile": {
     "notSignedIn": "You are not signed in.",
@@ -388,6 +397,14 @@
     "follow": "Follow",
     "followingAction": "Following",
     "memberSince": "Joined {date}"
+  },
+  "NewsletterUnsubscribe": {
+    "loading": "Processing...",
+    "successTitle": "Unsubscribed",
+    "successBody": "You won't receive any more newsletters from us.",
+    "errorTitle": "Couldn't unsubscribe",
+    "errorBody": "This link is invalid or has expired.",
+    "backHome": "Back to home"
   },
   "NotFound": {
     "description": "Oops! The page you're looking for doesn't exist.",
@@ -475,7 +492,7 @@
     "googlePreview": "Google preview",
     "titlePlaceholderPreview": "Post title…",
     "descMissing": "Missing short description — Google will auto-truncate the opening text.",
-    "sendEmailToAllUsers": "Send Email to All Users",
+    "sendEmailToAllUsers": "Notify your followers",
     "publishing": "Publishing...",
     "publishNow": "Publish now",
     "schedule": "Schedule",

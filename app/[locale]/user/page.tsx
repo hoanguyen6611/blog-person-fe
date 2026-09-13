@@ -6,12 +6,13 @@ import FollowList from "@/components/FollowList";
 import SavedPostsList from "@/components/SavedPostsList";
 import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { LayoutGrid, Bookmark } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { useTranslations } from "next-intl";
 import { useSavePost } from "@/hooks/useSavePost";
+import { useFollowToggle } from "@/hooks/useFollowToggle";
 import { cn } from "@/lib/utils";
 
 type ProfileTab = "posts" | "saved";
@@ -26,34 +27,37 @@ const UserPersonalPage = () => {
   useRequireAuth();
   const t = useTranslations("UserProfile");
   const { user } = useUser();
-  const { getToken, userId } = useAuth();
-  const [token, setToken] = useState<string | null>(null);
+  const { getToken, isSignedIn } = useAuth();
   const [activeTab, setActiveTab] = useState<ProfileTab>("posts");
   const { savedPostIds } = useSavePost();
-  useEffect(() => {
-    if (!userId) {
-      setToken(null);
-      return;
-    }
-    (async () => {
-      const t = await getToken();
-      setToken(t);
-    })();
-  }, [getToken, userId]);
+  const { toggleFollow, togglingId } = useFollowToggle();
+  // Fetch a fresh token inside the fetcher each time (not cached in state) —
+  // see the comment in app/[locale]/user/[id]/page.tsx for why.
   const { data: postsSummary } = useSWR(
-    token ? [`fetch-user-posts-count`, token] : null,
-    async ([, token]) => {
+    isSignedIn ? ["user-posts-count"] : null,
+    async () => {
+      const token = await getToken();
       return fetcherWithTokenUseSWR(
         `${process.env.NEXT_PUBLIC_API_URL}/posts/user?page=1&limit=1&scope=own`,
-        token
+        token!
       );
     }
   );
-  const { data, isLoading: loading } = useSWR(
-    () =>
-      token ? [`${process.env.NEXT_PUBLIC_API_URL}/users/follow`, token] : null,
-    ([url, token]) => fetcherWithTokenUseSWR(url, token)
+  const { data, isLoading: loading, mutate: mutateFollow } = useSWR(
+    isSignedIn ? ["users-follow"] : null,
+    async () => {
+      const token = await getToken();
+      return fetcherWithTokenUseSWR(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/follow`,
+        token!
+      );
+    }
   );
+
+  const handleUnfollow = async (targetUserId: string) => {
+    const ok = await toggleFollow(targetUserId);
+    if (ok) await mutateFollow();
+  };
 
   if (!user)
     return (
@@ -171,7 +175,13 @@ const UserPersonalPage = () => {
           <span className="mb-3 block font-display text-base font-bold tracking-tight text-ink">
             {t("connections")}
           </span>
-          <FollowList data={data} loading={loading} variant="tabs" />
+          <FollowList
+            data={data}
+            loading={loading}
+            variant="tabs"
+            onUnfollow={handleUnfollow}
+            unfollowingId={togglingId}
+          />
         </div>
       </div>
     </div>

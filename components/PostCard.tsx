@@ -1,8 +1,9 @@
+"use client";
 import { Link } from "@/i18n/navigation";
 import ImageShow from "./Image";
 import BookmarkButton from "./BookmarkButton";
 import { Post } from "@/interface/Post";
-import { format } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 
 const PostCard = ({
   post,
@@ -11,6 +12,7 @@ const PostCard = ({
   post: Post;
   categoryTitle?: string;
 }) => {
+  const timeAgo = useTimeAgo();
   return (
     <div
       className="flex flex-col gap-2.5 rounded-2xl border border-line-soft bg-surface p-3 shadow-sm"
@@ -45,7 +47,7 @@ const PostCard = ({
           </h3>
         </Link>
         <span className="font-meta text-xs text-faint">
-          {post.user?.username} · {format(post.createdAt)}
+          {post.user?.username} · {timeAgo(post.createdAt)}
         </span>
       </div>
     </div>

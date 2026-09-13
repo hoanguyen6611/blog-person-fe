@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import useSWR, { mutate as globalMutate } from "swr";
 import axios from "axios";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
-import { format } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 import { isToday, isThisWeek } from "date-fns";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -17,6 +17,7 @@ import PushNotificationToggle from "@/components/PushNotificationToggle";
 
 const TYPE_ICON: Record<string, React.ElementType> = {
   comment: MessageCircle,
+  reply: MessageCircle,
   like: Heart,
   follow: UserPlus,
   post: Newspaper,
@@ -28,6 +29,7 @@ export default function NotificationsPage() {
   useRequireAuth();
   const t = useTranslations("NotificationsPage");
   const tNav = useTranslations("NavBar");
+  const timeAgo = useTimeAgo();
   const { getToken, isSignedIn, userId } = useAuth();
   const [type, setType] = useState<string>("all");
   const [status, setStatus] = useState<StatusFilter>("all");
@@ -223,7 +225,7 @@ export default function NotificationsPage() {
                             {n.message}
                           </Link>
                           <span className="font-meta text-xs text-faint">
-                            {format(n.createdAt)}
+                            {timeAgo(n.createdAt)}
                           </span>
                         </div>
                         {!n.isRead && (

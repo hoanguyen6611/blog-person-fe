@@ -23,7 +23,7 @@ import { useState } from "react";
 import useSWR from "swr";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
 import { isToday, isThisWeek } from "date-fns";
-import { format } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 import { toast } from "react-toastify";
 import { useNotificationSocket } from "@/hooks/useNotificationSocket";
 import { Notification } from "@/interface/Notification";
@@ -72,13 +72,13 @@ export const NavLinks = () => {
       >
         {t("mostPopular")}
       </Link>
-      <Link
+      {/* <Link
         href="/about"
         className={navPillClass(pathname === "/about")}
         data-testid="navbar-about-link"
       >
         {t("about")}
-      </Link>
+      </Link> */}
       {isAdmin && (
         <Link
           href={cmsHref}
@@ -111,10 +111,12 @@ export const NewPostButton = () => {
 const typeAvatarClass: Record<string, string> = {
   post: "bg-avatar-amber-bg border border-avatar-amber-border text-avatar-amber-text",
   comment: "bg-avatar-blue-bg text-avatar-blue-text",
+  reply: "bg-avatar-blue-bg text-avatar-blue-text",
 };
 
 const typeIcon: Record<string, typeof MessageSquare> = {
   comment: MessageSquare,
+  reply: MessageSquare,
   post: FileText,
   like: Heart,
   follow: UserPlus,
@@ -141,6 +143,7 @@ export const NotificationBell = ({
 }) => {
   const { getToken, isSignedIn, userId } = useAuth();
   const t = useTranslations("NavBar");
+  const timeAgo = useTimeAgo();
   const [tab, setTab] = useState<"all" | "unread" | "comments">("all");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [desktopOpen, setDesktopOpen] = useState(false);
@@ -171,7 +174,7 @@ export const NotificationBell = ({
 
   const filtered = list.filter((n) => {
     if (tab === "unread") return !n.isRead;
-    if (tab === "comments") return n.type === "comment";
+    if (tab === "comments") return n.type === "comment" || n.type === "reply";
     return true;
   });
 
@@ -224,7 +227,14 @@ export const NotificationBell = ({
     setDesktopOpen(false);
     setMobileOpen(false);
     if (!n.isRead) markAsRead(n._id);
-    router.push(n.type === "comment" || n.type === "like" || n.type === "post" ? `/posts/${n.postId}` : "/user");
+    router.push(
+      n.type === "comment" ||
+        n.type === "reply" ||
+        n.type === "like" ||
+        n.type === "post"
+        ? `/posts/${n.postId}`
+        : "/user"
+    );
   };
 
   if (!isSignedIn) return null;
@@ -283,7 +293,7 @@ export const NotificationBell = ({
                         {n.message}
                       </span>
                       <span className="font-meta text-[11.5px] text-faint">
-                        {format(n.createdAt)}
+                        {timeAgo(n.createdAt)}
                       </span>
                     </div>
                     {!n.isRead && (

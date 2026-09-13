@@ -4,10 +4,11 @@ import DashBoard from "@/components/Dashboard";
 import { useAuth, useUser } from "@clerk/nextjs";
 import useSWR from "swr";
 import { Eye, Pencil, Plus, UserRound } from "lucide-react";
-import { format } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 import FollowList from "@/components/FollowList";
 import ImageShow from "@/components/Image";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
+import { useFollowToggle } from "@/hooks/useFollowToggle";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Post } from "@/interface/Post";
@@ -20,6 +21,7 @@ const PersonalPage = () => {
   const tCms = useTranslations("Cms");
   const tSidebar = useTranslations("Sidebar");
   const tNav = useTranslations("NavBar");
+  const timeAgo = useTimeAgo();
   const { user } = useUser();
   const { getToken, isSignedIn, userId } = useAuth();
   const { data: posts } = useSWR(
@@ -44,7 +46,7 @@ const PersonalPage = () => {
   );
   // Fetch a fresh token inside the fetcher each time (not cached in state) —
   // see the comment in app/[locale]/user/[id]/page.tsx for why.
-  const { data, isLoading } = useSWR(
+  const { data, isLoading, mutate: mutateFollow } = useSWR(
     isSignedIn ? ["users-follow"] : null,
     async () => {
       const token = await getToken();
@@ -54,6 +56,11 @@ const PersonalPage = () => {
       );
     }
   );
+  const { toggleFollow, togglingId } = useFollowToggle();
+  const handleUnfollow = async (targetUserId: string) => {
+    const ok = await toggleFollow(targetUserId);
+    if (ok) await mutateFollow();
+  };
 
   if (!isSignedIn)
     return (
@@ -189,7 +196,7 @@ const PersonalPage = () => {
                       <Eye size={12} />
                       {post.visit ?? 0}
                     </span>
-                    <span>{format(post.createdAt)}</span>
+                    <span>{timeAgo(post.createdAt)}</span>
                   </div>
                 </div>
                 <Link
@@ -213,7 +220,13 @@ const PersonalPage = () => {
           <span className="mb-3 block font-display text-base font-bold tracking-tight text-ink">
             {tCms("connections")}
           </span>
-          <FollowList data={data} loading={isLoading} variant="tabs" />
+          <FollowList
+            data={data}
+            loading={isLoading}
+            variant="tabs"
+            onUnfollow={handleUnfollow}
+            unfollowingId={togglingId}
+          />
         </div>
       </div>
     </div>

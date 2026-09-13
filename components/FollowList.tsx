@@ -22,7 +22,15 @@ const tabPillClass = (active: boolean) =>
     active ? "bg-ink text-bg" : "border border-line text-muted"
   );
 
-const UserRow = ({ user }: { user: UserItem }) => (
+const UserRow = ({
+  user,
+  onUnfollow,
+  unfollowing,
+}: {
+  user: UserItem;
+  onUnfollow?: (userId: string) => void;
+  unfollowing?: boolean;
+}) => (
   <div
     className="flex items-center gap-3"
     data-testid={`follow-list-item-${user._id}`}
@@ -34,23 +42,60 @@ const UserRow = ({ user }: { user: UserItem }) => (
       height={36}
       className="h-9 w-9 flex-none rounded-full object-cover"
     />
-    <div className="min-w-0">
+    <div className="min-w-0 flex-1">
       <p className="truncate text-sm font-semibold text-ink">
         {user.username}
       </p>
       <p className="truncate text-xs text-muted">{user.fullname}</p>
     </div>
+    {onUnfollow && (
+      <UnfollowButton
+        onClick={() => onUnfollow(user._id)}
+        loading={!!unfollowing}
+        testId={`follow-list-unfollow-button-${user._id}`}
+      />
+    )}
   </div>
 );
+
+const UnfollowButton = ({
+  onClick,
+  loading,
+  testId,
+}: {
+  onClick: () => void;
+  loading: boolean;
+  testId: string;
+}) => {
+  const t = useTranslations("FollowList");
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={loading}
+      className="flex-none rounded-full border border-line px-2.5 py-1 text-xs font-medium text-muted transition-colors hover:border-red-200 hover:text-red-500 disabled:opacity-50"
+      data-testid={testId}
+    >
+      {t("unfollow")}
+    </button>
+  );
+};
 
 const FollowList = ({
   data,
   loading,
   variant = "grid",
+  onUnfollow,
+  unfollowingId,
 }: {
   data: FollowListData;
   loading: boolean;
   variant?: "grid" | "tabs";
+  // Only pass this when showing the current user's OWN following list —
+  // there's no "unfollow on someone else's behalf" here, so callers
+  // rendering another profile's connections should leave this unset.
+  onUnfollow?: (userId: string) => void;
+  unfollowingId?: string | null;
 }) => {
   const t = useTranslations("FollowList");
   const [tab, setTab] = useState<"followers" | "following">("followers");
@@ -85,7 +130,14 @@ const FollowList = ({
           {activeUsers.length === 0 ? (
             <p className="text-sm text-muted">{t("empty")}</p>
           ) : (
-            activeUsers.map((user) => <UserRow key={user._id} user={user} />)
+            activeUsers.map((user) => (
+              <UserRow
+                key={user._id}
+                user={user}
+                onUnfollow={tab === "following" ? onUnfollow : undefined}
+                unfollowing={unfollowingId === user._id}
+              />
+            ))
           )}
         </div>
       </div>

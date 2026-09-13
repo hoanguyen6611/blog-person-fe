@@ -1,7 +1,7 @@
 "use client";
 import { Link } from "@/i18n/navigation";
 import ImageShow from "@/components/Image";
-import { format } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 import { useTranslations } from "next-intl";
 import { Eye, Pencil, Send, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -31,6 +31,7 @@ const AuthorPostCards = ({
   emptyStateAction: React.ReactNode;
 }) => {
   const tCms = useTranslations("Cms");
+  const timeAgo = useTimeAgo();
 
   if (posts.length === 0) {
     return (
@@ -95,7 +96,7 @@ const AuthorPostCards = ({
                 <Eye size={12} />
                 {post.visit ?? 0}
               </span>
-              <span>{format(post.updatedAt || post.createdAt)}</span>
+              <span>{timeAgo(post.updatedAt || post.createdAt)}</span>
             </div>
           </div>
 

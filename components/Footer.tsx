@@ -202,13 +202,15 @@ export default function Footer() {
 
           <div className="flex flex-col gap-3">
             <span className={columnHeadingClass}>{t("aboutHeading")}</span>
-            <Link href="/about" className={columnLinkClass}>
+            <Link href="" className={columnLinkClass}>
               {t("about")}
             </Link>
-            <Link href="/contact" className={columnLinkClass}>
+            <Link href="https://www.hoane.site/en" className={columnLinkClass} target="_blank"
+              rel="noopener noreferrer"
+            >
               {t("contact")}
             </Link>
-            <a href="/feed.xml" className={columnLinkClass}>
+            <a href="" className={columnLinkClass}>
               RSS
             </a>
           </div>

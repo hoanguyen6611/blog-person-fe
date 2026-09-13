@@ -37,6 +37,7 @@ interface FormPost {
   tags?: string[];
   publishedAt?: Date | null;
   isPublished?: boolean;
+  notifyFollowers?: boolean;
 }
 
 const modalInputClass =
@@ -49,6 +50,7 @@ const PostCreate = () => {
   const t = useTranslations("PostCreate");
   const { isLoaded, isSignedIn } = useUser();
   const [isDisabledBtnSend, setIsDisabledBtnSend] = useState(false);
+  const [notifyFollowers, setNotifyFollowers] = useState(false);
   const router = useRouter();
   const { getToken } = useAuth();
   const [cover, setCover] = useState("");
@@ -281,6 +283,7 @@ const PostCreate = () => {
       ...dataForm,
       publishedAt: new Date(),
       isPublished: true,
+      notifyFollowers,
     });
   };
   const allCategoryOptions =
@@ -360,7 +363,7 @@ const PostCreate = () => {
     label: tag.name,
   }));
   const onChangeCheckBox: CheckboxProps["onChange"] = (e) => {
-    console.log(`checked = ${e.target.checked}`);
+    setNotifyFollowers(e.target.checked);
   };
   const handleSubmitSchedule = async () => {
     const dataForm = buildBaseForm();
@@ -632,6 +635,7 @@ const PostCreate = () => {
 
             <div className="flex items-center gap-2 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm">
               <Checkbox
+                checked={notifyFollowers}
                 onChange={onChangeCheckBox}
                 data-testid="post-create-send-email-checkbox"
               >

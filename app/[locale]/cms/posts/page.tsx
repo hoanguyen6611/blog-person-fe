@@ -6,7 +6,7 @@ import { useAuth, useUser, UserButton } from "@clerk/nextjs";
 import { Dropdown, Modal, Select, TableColumnsType } from "antd";
 import { usePathname, useRouter, Link } from "@/i18n/navigation";
 import useSWR from "swr";
-import { format as formatTimeAgo } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 import { MoreOutlined } from "@ant-design/icons";
 import {
   Plus,
@@ -66,6 +66,7 @@ const PostPage = () => {
   const tCms = useTranslations("Cms");
   const tNav = useTranslations("NavBar");
   const locale = useLocale();
+  const formatTimeAgo = useTimeAgo();
   const router = useRouter();
   const { getToken, isSignedIn } = useAuth();
   const { user } = useUser();

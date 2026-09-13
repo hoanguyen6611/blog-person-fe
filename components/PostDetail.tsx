@@ -5,7 +5,7 @@ import DOMPurify from "dompurify";
 import { Link } from "@/i18n/navigation";
 import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
-import { format } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 import { format as formatDate } from "date-fns";
 
 import ImageShow from "@/components/Image";
@@ -34,6 +34,7 @@ export default function PostDetail({ post }: { post: Post }) {
   const { isSignedIn } = useAuth();
   const t = useTranslations("PostDetail");
   const tHome = useTranslations("HomePage");
+  const timeAgo = useTimeAgo();
   const { settings } = useAppearanceSettings();
   const showSidebars = !settings.focusMode;
   const [feedback, setFeedback] = useState<"yes" | "unsure" | null>(null);
@@ -167,7 +168,7 @@ export default function PostDetail({ post }: { post: Post }) {
                   )}
                 >
                   <span className="font-mono text-xs text-muted">
-                    {format(post?.createdAt)}
+                    {timeAgo(post?.createdAt)}
                   </span>
                 </Tooltip>
               </div>

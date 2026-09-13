@@ -111,6 +111,7 @@
     "allTypes": "Tất cả",
     "type": {
       "comment": "Bình luận",
+      "reply": "Trả lời",
       "like": "Lượt thích",
       "follow": "Người theo dõi",
       "post": "Bài viết mới"
@@ -355,7 +356,14 @@
     "activeSubscribers": "Đang hoạt động",
     "toggleSuccess": "Đã cập nhật trạng thái",
     "deleteSuccess": "Đã xoá người đăng ký",
-    "empty": "Chưa có ai đăng ký bản tin."
+    "empty": "Chưa có ai đăng ký bản tin.",
+    "previewHeading": "Xem trước bản tin kế tiếp",
+    "previewEmpty": "Không có bài viết nào trong 7 ngày qua để gửi.",
+    "sendNow": "Gửi ngay",
+    "sendConfirmTitle": "Gửi bản tin ngay bây giờ?",
+    "sendConfirmBody": "Bản tin sẽ được gửi tới {count} người đăng ký đang hoạt động ngay lập tức.",
+    "sendSuccess": "Đã gửi tới {sent} người ({failed} thất bại)",
+    "sendError": "Không thể gửi bản tin. Kiểm tra đã cấu hình RESEND_API_KEY chưa."
   },
   "UserTable": {
     "image": "Hình ảnh",
@@ -374,7 +382,8 @@
   "FollowList": {
     "followers": "Người theo dõi",
     "following": "Đang theo dõi",
-    "empty": "Chưa có người dùng nào."
+    "empty": "Chưa có người dùng nào.",
+    "unfollow": "Bỏ theo dõi"
   },
   "UserProfile": {
     "notSignedIn": "Bạn chưa đăng nhập.",
@@ -388,6 +397,14 @@
     "follow": "Theo dõi",
     "followingAction": "Đang theo dõi",
     "memberSince": "Tham gia từ {date}"
+  },
+  "NewsletterUnsubscribe": {
+    "loading": "Đang xử lý...",
+    "successTitle": "Đã huỷ đăng ký",
+    "successBody": "Bạn sẽ không nhận thêm bản tin nào từ chúng tôi nữa.",
+    "errorTitle": "Không thể huỷ đăng ký",
+    "errorBody": "Đường dẫn không hợp lệ hoặc đã hết hạn.",
+    "backHome": "Về trang chủ"
   },
   "NotFound": {
     "description": "Rất tiếc! Trang bạn đang tìm không tồn tại.",
@@ -475,7 +492,7 @@
     "googlePreview": "Xem trước trên Google",
     "titlePlaceholderPreview": "Tiêu đề bài viết…",
     "descMissing": "Thiếu mô tả ngắn — Google sẽ tự cắt đoạn đầu bài.",
-    "sendEmailToAllUsers": "Gửi email cho tất cả người dùng",
+    "sendEmailToAllUsers": "Gửi thông báo cho người theo dõi bạn",
     "publishing": "Đang đăng...",
     "publishNow": "Đăng ngay",
     "schedule": "Lên lịch",

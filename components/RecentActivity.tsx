@@ -1,7 +1,7 @@
 "use client";
 import useSWR from "swr";
 import { useAuth } from "@clerk/nextjs";
-import { format } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 import { Heart, MessageCircle, Newspaper, UserPlus, Inbox } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -10,6 +10,7 @@ import { Notification } from "@/interface/Notification";
 
 const TYPE_ICON: Record<string, React.ElementType> = {
   comment: MessageCircle,
+  reply: MessageCircle,
   like: Heart,
   follow: UserPlus,
   post: Newspaper,
@@ -19,6 +20,7 @@ const MAX_ITEMS = 6;
 
 export default function RecentActivity() {
   const t = useTranslations("RecentActivity");
+  const timeAgo = useTimeAgo();
   const { getToken, isSignedIn, userId } = useAuth();
   const { data } = useSWR(
     isSignedIn ? ["recent-activity", userId] : null,
@@ -87,7 +89,7 @@ export default function RecentActivity() {
                   {n.message}
                 </span>
                 <span className="flex-none font-meta text-xs text-faint">
-                  {format(n.createdAt)}
+                  {timeAgo(n.createdAt)}
                 </span>
               </Link>
             );

@@ -1,8 +1,9 @@
+"use client";
 import { Link } from "@/i18n/navigation";
 import ImageShow from "./Image";
 import BookmarkButton from "./BookmarkButton";
 import { Post } from "@/interface/Post";
-import { format } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 import { useTranslations } from "next-intl";
 import { ArrowUpRight, Eye, MessageCircle, Clock } from "lucide-react";
 import { readingTimeMinutes } from "@/lib/wordCount";
@@ -16,6 +17,7 @@ const PostRow = ({
 }) => {
   const t = useTranslations("Statistic");
   const tPost = useTranslations("PostDetail");
+  const timeAgo = useTimeAgo();
   return (
     <div
       className="flex flex-col gap-4 rounded-2xl border border-line-soft bg-surface p-4 shadow-sm sm:flex-row sm:items-center"
@@ -51,7 +53,7 @@ const PostRow = ({
           {post.desc}
         </p>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 font-meta text-xs text-faint">
-          <span className="whitespace-nowrap">{format(post.createdAt)}</span>
+          <span className="whitespace-nowrap">{timeAgo(post.createdAt)}</span>
           {typeof post.visit === "number" && (
             <span className="flex items-center gap-1 whitespace-nowrap">
               <Eye size={12} />

@@ -1,10 +1,12 @@
+"use client";
 import { Link } from "@/i18n/navigation";
 import ImageShow from "./Image";
 import { Post } from "@/interface/Post";
-import { format } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 import BookmarkButton from "./BookmarkButton";
 
 const PostListItem = ({ post }: { post: Post }) => {
+  const timeAgo = useTimeAgo();
   return (
     <div className="flex flex-col gap-4 overflow-hidden rounded-2xl border border-line bg-surface shadow-sm transition hover:shadow-md xl:flex-row">
       {/* image */}
@@ -30,7 +32,7 @@ const PostListItem = ({ post }: { post: Post }) => {
           <p className="text-sm text-muted line-clamp-2">{post.desc}</p>
           <div className="flex gap-3 font-mono text-xs text-muted">
             <span>{post.user.username}</span>
-            <span>{format(post.createdAt)}</span>
+            <span>{timeAgo(post.createdAt)}</span>
           </div>
         </div>
         <BookmarkButton postId={post._id} className="self-start" />

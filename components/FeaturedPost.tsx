@@ -3,7 +3,7 @@ import { Link } from "@/i18n/navigation";
 import ImageShow from "./Image";
 import useSWR from "swr";
 import { fetcherUseSWR } from "@/api/useswr";
-import { format } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 import { useTranslations } from "next-intl";
 import { Eye, ArrowUpRight, MessageCircle, Clock } from "lucide-react";
 import { Category } from "@/interface/Category";
@@ -13,6 +13,7 @@ import { readingTimeMinutes } from "@/lib/wordCount";
 const FeaturedPost = () => {
   const t = useTranslations("HomePage");
   const tStat = useTranslations("Statistic");
+  const timeAgo = useTimeAgo();
   const { data, isLoading, error } = useSWR(
     `${process.env.NEXT_PUBLIC_API_URL}/posts?featured=true&limit=4&sort=newest`,
     fetcherUseSWR
@@ -81,7 +82,7 @@ const FeaturedPost = () => {
                   {readingTimeMinutes(first.content)} {tStat("readTime")}
                 </span>
               )}
-              <span>{format(first.createdAt)}</span>
+              <span>{timeAgo(first.createdAt)}</span>
               <span className="ml-auto flex items-center gap-1.5 font-cta text-sm font-medium text-accent-ink">
                 <ArrowUpRight size={15} />
               </span>
@@ -98,7 +99,7 @@ const FeaturedPost = () => {
               index={idx + 2}
               title={post.title}
               img={post.img}
-              date={format(post.createdAt)}
+              date={timeAgo(post.createdAt)}
               category={getCategoryTitle(post.category)}
             />
           ))}

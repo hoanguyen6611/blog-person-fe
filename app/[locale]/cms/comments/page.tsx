@@ -4,7 +4,7 @@ import axios from "axios";
 import useSWR from "swr";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { format } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 import { Check, EyeOff, MessageCircle } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { fetcherWithTokenUseSWR } from "@/api/useswr";
@@ -21,6 +21,7 @@ const PendingCommentsPage = () => {
   const tSidebar = useTranslations("Sidebar");
   const t = useTranslations("CmsComments");
   const tCms = useTranslations("Cms");
+  const timeAgo = useTimeAgo();
   const [replyingId, setReplyingId] = useState<string | null>(null);
   const [replyText, setReplyText] = useState("");
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -143,7 +144,7 @@ const PendingCommentsPage = () => {
                   {comment.user?.username}
                 </span>
                 <span className="font-mono text-xs text-faint">
-                  {format(comment.createdAt)}
+                  {timeAgo(comment.createdAt)}
                 </span>
                 <Link
                   href={`/posts/${postIdOf(comment.post)}`}

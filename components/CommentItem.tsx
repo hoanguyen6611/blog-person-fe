@@ -6,7 +6,7 @@ import { Tooltip } from "antd";
 import { MessageCircle, ThumbsUp, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { format } from "timeago.js";
+import { useTimeAgo } from "@/lib/timeAgo";
 import { format as formatDate } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -37,6 +37,7 @@ const CommentItem = ({
   const [desc, setDesc] = useState("");
   const { user } = useUser();
   const t = useTranslations("Comments");
+  const timeAgo = useTimeAgo();
   const isAdmin = user?.publicMetadata?.role === "admin" || false;
 
   const handleReply = (e: React.FormEvent) => {
@@ -77,7 +78,7 @@ const CommentItem = ({
               title={formatDate(new Date(item.createdAt), "dd/MM/yyyy hh:mm")}
             >
               <span className="font-mono text-xs text-muted">
-                {format(item.createdAt)}
+                {timeAgo(item.createdAt)}
               </span>
             </Tooltip>
             {canDelete && (
